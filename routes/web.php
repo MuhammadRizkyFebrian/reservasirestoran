@@ -15,6 +15,9 @@ Route::get('/reservation', function () {
 Route::get('/reservation-history', function () {
     return view('reservation-history');
 })->name('reservation-history');
+Route::get('/payment', function () {
+    return view('payment');
+})->name('payment');
 
 // Route autentikasi
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -34,11 +37,6 @@ Route::get('/profile', function () {
     return view('profile');
 })->name('profile');
 
-// Route resi reservasi
-Route::get('/reservation-receipt', function () {
-    return view('reservation-receipt');
-})->name('reservation-receipt');
-
 // Admin Routes
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', function () {
@@ -53,11 +51,11 @@ Route::prefix('admin')->group(function () {
         return view('admin.tables');
     })->name('admin.tables');
     
-    Route::get('/reservations', function () {
-        return view('admin.reservations');
-    })->name('admin.reservations');
+    Route::get('/pemesanan', function () {
+        return view('admin.pemesanan');
+    })->name('admin.pemesanan');
     
     Route::get('/transactions', function () {
-        return view('admin.transactions');
+        return view('admin.riwayat-transaksi');
     })->name('admin.transactions');
 });
