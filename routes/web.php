@@ -15,9 +15,6 @@ Route::get('/reservation', function () {
 Route::get('/reservation-history', function () {
     return view('reservation-history');
 })->name('reservation-history');
-Route::get('/reservation-receipt', function () {
-    return view('reservation-receipt');
-})->name('reservation-receipt');
 Route::get('/payment', function () {
     return view('payment');
 })->name('payment');

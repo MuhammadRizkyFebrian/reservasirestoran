@@ -3,12 +3,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem 1rem;
+    padding: 0.35rem 0.5rem;
     font-weight: 600;
-    border-radius: 0.5rem;
-    margin: 0.25rem;
+    border-radius: 0.375rem;
     cursor: pointer;
     transition: all 0.2s;
+    font-size: 0.8rem;
 }
 
 .table-btn.available {
@@ -36,9 +36,9 @@
 
 .table-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
     gap: 0.5rem;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 
 .payment-method {
@@ -65,7 +65,12 @@
 
 @media (max-width: 640px) {
     .table-grid {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    }
+    
+    .table-btn {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.75rem;
     }
 }
 </style> 

@@ -1,29 +1,39 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const tableBtns = document.querySelectorAll('.table-btn.available');
+        const reservationModal = document.getElementById('reservation-modal');
+        const closeReservationModal = document.getElementById('closeReservationModal');
+        const reservationFormBtn = document.getElementById('reservationFormBtn');
+        const openReservationModalBtn = document.getElementById('openReservationModalBtn');
         const selectedTablesInfo = document.getElementById('selectedTablesInfo');
-        const tablePrice = document.getElementById('tablePrice');
-        const totalPrice = document.getElementById('totalPrice');
+        const tableSummary = document.getElementById('tableSummary');
+        const modalTablePrice = document.getElementById('modalTablePrice');
+        const modalTotalPrice = document.getElementById('modalTotalPrice');
         const reservationForm = document.getElementById('reservationForm');
-        const paymentTablePrice = document.getElementById('paymentTablePrice');
-        const paymentTotalPrice = document.getElementById('paymentTotalPrice');
-        const reservationDateTimeInfo = document.getElementById('reservationDateTimeInfo');
-        const reservationTableInfo = document.getElementById('reservationTableInfo');
-        const reservationGuestInfo = document.getElementById('reservationGuestInfo');
-        const reservationNotesInfo = document.getElementById('reservationNotesInfo');
-        const paymentModal = document.getElementById('payment-modal');
-        const successModal = document.getElementById('success-modal');
-        const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
-        const closePaymentModal = document.getElementById('closePaymentModal');
-        const paymentProof = document.getElementById('paymentProof');
-        const imagePreview = document.getElementById('imagePreview');
-        const previewImage = document.getElementById('previewImage');
-        const orderCode = document.getElementById('orderCode');
-        const transactionCode = document.getElementById('transactionCode');
-        const successOrderCode = document.getElementById('successOrderCode');
         
         const selectedTables = [];
         let totalPriceValue = 15000; // Default service fee
+        
+        // Handle open reservation modal button
+        if (openReservationModalBtn) {
+            openReservationModalBtn.addEventListener('click', function() {
+                reservationModal.showModal();
+            });
+        }
+        
+        // Handle reservation form button
+        if (reservationFormBtn) {
+            reservationFormBtn.addEventListener('click', function() {
+                reservationModal.showModal();
+            });
+        }
+        
+        // Handle close reservation modal
+        if (closeReservationModal) {
+            closeReservationModal.addEventListener('click', function() {
+                reservationModal.close();
+            });
+        }
         
         // Handle table button clicks
         tableBtns.forEach(btn => {
@@ -50,10 +60,29 @@
                 
                 updateSelectedTablesInfo();
                 updatePriceInfo();
+                updateTableSummary();
+                
+                // Enable or disable the reservation button
+                if (selectedTables.length > 0) {
+                    openReservationModalBtn.disabled = false;
+                } else {
+                    openReservationModalBtn.disabled = true;
+                }
             });
         });
         
-        // Update selected tables info
+        // Update table summary on main page
+        function updateTableSummary() {
+            if (selectedTables.length === 0) {
+                tableSummary.textContent = 'Belum ada meja yang dipilih';
+                return;
+            }
+            
+            const tableNames = selectedTables.map(table => table.name).join(', ');
+            tableSummary.textContent = tableNames;
+        }
+        
+        // Update selected tables info in modal
         function updateSelectedTablesInfo() {
             if (selectedTables.length === 0) {
                 selectedTablesInfo.textContent = 'Belum ada meja yang dipilih';
@@ -76,116 +105,36 @@
             const tablePriceValue = selectedTables.reduce((sum, table) => sum + table.price, 0);
             totalPriceValue = tablePriceValue + 15000; // Add service fee
             
-            tablePrice.textContent = `Rp ${tablePriceValue.toLocaleString('id-ID')}`;
-            totalPrice.textContent = `Rp ${totalPriceValue.toLocaleString('id-ID')}`;
-            
-            // Also update in payment modal
-            paymentTablePrice.textContent = `Rp ${tablePriceValue.toLocaleString('id-ID')}`;
-            paymentTotalPrice.textContent = `Rp ${totalPriceValue.toLocaleString('id-ID')}`;
+            // Update in reservation modal
+            modalTablePrice.textContent = `Rp ${tablePriceValue.toLocaleString('id-ID')}`;
+            modalTotalPrice.textContent = `Rp ${totalPriceValue.toLocaleString('id-ID')}`;
         }
         
-        // Handle reservation form submission
+        // Handle form submission
         if (reservationForm) {
             reservationForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Validate form
-                const date = document.getElementById('reservationDate').value;
-                const time = document.getElementById('reservationTime').value;
-                const guestCount = document.getElementById('guestCount').value;
-                const notes = document.getElementById('notes').value;
-                const termsCheckbox = document.getElementById('termsCheckbox').checked;
+                // Validasi form sederhana
+                const customerName = document.getElementById('customerName')?.value;
+                const phoneNumber = document.getElementById('phoneNumber')?.value;
+                const reservationDate = document.getElementById('reservationDate')?.value;
+                const reservationTime = document.getElementById('reservationTime')?.value;
+                const guestCount = document.getElementById('guestCount')?.value;
                 
-                if (!date || !time || !guestCount || selectedTables.length === 0 || !termsCheckbox) {
-                    alert('Harap isi semua field yang diperlukan dan pilih setidaknya satu meja.');
-                    return;
-                }
-                
-                // Format date for display
-                const dateObj = new Date(date);
-                const formattedDate = dateObj.toLocaleDateString('id-ID', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                
-                // Update reservation info in payment modal
-                reservationDateTimeInfo.textContent = `${formattedDate} - ${time}`;
-                
-                let tableNames = selectedTables.map(table => table.name).join(', ');
-                reservationTableInfo.textContent = tableNames;
-                
-                reservationGuestInfo.textContent = `${guestCount} orang`;
-                reservationNotesInfo.textContent = notes || '-';
-                
-                // Generate random codes
-                const randomOrderCode = 'RSV' + Math.floor(10000 + Math.random() * 90000);
-                const randomTransactionCode = 'TRX' + Math.floor(100000 + Math.random() * 900000);
-                
-                orderCode.textContent = randomOrderCode;
-                transactionCode.textContent = randomTransactionCode;
-                successOrderCode.textContent = randomOrderCode;
-                
-                // Show payment modal
-                paymentModal.showModal();
-            });
-        }
-        
-        // Handle payment proof upload
-        if (paymentProof) {
-            paymentProof.addEventListener('change', function(e) {
-                if (e.target.files.length > 0) {
-                    const file = e.target.files[0];
+                if (customerName && phoneNumber && reservationDate && reservationTime && guestCount) {
+                    // Generate random reservation order code
+                    const orderCode = 'RSV' + Math.floor(Math.random() * 90000 + 10000);
                     
-                    // Validate file size (max 2MB)
-                    if (file.size > 2 * 1024 * 1024) {
-                        alert('Ukuran file terlalu besar. Maksimum 2MB.');
-                        this.value = '';
-                        imagePreview.classList.add('hidden');
-                        return;
-                    }
+                    // Set order code in success modal
+                    document.getElementById('successOrderCode').textContent = orderCode;
                     
-                    // Preview image
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        previewImage.src = e.target.result;
-                        imagePreview.classList.remove('hidden');
-                    }
-                    reader.readAsDataURL(file);
+                    // Close reservation modal and redirect to payment page
+                    reservationModal.close();
                     
-                    // Enable confirm button
-                    confirmPaymentBtn.disabled = false;
-                } else {
-                    imagePreview.classList.add('hidden');
+                    // Redirect to payment page
+                    window.location.href = "{{ route('payment') }}";
                 }
-            });
-        }
-        
-        // Handle confirm payment button
-        if (confirmPaymentBtn) {
-            confirmPaymentBtn.addEventListener('click', function() {
-                if (!paymentProof.files.length) {
-                    alert('Silakan upload bukti pembayaran terlebih dahulu.');
-                    return;
-                }
-                
-                // Set reservation code in the success modal
-                const orderCode = document.getElementById('orderCode').textContent;
-                const successOrderCode = document.getElementById('successOrderCode');
-                if (successOrderCode) {
-                    successOrderCode.textContent = orderCode;
-                }
-                
-                paymentModal.close();
-                successModal.showModal();
-            });
-        }
-        
-        // Handle close payment modal
-        if (closePaymentModal) {
-            closePaymentModal.addEventListener('click', function() {
-                paymentModal.close();
             });
         }
         

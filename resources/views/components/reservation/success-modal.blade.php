@@ -11,12 +11,14 @@
             <p class="text-sm mb-1">Kode Pesanan:</p>
             <p class="font-bold text-lg" id="successOrderCode">RSV12345</p>
         </div>
-        <p class="mb-2 text-sm">Bukti pembayaran Anda telah diterima.</p>
-        <p class="mb-4 text-xs text-base-content/70">Status pembayaran dapat dilihat pada halaman riwayat reservasi.</p>
+        <p class="mb-2 text-sm">Reservasi Anda telah berhasil dibuat.</p>
+        <p class="mb-4 text-xs text-base-content/70">Silakan lanjutkan ke halaman pembayaran.</p>
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
-            <a href="{{ route('reservation-receipt') }}" class="btn btn-primary btn-sm">
-                <i class='bx bx-receipt mr-1'></i> Lihat Resi
-            </a>
+            <div class="modal-action justify-center">
+                <a href="{{ route('payment') }}" class="btn btn-primary w-full sm:w-auto">
+                    <i class='bx bx-credit-card'></i> Lanjutkan ke Pembayaran
+                </a>
+            </div>
             <a href="{{ route('reservation-history') }}" class="btn btn-outline btn-sm">
                 <i class='bx bx-history mr-1'></i> Riwayat Reservasi
             </a>
