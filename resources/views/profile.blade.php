@@ -79,29 +79,24 @@
 @endsection
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
+<div class="container mx-auto px-4 py-5">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <!-- Sidebar Profile -->
         <div class="md:col-span-1">
             <div class="profile-sidebar">
-                <a href="{{ route('home') }}" class="flex items-center text-primary mb-6">
-                    <i class='bx bx-chevron-left text-xl'></i>
-                    <span>Kembali</span>
-                </a>
-                
                 <div class="flex flex-col items-center mb-6">
                     <div class="relative mb-4">
-                        <img src="{{ asset('images/logo.jpg') }}" alt="Profile" id="profileAvatar" class="profile-image">
+                        <img src="https://ui-avatars.com/api/?name=Rwfles&background=random&size=140" alt="Profile" id="profileAvatar" class="profile-image">
                         <label for="avatarUpload" class="edit-button">
                             <i class='bx bx-plus'></i>
                             <input type="file" id="avatarUpload" class="hidden" accept="image/*" />
                         </label>
                     </div>
-                    <h2 class="text-xl font-bold mb-3">JohnDoe123</h2>
+                    <h2 class="text-xl font-bold mb-3">Rwfles</h2>
                     <div class="flex flex-col items-center space-y-2 text-center">
                         <div class="flex items-center">
                             <i class='bx bx-envelope text-base-content/70 mr-2'></i>
-                            <span class="text-sm" id="displayEmail">johndoe@example.com</span>
+                            <span class="text-sm" id="displayEmail">Rwfles@gmail.com</span>
                         </div>
                         <div class="flex items-center">
                             <i class='bx bx-phone text-base-content/70 mr-2'></i>
@@ -144,11 +139,11 @@
                 <div class="grid grid-cols-1 gap-3">
                     <div>
                         <p class="text-base-content/70 text-sm">Username</p>
-                        <p class="font-medium" id="displayName">JohnDoe123</p>
+                        <p class="font-medium" id="displayName">Rwfles</p>
                     </div>
                     <div>
                         <p class="text-base-content/70 text-sm">Email</p>
-                        <p class="font-medium">johndoe@example.com</p>
+                        <p class="font-medium">Rwfles@gmail.com</p>
                     </div>
                     <div>
                         <p class="text-base-content/70 text-sm">Nomor Telepon</p>
