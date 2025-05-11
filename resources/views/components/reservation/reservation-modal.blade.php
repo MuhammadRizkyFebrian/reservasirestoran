@@ -94,13 +94,13 @@
             
             <div class="form-control">
                 <label class="cursor-pointer label justify-start py-1">
-                    <input type="checkbox" class="checkbox checkbox-primary mr-2" id="modalTermsCheckbox" required />
-                    <span class="label-text text-sm">Saya menyetujui <span class="text-primary font-medium cursor-pointer" onclick="document.getElementById('terms-modal').showModal()">syarat dan ketentuan</span></span>
+                    <input type="checkbox" class="checkbox checkbox-secondary mr-2" id="modalTermsCheckbox" required />
+                    <span class="label-text text-sm">Saya menyetujui <span class="text-secondary font-medium cursor-pointer" onclick="document.getElementById('terms-modal').showModal()">syarat dan ketentuan</span></span>
                 </label>
             </div>
             
             <div class="form-control">
-                <button type="submit" class="btn btn-primary" id="modalLanjutkanReservasiBtn">Lanjutkan Reservasi</button>
+                <button type="submit" class="btn btn-secondary" id="modalLanjutkanReservasiBtn">Lanjutkan Reservasi</button>
             </div>
         </form>
     </div>

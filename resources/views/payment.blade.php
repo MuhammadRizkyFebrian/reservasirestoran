@@ -146,7 +146,7 @@
                         
                         <div class="payment-info-item">
                             <span class="payment-info-label">Jumlah</span>
-                            <span class="payment-info-value font-bold text-primary">Rp150.000</span>
+                            <span class="payment-info-value font-bold text-secondary">Rp150.000</span>
                         </div>
                     </div>
                 </div>
@@ -192,7 +192,7 @@
                         <span>Kembali</span>
                     </a>
                     
-                    <button class="btn btn-primary btn-sm" id="btnConfirmPayment">
+                    <button class="btn btn-secondary btn-sm" id="btnConfirmPayment">
                         <i class='bx bx-check'></i>
                         <span>Konfirmasi Pembayaran</span>
                     </button>
@@ -242,7 +242,7 @@
             
             <div class="modal-action">
                 <button type="button" class="btn btn-ghost" onclick="confirmPaymentModal.close()">Batal</button>
-                <button type="submit" class="btn btn-primary">Kirim Konfirmasi</button>
+                <button type="submit" class="btn btn-secondary">Kirim Konfirmasi</button>
             </div>
         </form>
     </div>

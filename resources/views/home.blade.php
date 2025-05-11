@@ -15,7 +15,7 @@
                 <div class="text-center text-white max-w-md">
                     <h1 class="mb-3 sm:mb-5 text-3xl sm:text-5xl font-bold">Selamat Datang</h1>
                     <p class="mb-4 sm:mb-5 text-sm sm:text-base">Rasakan pengalaman makan malam yang tak terlupakan dengan suasana misterius dan hidangan istimewa dari dapur kami.</p>
-                    <a href="{{ route('reservation') }}" class="btn btn-primary btn-sm sm:btn-md">Pesan Meja</a>
+                    <a href="{{ route('reservation') }}" class="btn btn-soft btn-warning">Pesan Meja</a>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
                         <h3 class="card-title text-base sm:text-lg">Seafood Special</h3>
                         <p class="text-sm sm:text-base">Fresh seafood with special sauce</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-primary text-xs sm:text-sm">Rp120.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm">Rp120.000</span>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                         <h3 class="card-title text-base sm:text-lg">Steak & Mushrooms</h3>
                         <p class="text-sm sm:text-base">Premium beef with sautéed mushrooms</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-primary text-xs sm:text-sm">Rp150.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm">Rp150.000</span>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                         <h3 class="card-title text-base sm:text-lg">Signature Cocktail</h3>
                         <p class="text-sm sm:text-base">Refreshing mix with local ingredients</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-primary text-xs sm:text-sm">Rp80.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm">Rp80.000</span>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                         <h3 class="card-title text-base sm:text-lg">Chef's Special</h3>
                         <p class="text-sm sm:text-base">Daily creation by our head chef</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-primary text-xs sm:text-sm">Rp135.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm">Rp135.000</span>
                         </div>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                         <h3 class="card-title text-base sm:text-lg">Chocolate Delight</h3>
                         <p class="text-sm sm:text-base">Rich dessert with local chocolate</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-primary text-xs sm:text-sm">Rp45.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm">Rp45.000</span>
                         </div>
                     </div>
                 </div>
@@ -94,14 +94,14 @@
                         <h3 class="card-title text-base sm:text-lg">Creamy Pasta</h3>
                         <p class="text-sm sm:text-base">Pasta with creamy sauce and herbs</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-primary text-xs sm:text-sm">Rp95.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm">Rp95.000</span>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="text-center mt-6 sm:mt-8">
-                <a href="{{ route('menu') }}" class="btn btn-primary btn-sm sm:btn-md">Lihat Menu Lengkap</a>
+                <a href="{{ route('menu') }}" class="btn btn-warning btn-sm sm:btn-md">Lihat Menu Lengkap</a>
             </div>
         </div>
     </section>
@@ -142,7 +142,7 @@
                     <div class="promo-content text-white">
                         <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Happy Hour</h3>
                         <p class="mb-3 sm:mb-4 text-sm sm:text-base">Diskon 20% untuk semua minuman dari jam 4-6 sore, setiap hari Senin-Jumat.</p>
-                        <button class="btn btn-xs sm:btn-sm btn-primary">Lihat Detail</button>
+                        <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
                     </div>
                 </div>
                 
@@ -151,7 +151,7 @@
                     <div class="promo-content text-white">
                         <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Weekend Special</h3>
                         <p class="mb-3 sm:mb-4 text-sm sm:text-base">Paket makan untuk 4 orang hanya Rp500.000, setiap Sabtu dan Minggu.</p>
-                        <button class="btn btn-xs sm:btn-sm btn-primary">Lihat Detail</button>
+                        <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
                     </div>
                 </div>
                 
@@ -160,7 +160,7 @@
                     <div class="promo-content text-white">
                         <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Birthday Package</h3>
                         <p class="mb-3 sm:mb-4 text-sm sm:text-base">Gratis kue dan minuman spesial untuk yang berulang tahun (min. 4 orang).</p>
-                        <button class="btn btn-xs sm:btn-sm btn-primary">Lihat Detail</button>
+                        <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
                     </div>
                 </div>
             </div>
@@ -177,14 +177,14 @@
                         <div class="rating-summary flex items-center">
                             <span id="avgRating" class="text-lg sm:text-xl font-bold">0</span>
                             <div class="flex ml-2">
-                                <i class='bx bxs-star text-warning text-lg sm:text-xl'></i>
+                                <i class='bx bxs-star text-accent text-lg sm:text-xl'></i>
                             </div>
                         </div>
                         <span class="text-base-content/70">|</span>
                         <div id="totalReviews" class="text-sm sm:text-base text-base-content/70">0 ulasan</div>
                     </div>
                 </div>
-                <button id="addReviewBtn" class="btn btn-primary mt-4 sm:mt-0">Tambah Ulasan</button>
+                <button id="addReviewBtn" class="btn btn-warning mt-4 sm:mt-0">Tambah Ulasan</button>
             </div>
             
             <!-- Daftar Ulasan -->
@@ -200,7 +200,7 @@
             <div class="text-center">
                 <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Reservasi Sekarang</h2>
                 <p class="mb-6 sm:mb-8 max-w-2xl mx-auto text-sm sm:text-base">Jangan lewatkan pengalaman bersantap yang luar biasa. Reservasi meja Anda sekarang dan nikmati hidangan spesial dari chef kami!</p>
-                <a href="{{ route('reservation') }}" class="btn btn-primary">Pesan Meja</a>
+                <a href="{{ route('reservation') }}" class="btn btn-warning">Pesan Meja</a>
             </div>
         </div>
     </section>
@@ -375,10 +375,10 @@
                                 <h3 class="font-bold text-base sm:text-lg">${review.name}</h3>
                             </div>
                             <div class="flex gap-1 sm:gap-2">
-                                <button class="btn btn-xs sm:btn-sm btn-ghost edit-review" data-id="${review.id}">
+                                <button class="btn btn-xs sm:btn-sm btn-outline btn-warning edit-review" data-id="${review.id}">
                                     <i class='bx bx-edit text-base sm:text-lg'></i>
                                 </button>
-                                <button class="btn btn-xs sm:btn-sm btn-ghost delete-review" data-id="${review.id}">
+                                <button class="btn btn-xs sm:btn-sm btn-outline btn-error delete-review" data-id="${review.id}">
                                     <i class='bx bx-trash text-base sm:text-lg text-error'></i>
                                 </button>
                             </div>
@@ -424,20 +424,20 @@
             
             // Tambahkan bintang penuh
             for (let i = 0; i < fullStars; i++) {
-                stars += `<i class='bx bxs-star text-warning text-base sm:text-xl'></i>`;
+                stars += `<i class='bx bxs-star text-accent text-base sm:text-xl'></i>`;
             }
             
             // Tambahkan bintang setengah jika perlu
             if (hasHalfStar) {
-                stars += `<i class='bx bxs-star-half text-warning text-base sm:text-xl'></i>`;
+                stars += `<i class='bx bxs-star-half text-accent text-base sm:text-xl'></i>`;
             } else if (hasFullStar) {
-                stars += `<i class='bx bxs-star text-warning text-base sm:text-xl'></i>`;
+                stars += `<i class='bx bxs-star text-accent text-base sm:text-xl'></i>`;
             }
             
             // Tambahkan bintang kosong yang tersisa
             const remainingStars = 5 - fullStars - (hasHalfStar || hasFullStar ? 1 : 0);
             for (let i = 0; i < remainingStars; i++) {
-                stars += `<i class='bx bx-star text-warning text-base sm:text-xl'></i>`;
+                stars += `<i class='bx bx-star text-accent text-base sm:text-xl'></i>`;
             }
             
             return stars;

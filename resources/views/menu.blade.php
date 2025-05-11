@@ -17,10 +17,10 @@
     @include('components.menu.menu-filter')
 
     <!-- Makanan Section -->
-    <div class="container mx-auto px-4 py-8 bg-base-100">
-        <h2 class="text-3xl font-bold mb-6 text-base-content">Makanan</h2>
+    <div class="container mx-auto px-2 md:px-4 py-4 md:py-6 bg-base-100">
+        <h2 class="text-3xl font-bold mb-8 text-base-content">Makanan</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 lg:gap-2">
             <!-- Wagyu Steak -->
             @component('components.menu.menu-card')
                 @slot('image', 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=2070&auto=format&fit=crop')
@@ -85,9 +85,9 @@
 
     <!-- Minuman Section -->
     <div class="container mx-auto px-4 py-8 bg-base-100">
-        <h2 class="text-3xl font-bold mb-6 text-base-content">Minuman</h2>
+        <h2 class="text-3xl font-bold mb-8 text-base-content">Minuman</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 lg:gap-2">
             <!-- Signature Cocktail -->
             @component('components.menu.menu-card')
                 @slot('image', 'https://images.unsplash.com/photo-1536935338788-846bb9981813?q=80&w=1172&auto=format&fit=crop')

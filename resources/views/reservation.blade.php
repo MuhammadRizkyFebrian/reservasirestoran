@@ -20,7 +20,7 @@
             <div class="card-body p-4">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3">
                     <h2 class="card-title text-lg font-bold">Denah Meja Restoran</h2>
-                    <button id="reservationFormBtn" class="btn btn-primary btn-sm mt-2 sm:mt-0">
+                    <button id="reservationFormBtn" class="btn btn-secondary btn-sm mt-2 sm:mt-0">
                         <i class='bx bx-calendar-edit mr-1'></i> Buat Reservasi
                     </button>
                 </div>
@@ -101,10 +101,10 @@
                 <!-- Summary -->
                 <div class="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center">
                     <div>
-                        <h3 class="font-bold text-base">Meja Dipilih: <span id="tableSummary" class="text-primary">Belum ada meja yang dipilih</span></h3>
+                        <h3 class="font-bold text-base">Meja Dipilih: <span id="tableSummary" class="text-secondary">Belum ada meja yang dipilih</span></h3>
                     </div>
                     <div class="mt-2 sm:mt-0">
-                        <button id="openReservationModalBtn" class="btn btn-primary btn-sm" disabled>Lanjutkan</button>
+                        <button id="openReservationModalBtn" class="btn btn-secondary btn-sm" disabled>Lanjutkan</button>
                     </div>
                 </div>
             </div>

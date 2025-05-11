@@ -106,7 +106,7 @@
                 </div>
                 
                 <div class="mt-8">
-                    <a href="{{ route('profile') }}" class="nav-item active">
+                    <a href="{{ route('profile') }}" class="nav-item active text-white">
                         <i class='bx bx-user'></i>
                         <span>Profil</span>
                     </a>
@@ -129,7 +129,7 @@
         <div class="md:col-span-3">
             <div class="flex justify-between items-center mb-3">
                 <h1 class="text-xl sm:text-2xl font-bold">Informasi Akun</h1>
-                <button id="editProfileBtn" class="btn btn-primary btn-sm">
+                <button id="editProfileBtn" class="btn btn-primary text-white btn-sm">
                     <i class='bx bx-edit mr-1'></i> Edit Profil
                 </button>
             </div>
@@ -212,7 +212,7 @@
                     </div>
                     
                     <div class="flex justify-end gap-2 pt-2">
-                        <button type="submit" class="btn btn-primary btn-sm">Ubah Password</button>
+                        <button type="submit" class="btn btn-primary text-white btn-sm">Ubah Password</button>
                     </div>
                 </form>
             </div>

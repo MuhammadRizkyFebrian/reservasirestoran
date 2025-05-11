@@ -165,7 +165,7 @@
                     </div>
                     
                     <div class="form-control flex-1">
-                        <button class="btn btn-primary" id="filterButton">
+                        <button class="btn btn-primary text-white" id="filterButton">
                             <i class='bx bx-filter-alt mr-2'></i> Filter
                         </button>
                     </div>
@@ -195,7 +195,7 @@
                         <p class="font-bold mb-2 sm:mb-0 break-words">Total: Rp150.000</p>
                         <div class="flex flex-wrap gap-2 mt-3 justify-between">
                             <div class="flex gap-2 flex-grow">
-                                <a href="{{ route('payment') }}" class="btn btn-sm btn-primary flex-1 sm:flex-none">
+                                <a href="{{ route('payment') }}" class="btn btn-sm btn-primary text-white flex-1 sm:flex-none">
                                     <i class='bx bx-credit-card'></i>
                                     <span class="hidden xs:inline">Lihat Pembayaran</span>
                                 </a>
@@ -244,7 +244,7 @@
                             <h3 class="font-bold text-lg truncate">Reservasi-1156</h3>
                             <p class="text-sm text-base-content/70">15 Mei 2023 - 20:00</p>
                         </div>
-                        <span class="badge badge-primary whitespace-nowrap shrink-0">Terjadwal</span>
+                        <span class="badge badge-primary whitespace-nowrap text-white shrink-0">Terjadwal</span>
                     </div>
                     
                     <div class="divider my-2"></div>

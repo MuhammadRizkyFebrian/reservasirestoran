@@ -48,7 +48,7 @@
                     
                     <!-- Filter Buttons -->
                     <div class="flex gap-2">
-                        <button type="button" id="filterButton" class="btn btn-primary flex-1 sm:flex-none h-12 min-h-0">
+                        <button type="button" id="filterButton" class="btn btn-warning flex-1 sm:flex-none h-12 min-h-0">
                             <i class='bx bx-filter-alt mr-1'></i>Filter
                         </button>
                         <button type="reset" id="resetButton" class="btn btn-outline h-12 min-h-0 px-3 sm:px-4">
