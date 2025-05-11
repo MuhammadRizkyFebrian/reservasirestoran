@@ -34,7 +34,7 @@
                         <h3 class="card-title text-base sm:text-lg">Seafood Special</h3>
                         <p class="text-sm sm:text-base">Fresh seafood with special sauce</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-warning text-xs sm:text-sm">Rp120.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp120.000</span>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                         <h3 class="card-title text-base sm:text-lg">Steak & Mushrooms</h3>
                         <p class="text-sm sm:text-base">Premium beef with sautéed mushrooms</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-warning text-xs sm:text-sm">Rp150.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp150.000</span>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                         <h3 class="card-title text-base sm:text-lg">Signature Cocktail</h3>
                         <p class="text-sm sm:text-base">Refreshing mix with local ingredients</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-warning text-xs sm:text-sm">Rp80.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp80.000</span>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                         <h3 class="card-title text-base sm:text-lg">Chef's Special</h3>
                         <p class="text-sm sm:text-base">Daily creation by our head chef</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-warning text-xs sm:text-sm">Rp135.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp135.000</span>
                         </div>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                         <h3 class="card-title text-base sm:text-lg">Chocolate Delight</h3>
                         <p class="text-sm sm:text-base">Rich dessert with local chocolate</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-warning text-xs sm:text-sm">Rp45.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp45.000</span>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                         <h3 class="card-title text-base sm:text-lg">Creamy Pasta</h3>
                         <p class="text-sm sm:text-base">Pasta with creamy sauce and herbs</p>
                         <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-warning text-xs sm:text-sm">Rp95.000</span>
+                            <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp95.000</span>
                         </div>
                     </div>
                 </div>
