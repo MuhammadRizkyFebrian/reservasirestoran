@@ -90,30 +90,25 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                 <div>
                     <div class="payment-info-item">
-                        <span class="payment-info-label">ID Pembayaran</span>
-                        <span class="payment-info-value">PAY-45952</span>
+                        <span class="payment-info-label">ID Transaksi</span>
+                        <span class="payment-info-value">#TRX005</span>
                     </div>
                     
                     <div class="payment-info-item">
                         <span class="payment-info-label">ID Pemesanan</span>
-                        <span class="payment-info-value">RSV-85716</span>
-                    </div>
-                    
-                    <div class="payment-info-item">
-                        <span class="payment-info-label">Metode Pembayaran</span>
-                        <span class="payment-info-value">Transfer Bank</span>
+                        <span class="payment-info-value">RSV-005</span>
                     </div>
                 </div>
                 
                 <div>
                     <div class="payment-info-item">
                         <span class="payment-info-label">Nama Pemesan</span>
-                        <span class="payment-info-value">John Doe</span>
+                        <span class="payment-info-value">Rafles</span>
                     </div>
                     
                     <div class="payment-info-item">
                         <span class="payment-info-label">Nomor Telepon</span>
-                        <span class="payment-info-value">+62 812 3456 7890</span>
+                        <span class="payment-info-value">081234567890</span>
                     </div>
                 </div>
             </div>
@@ -146,7 +141,7 @@
                         
                         <div class="payment-info-item">
                             <span class="payment-info-label">Jumlah</span>
-                            <span class="payment-info-value font-bold text-secondary">Rp150.000</span>
+                            <span class="payment-info-value font-bold text-primary">Rp150.000</span>
                         </div>
                     </div>
                 </div>
@@ -157,11 +152,11 @@
                         <div class="flex flex-col mt-2 px-4 py-2 bg-base-200 rounded-lg">
                             <div class="flex justify-between mb-1">
                                 <span class="text-sm">Meja</span>
-                                <span class="font-medium">Meja 3 (4 orang)</span>
+                                <span class="font-medium">Meja 3 (2 orang)</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-sm">Jadwal</span>
-                                <span class="font-medium">3 Mei 2023 - 16:00</span>
+                                <span class="font-medium">28 Mei 2025 - 20:00</span>
                             </div>
                         </div>
                     </div>
@@ -176,15 +171,6 @@
             <!-- Payment Actions -->
             <div class="payment-action flex flex-col sm:flex-row gap-3 justify-between no-print">
                 <div class="flex gap-2">
-                    <button class="btn btn-outline btn-sm" onclick="window.print()">
-                        <i class='bx bx-printer'></i>
-                        <span>Cetak</span>
-                    </button>
-                    
-                    <button class="btn btn-outline btn-sm">
-                        <i class='bx bx-download'></i>
-                        <span>Unduh PDF</span>
-                    </button>
                 </div>
                 
                 <div class="flex gap-2">

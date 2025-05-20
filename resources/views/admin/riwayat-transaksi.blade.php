@@ -372,17 +372,49 @@
         
         @media (max-width: 480px) {
             .header h1 {
-                font-size: 1.5rem;
+                font-size: 1.2rem;
             }
-            
             .content-wrapper h2 {
-                font-size: 1.25rem;
+                font-size: 1rem;
             }
-            
-            .pagination {
-                flex-direction: column-reverse;
-                gap: 1rem;
-                align-items: flex-start;
+            .sidebar {
+                width: 80vw;
+                min-width: 0;
+                max-width: 280px;
+                transform: translateX(-80vw);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .content-wrapper {
+                margin-left: 0;
+                padding: 3.5rem 0.5rem 1rem 0.5rem;
+            }
+            .mobile-menu-toggle {
+                width: 36px;
+                height: 36px;
+                left: 0.5rem;
+                top: 0.5rem;
+            }
+            .sidebar-menu {
+                padding: 0.5rem;
+            }
+            .menu-item {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.95rem;
+            }
+            .transaction-table th, .transaction-table td {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
+        @media (max-width: 320px) {
+            .sidebar {
+                width: 95vw;
+                max-width: 95vw;
+            }
+            .content-wrapper {
+                padding: 3rem 0.2rem 1rem 0.2rem;
             }
         }
     </style>
@@ -471,7 +503,7 @@
                         <tr>
                             <th>ID Transaksi</th>
                             <th>ID Pemesanan</th>
-                            <th>Nama Pelanggan</th>
+                            <th>Username Pemesan</th>
                             <th>Tanggal Transaksi</th>
                             <th>Total Pembayaran</th>
                             <th>Status</th>
@@ -483,13 +515,13 @@
                         <tr>
                             <td>#TRX001</td>
                             <td>#RSV001</td>
-                            <td>John Doe</td>
+                            <td>Hakim</td>
                             <td>25 Juni 2024</td>
-                            <td>Rp 55.000</td>
+                            <td>Rp 20.000</td>
                             <td>
-                                <span class="table-status status-confirmed">
-                                    <i class='bx bxs-check-circle mr-1 text-xs'></i>
-                                    Dikonfirmasi
+                            <span class="table-status status-completed">
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    Selesai
                                 </span>
                             </td>
                             <td>
@@ -502,41 +534,20 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>#TRX003</td>
-                            <td>#RSV003</td>
-                            <td>Alex Smith</td>
+                            <td>#TRX002</td>
+                            <td>#RSV002</td>
+                            <td>Sakila</td>
                             <td>27 Juni 2024</td>
-                            <td>Rp 210.000</td>
-                             <td>
+                            <td>Rp 40.000</td>
+                            <td>
                                 <span class="table-status status-completed">
-                                    <i class='bx bxs-check-square mr-1 text-xs'></i>
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
                                     Selesai
                                 </span>
                             </td>
-                             <td>
+                            <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-info action-view-btn" onclick="viewTransactionDetails('TRX003')">
-                                        <i class='bx bx-show-alt'></i>
-                                        <span class="hidden sm:inline ml-1">Detail</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>#TRX005</td>
-                            <td>#RSV005</td>
-                            <td>Maria Tanjung</td>
-                            <td>29 Juni 2024</td>
-                            <td>Rp 130.000</td>
-                             <td>
-                                <span class="table-status status-completed">
-                                    <i class='bx bxs-check-square mr-1 text-xs'></i>
-                                    Selesai
-                                </span>
-                            </td>
-                             <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-sm btn-info action-view-btn" onclick="viewTransactionDetails('TRX005')">
+                                    <button class="btn btn-sm btn-info action-view-btn" onclick="viewTransactionDetails('TRX002')">
                                         <i class='bx bx-show-alt'></i>
                                         <span class="hidden sm:inline ml-1">Detail</span>
                                     </button>
@@ -544,6 +555,28 @@
                             </td>
                         </tr>
                        
+                        <tr>
+                            <td>#TRX004</td>
+                            <td>#RSV004</td>
+                            <td>Rafles</td>
+                            <td>27 Juni 2024</td>
+                            <td>Rp 40.000</td>
+                            <td>
+                                <span class="table-status status-confirmed">
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    Dikonfirmasi
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-info action-view-btn" onclick="viewTransactionDetails('TRX004')">
+                                        <i class='bx bx-show-alt'></i>
+                                        <span class="hidden sm:inline ml-1">Detail</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -551,7 +584,7 @@
             <!-- Pagination -->
             <div class="pagination">
                 <div class="text-sm text-base-content/70">
-                    Menampilkan 1-3 dari 3 transaksi
+                    Menampilkan 1-2 dari 2 transaksi
                 </div>
                 <div class="pagination-buttons">
                     <button class="btn btn-sm btn-outline pagination-button" disabled>
@@ -573,7 +606,7 @@
             <h3 class="font-bold text-lg mb-4">Detail Transaksi <span id="detailTransactionId" class="font-normal"></span></h3>
             <div class="space-y-2">
                 <p><strong>ID Pemesanan:</strong> <span id="detailReservationId"></span></p>
-                <p><strong>Nama Pelanggan:</strong> <span id="detailCustomerName"></span></p>
+                <p><strong>Username Pemesan:</strong> <span id="detailCustomerName"></span></p>
                 <p><strong>Tanggal Transaksi:</strong> <span id="detailTransactionDate"></span></p>
                 <p><strong>Total Pembayaran:</strong> <span id="detailTotalPayment"></span></p>
                 <p><strong>Status:</strong> <span id="detailStatus"></span></p>
@@ -663,9 +696,9 @@
             // --- GANTI DENGAN DATA ASLI DARI BACKEND --- 
             // Contoh data statis untuk modal detail (tanpa metode pembayaran)
             const transactions = {
-                "TRX001": { reservationId: "#RSV001", customerName: "John Doe", date: "25 Juni 2024", total: "Rp 55.000", status: "Dikonfirmasi" },
-                "TRX003": { reservationId: "#RSV003", customerName: "Alex Smith", date: "27 Juni 2024", total: "Rp 210.000", status: "Selesai" },
-                "TRX005": { reservationId: "#RSV005", customerName: "Maria Tanjung", date: "29 Juni 2024", total: "Rp 130.000", status: "Selesai" }
+                "TRX001": { reservationId: "#RSV001", customerName: "Hakim", date: "25 Juni 2024", total: "Rp 20.000", status: "Selesai" },
+                "TRX002": { reservationId: "#RSV002", customerName: "Sakila", date: "1 Juli 2024", total: "Rp 40.000", status: "Selesai" },
+                "TRX004": { reservationId: "#RSV004", customerName: "Rafles", date: "19 Mei 2025", total: "Rp 40.000", status: "Dikonfirmasi" }
             };
             const data = transactions[transactionId];
             // --- AKHIR DATA CONTOH --- 

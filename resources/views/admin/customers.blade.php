@@ -356,17 +356,49 @@
         
         @media (max-width: 480px) {
             .header h1 {
-                font-size: 1.5rem;
+                font-size: 1.2rem;
             }
-            
             .content-wrapper h2 {
-                font-size: 1.25rem;
+                font-size: 1rem;
             }
-            
-            .pagination {
-                flex-direction: column-reverse;
-                gap: 1rem;
-                align-items: flex-start;
+            .sidebar {
+                width: 80vw;
+                min-width: 0;
+                max-width: 280px;
+                transform: translateX(-80vw);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .content-wrapper {
+                margin-left: 0;
+                padding: 3.5rem 0.5rem 1rem 0.5rem;
+            }
+            .mobile-menu-toggle {
+                width: 36px;
+                height: 36px;
+                left: 0.5rem;
+                top: 0.5rem;
+            }
+            .sidebar-menu {
+                padding: 0.5rem;
+            }
+            .menu-item {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.95rem;
+            }
+            .customer-table th, .customer-table td {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
+        @media (max-width: 320px) {
+            .sidebar {
+                width: 95vw;
+                max-width: 95vw;
+            }
+            .content-wrapper {
+                padding: 3rem 0.2rem 1rem 0.2rem;
             }
         }
     </style>
@@ -454,8 +486,8 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Email</th>
                             <th>Username</th>
+                            <th>Email</th>
                             <th>No. Handphone</th>
                             <th>Aksi</th>
                         </tr>
@@ -463,91 +495,61 @@
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>johndoe@example.com</td>
-                            <td>johndoe123</td>
-                            <td>+62 812 3456 7890</td>
+                            <td>Rafles</td>
+                            <td>rafles@email.com</td>
+                            <td>081234567890</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal(1, 'johndoe@example.com', 'johndoe123', '+62 812 3456 7890')">
-                                        <i class='bx bx-edit-alt'></i>
-                                        <span class="hidden sm:inline ml-1">Edit</span>
-                                    </button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete(1, 'johndoe123')">
-                                        <i class='bx bx-trash'></i>
-                                        <span class="hidden sm:inline ml-1">Hapus</span>
-                                    </button>
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('1', 'rafles@email.com', 'Rafles', '081234567890')"><i class='bx bx-edit-alt'></i></button>
+                                    <button class="btn btn-sm btn-error action-delete-btn"><i class='bx bx-trash'></i></button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td>2</td>
-                            <td>janedoe@example.com</td>
-                            <td>janedoe456</td>
-                            <td>+62 821 3456 7890</td>
+                            <td>Hakim</td>
+                            <td>hakim@email.com</td>
+                            <td>081234567891</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal(2, 'janedoe@example.com', 'janedoe456', '+62 821 3456 7890')">
-                                        <i class='bx bx-edit-alt'></i>
-                                        <span class="hidden sm:inline ml-1">Edit</span>
-                                    </button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete(2, 'janedoe456')">
-                                        <i class='bx bx-trash'></i>
-                                        <span class="hidden sm:inline ml-1">Hapus</span>
-                                    </button>
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('2', 'hakim@email.com', 'Hakim', '081234567891')"><i class='bx bx-edit-alt'></i></button>
+                                    <button class="btn btn-sm btn-error action-delete-btn"><i class='bx bx-trash'></i></button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td>3</td>
-                            <td>alexsmith@example.com</td>
-                            <td>alexsmith789</td>
-                            <td>+62 832 3456 7890</td>
+                            <td>Sakila</td>
+                            <td>sakila@email.com</td>
+                            <td>081234567892</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal(3, 'alexsmith@example.com', 'alexsmith789', '+62 832 3456 7890')">
-                                        <i class='bx bx-edit-alt'></i>
-                                        <span class="hidden sm:inline ml-1">Edit</span>
-                                    </button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete(3, 'alexsmith789')">
-                                        <i class='bx bx-trash'></i>
-                                        <span class="hidden sm:inline ml-1">Hapus</span>
-                                    </button>
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('3', 'sakila@email.com', 'Sakila', '081234567892')"><i class='bx bx-edit-alt'></i></button>
+                                    <button class="btn btn-sm btn-error action-delete-btn"><i class='bx bx-trash'></i></button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td>4</td>
-                            <td>mariatanjung@example.com</td>
-                            <td>mariatanjung</td>
-                            <td>+62 856 3456 7890</td>
+                            <td>Rizki</td>
+                            <td>rizki@email.com</td>
+                            <td>081234567893</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal(4, 'mariatanjung@example.com', 'mariatanjung', '+62 856 3456 7890')">
-                                        <i class='bx bx-edit-alt'></i>
-                                        <span class="hidden sm:inline ml-1">Edit</span>
-                                    </button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete(4, 'mariatanjung')">
-                                        <i class='bx bx-trash'></i>
-                                        <span class="hidden sm:inline ml-1">Hapus</span>
-                                    </button>
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('4', 'rizki@email.com', 'Rizki', '081234567893')"><i class='bx bx-edit-alt'></i></button>
+                                    <button class="btn btn-sm btn-error action-delete-btn"><i class='bx bx-trash'></i></button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td>5</td>
-                            <td>budisetiawan@example.com</td>
-                            <td>budisetiawan22</td>
-                            <td>+62 878 3456 7890</td>
+                            <td>Ujang</td>
+                            <td>ujang@email.com</td>
+                            <td>081234567894</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal(5, 'budisetiawan@example.com', 'budisetiawan22', '+62 878 3456 7890')">
-                                        <i class='bx bx-edit-alt'></i>
-                                        <span class="hidden sm:inline ml-1">Edit</span>
-                                    </button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete(5, 'budisetiawan22')">
-                                        <i class='bx bx-trash'></i>
-                                        <span class="hidden sm:inline ml-1">Hapus</span>
-                                    </button>
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('5', 'ujang@email.com', 'Ujang', '081234567894')"><i class='bx bx-edit-alt'></i></button>
+                                    <button class="btn btn-sm btn-error action-delete-btn"><i class='bx bx-trash'></i></button>
                                 </div>
                             </td>
                         </tr>

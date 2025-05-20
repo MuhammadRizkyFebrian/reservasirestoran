@@ -218,10 +218,6 @@
             color: var(--fallback-error,oklch(var(--er)));
         }
         
-        .status-maintenance {
-            background-color: rgba(var(--warning-rgb, 200, 150, 0), 0.15);
-            color: var(--fallback-warning,oklch(var(--wa)));
-        }
         
         .action-edit-btn, .action-delete-btn {
             transition: all 0.3s ease;
@@ -390,17 +386,49 @@
         
         @media (max-width: 480px) {
             .header h1 {
-                font-size: 1.5rem;
+                font-size: 1.2rem;
             }
-            
             .content-wrapper h2 {
-                font-size: 1.25rem;
+                font-size: 1rem;
             }
-            
-            .pagination {
-                flex-direction: column-reverse;
-                gap: 1rem;
-                align-items: flex-start;
+            .sidebar {
+                width: 80vw;
+                min-width: 0;
+                max-width: 280px;
+                transform: translateX(-80vw);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .content-wrapper {
+                margin-left: 0;
+                padding: 3.5rem 0.5rem 1rem 0.5rem;
+            }
+            .mobile-menu-toggle {
+                width: 36px;
+                height: 36px;
+                left: 0.5rem;
+                top: 0.5rem;
+            }
+            .sidebar-menu {
+                padding: 0.5rem;
+            }
+            .menu-item {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.95rem;
+            }
+            .table-data-table th, .table-data-table td {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
+        @media (max-width: 320px) {
+            .sidebar {
+                width: 95vw;
+                max-width: 95vw;
+            }
+            .content-wrapper {
+                padding: 3rem 0.2rem 1rem 0.2rem;
             }
         }
     </style>
@@ -487,7 +515,6 @@
                         <option value="">Semua Status</option>
                         <option value="available">Tersedia</option>
                         <option value="booked">Dipesan</option>
-                        <option value="maintenance">Pemeliharaan</option>
                     </select>
                     <button class="btn btn-primary">
                         <i class='bx bx-search mr-1'></i>
@@ -510,9 +537,9 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>A1</td>
+                            <td>T1</td>
                             <td>Persegi</td>
-                            <td>Rp 50.000</td>
+                            <td>Rp 25.000</td>
                             <td>
                                 <span class="table-status status-available">
                                     <i class='bx bxs-circle mr-1 text-xs'></i>
@@ -521,11 +548,11 @@
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('A1', 'Persegi', '50000', 'available')">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('T1', 'Persegi', '25000', 'available')">
                                         <i class='bx bx-edit-alt'></i>
                                         <span class="hidden sm:inline ml-1">Edit</span>
                                     </button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('A1')">
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('T1')">
                                         <i class='bx bx-trash'></i>
                                         <span class="hidden sm:inline ml-1">Hapus</span>
                                     </button>
@@ -533,9 +560,55 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>A2</td>
+                            <td>T2</td>
                             <td>Persegi</td>
-                            <td>Rp 50.000</td>
+                            <td>Rp 25.000</td>
+                            <td>
+                                <span class="table-status status-available">
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    Tersedia
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('T2', 'Persegi', '25000', 'available')">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="hidden sm:inline ml-1">Edit</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('T2')">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="hidden sm:inline ml-1">Hapus</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>T3</td>
+                            <td>Persegi</td>
+                            <td>Rp 25.000</td>
+                            <td>
+                                <span class="table-status status-available">
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    Tersedia
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('T3', 'Persegi', '25000', 'available')">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="hidden sm:inline ml-1">Edit</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('T3')">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="hidden sm:inline ml-1">Hapus</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>T4</td>
+                            <td>Persegi</td>
+                            <td>Rp 25.000</td>
                             <td>
                                 <span class="table-status status-booked">
                                     <i class='bx bxs-circle mr-1 text-xs'></i>
@@ -544,11 +617,11 @@
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('A2', 'Persegi', '50000', 'booked')">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('T4', 'Persegi', '25000', 'booked')">
                                         <i class='bx bx-edit-alt'></i>
                                         <span class="hidden sm:inline ml-1">Edit</span>
                                     </button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('A2')">
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('T4')">
                                         <i class='bx bx-trash'></i>
                                         <span class="hidden sm:inline ml-1">Hapus</span>
                                     </button>
@@ -556,55 +629,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>B1</td>
-                            <td>Persegi Panjang</td>
-                            <td>Rp 100.000</td>
-                            <td>
-                                <span class="table-status status-available">
-                                    <i class='bx bxs-circle mr-1 text-xs'></i>
-                                    Tersedia
-                                </span>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('B1', 'Persegi Panjang', '100000', 'available')">
-                                        <i class='bx bx-edit-alt'></i>
-                                        <span class="hidden sm:inline ml-1">Edit</span>
-                                    </button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('B1')">
-                                        <i class='bx bx-trash'></i>
-                                        <span class="hidden sm:inline ml-1">Hapus</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>C1</td>
+                            <td>T5</td>
                             <td>Bundar</td>
-                            <td>Rp 75.000</td>
-                            <td>
-                                <span class="table-status status-maintenance">
-                                    <i class='bx bxs-circle mr-1 text-xs'></i>
-                                    Pemeliharaan
-                                </span>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('C1', 'Bundar', '750000', 'maintenance')">
-                                        <i class='bx bx-edit-alt'></i>
-                                        <span class="hidden sm:inline ml-1">Edit</span>
-                                    </button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('C1')">
-                                        <i class='bx bx-trash'></i>
-                                        <span class="hidden sm:inline ml-1">Hapus</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>D1</td>
-                            <td>Persegi Panjang</td>
-                            <td>Rp 100.000</td>
+                            <td>Rp 40.000</td>
                             <td>
                                 <span class="table-status status-available">
                                     <i class='bx bxs-circle mr-1 text-xs'></i>
@@ -613,11 +640,149 @@
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('D1', 'Persegi Panjang', '100000', 'available')">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('T5', 'Bundar', '40000', 'available')">
                                         <i class='bx bx-edit-alt'></i>
                                         <span class="hidden sm:inline ml-1">Edit</span>
                                     </button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('D1')">
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('T5')">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="hidden sm:inline ml-1">Hapus</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>T6</td>
+                            <td>Bundar</td>
+                            <td>Rp 40.000</td>
+                            <td>
+                                <span class="table-status status-available">
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    Tersedia
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('T6', 'Bundar', '40000', 'available')">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="hidden sm:inline ml-1">Edit</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('T6')">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="hidden sm:inline ml-1">Hapus</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>T7</td>
+                            <td>Bundar</td>
+                            <td>Rp 40.000</td>
+                            <td>
+                                <span class="table-status status-booked">
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    Dipesan
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('T7', 'Bundar', '40000', 'booked')">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="hidden sm:inline ml-1">Edit</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('T7')">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="hidden sm:inline ml-1">Hapus</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>T8</td>
+                            <td>Persegi Panjang</td>
+                            <td>Rp 60.000</td>
+                            <td>
+                                <span class="table-status status-available">
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    Tersedia
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('T8', 'Persegi Panjang', '60000', 'available')">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="hidden sm:inline ml-1">Edit</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('T8')">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="hidden sm:inline ml-1">Hapus</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>T9</td>
+                            <td>Persegi Panjang</td>
+                            <td>Rp 60.000</td>
+                            <td>
+                                <span class="table-status status-available">
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    Tersedia
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('T9', 'Persegi Panjang', '60000', 'available')">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="hidden sm:inline ml-1">Edit</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('T9')">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="hidden sm:inline ml-1">Hapus</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>T10</td>
+                            <td>Persegi Panjang</td>
+                            <td>Rp 60.000</td>
+                            <td>
+                                <span class="table-status status-booked">
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    Dipesan
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('T10', 'Persegi Panjang', '60000', 'booked')">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="hidden sm:inline ml-1">Edit</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('T10')">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="hidden sm:inline ml-1">Hapus</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>T11</td>
+                            <td>VIP</td>
+                            <td>Rp 90.000</td>
+                            <td>
+                                <span class="table-status status-available">
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    Tersedia
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('T11', 'VIP', '90000', 'available')">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="hidden sm:inline ml-1">Edit</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('T11')">
                                         <i class='bx bx-trash'></i>
                                         <span class="hidden sm:inline ml-1">Hapus</span>
                                     </button>
@@ -629,19 +794,13 @@
             </div>
             
             <!-- Pagination -->
-            <div class="pagination">
-                <div class="text-sm text-base-content/70">
-                    Menampilkan 1-5 dari 15 meja
+            <div class="pagination" id="paginationNav">
+                <div class="text-sm text-base-content/70" id="paginationInfo">
+                    Menampilkan 1-5 dari 11 meja
                 </div>
                 <div class="pagination-buttons">
-                    <button class="btn btn-sm btn-outline pagination-button" disabled>
-                        <i class='bx bx-chevron-left'></i>
-                        <span>Sebelumnya</span>
-                    </button>
-                    <button class="btn btn-sm btn-outline pagination-button">
-                        <span>Selanjutnya</span>
-                        <i class='bx bx-chevron-right'></i>
-                    </button>
+                    <button class="btn btn-sm btn-outline pagination-button" id="prevPage" disabled>Sebelumnya</button>
+                    <button class="btn btn-sm btn-outline pagination-button" id="nextPage">Selanjutnya</button>
                 </div>
             </div>
         </div>
@@ -670,6 +829,7 @@
                         <option value="Persegi">Persegi</option>
                         <option value="Persegi Panjang">Persegi Panjang</option>
                         <option value="Bundar">Bundar</option>
+                        <option value="VIP">VIP</option>
                     </select>
                 </div>
                 
@@ -687,7 +847,6 @@
                     <select id="tableStatus" class="select select-bordered" required>
                         <option value="available">Tersedia</option>
                         <option value="booked">Dipesan</option>
-                        <option value="maintenance">Pemeliharaan</option>
                     </select>
                 </div>
                 
@@ -843,6 +1002,47 @@
                     }
                 });
             });
+            
+            // PAGINATION LOGIC
+            const rows = document.querySelectorAll('.table-data-table tbody tr');
+            const rowsPerPage = 5;
+            let currentPage = 1;
+            const totalRows = rows.length;
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+            const paginationInfo = document.getElementById('paginationInfo');
+            const prevPageBtn = document.getElementById('prevPage');
+            const nextPageBtn = document.getElementById('nextPage');
+
+            function showPage(page) {
+                // Hide all rows
+                rows.forEach(row => row.style.display = 'none');
+                // Show only rows for this page
+                const start = (page - 1) * rowsPerPage;
+                const end = Math.min(start + rowsPerPage, totalRows);
+                for (let i = start; i < end; i++) {
+                    rows[i].style.display = '';
+                }
+                // Update info
+                paginationInfo.textContent = `Menampilkan ${start + 1}-${end} dari ${totalRows} meja`;
+                // Update button state
+                prevPageBtn.disabled = page === 1;
+                nextPageBtn.disabled = page === totalPages;
+            }
+
+            prevPageBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    showPage(currentPage);
+                }
+            });
+            nextPageBtn.addEventListener('click', function() {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    showPage(currentPage);
+                }
+            });
+            // Inisialisasi
+            showPage(currentPage);
         });
         
         // Function to open add modal

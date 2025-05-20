@@ -386,17 +386,49 @@
         
         @media (max-width: 480px) {
             .header h1 {
-                font-size: 1.5rem;
+                font-size: 1.2rem;
             }
-            
             .content-wrapper h2 {
-                font-size: 1.25rem;
+                font-size: 1rem;
             }
-            
-            .pagination {
-                flex-direction: column-reverse;
-                gap: 1rem;
-                align-items: flex-start;
+            .sidebar {
+                width: 80vw;
+                min-width: 0;
+                max-width: 280px;
+                transform: translateX(-80vw);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .content-wrapper {
+                margin-left: 0;
+                padding: 3.5rem 0.5rem 1rem 0.5rem;
+            }
+            .mobile-menu-toggle {
+                width: 36px;
+                height: 36px;
+                left: 0.5rem;
+                top: 0.5rem;
+            }
+            .sidebar-menu {
+                padding: 0.5rem;
+            }
+            .menu-item {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.95rem;
+            }
+            .reservation-table th, .reservation-table td {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
+        @media (max-width: 320px) {
+            .sidebar {
+                width: 95vw;
+                max-width: 95vw;
+            }
+            .content-wrapper {
+                padding: 3rem 0.2rem 1rem 0.2rem;
             }
         }
     </style>
@@ -484,7 +516,7 @@
                     <thead>
                         <tr>
                             <th>ID Pemesanan</th>
-                            <th>Nama Pelanggan</th>
+                            <th>Username Pemesan</th>
                             <th>Tanggal & Waktu</th>
                             <th>Meja</th>
                             <th>Status</th>
@@ -495,18 +527,18 @@
                         <!-- Contoh Data (ganti dengan data dinamis dari backend) -->
                         <tr>
                             <td>#RSV001</td>
-                            <td>John Doe</td>
-                            <td>25 Juni 2024, 18:00</td>
-                            <td>A1</td>
+                            <td>Hakim</td>
+                            <td>25 Juni 2024</td>
+                            <td>T4</td>
                             <td>
                                 <span class="table-status status-confirmed">
-                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    <i class='bx bxs-check-circle mr-1 text-xs'></i>
                                     Dikonfirmasi
                                 </span>
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('RSV001', 'John Doe', '2024-06-25T18:00', 'A1', 'confirmed')">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('RSV001', 'Hakim', '2024-06-25T18:00', 'T4', 'confirmed')">
                                         <i class='bx bx-edit-alt'></i>
                                         <span class="hidden sm:inline ml-1">Edit</span>
                                     </button>
@@ -519,18 +551,18 @@
                         </tr>
                         <tr>
                             <td>#RSV002</td>
-                            <td>Jane Doe</td>
-                            <td>26 Juni 2024, 19:30</td>
-                            <td>B1</td>
+                            <td>Sakila</td>
+                            <td>26 Juni 2024</td>
+                            <td>T7</td>
                             <td>
-                                <span class="table-status status-pending">
-                                    <i class='bx bxs-circle mr-1 text-xs'></i>
-                                    Pending
+                                <span class="table-status status-confirmed">
+                                    <i class='bx bxs-check-circle mr-1 text-xs'></i>
+                                    Dikonfirmasi
                                 </span>
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('RSV002', 'Jane Doe', '2024-06-26T19:30', 'B1', 'pending')">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('RSV002', 'Sakila', '2024-06-26T19:00', 'T7', 'confirmed')">
                                         <i class='bx bx-edit-alt'></i>
                                         <span class="hidden sm:inline ml-1">Edit</span>
                                     </button>
@@ -541,20 +573,20 @@
                                 </div>
                             </td>
                         </tr>
-                       <tr>
+                        <tr>
                             <td>#RSV003</td>
-                            <td>Alex Smith</td>
-                            <td>27 Juni 2024, 20:00</td>
-                            <td>C1</td>
+                            <td>Rafles</td>
+                            <td>10 April 2023</td>
+                            <td>T8</td>
                             <td>
-                                <span class="table-status status-completed">
+                                <span class="table-status status-cancelled">
                                     <i class='bx bxs-circle mr-1 text-xs'></i>
-                                    Selesai
+                                    Dibatalkan
                                 </span>
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('RSV003', 'Alex Smith', '2024-06-27T20:00', 'C1', 'completed')">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('RSV003', 'Rafles', '2023-04-10T13:00', 'T8', 'cancelled')">
                                         <i class='bx bx-edit-alt'></i>
                                         <span class="hidden sm:inline ml-1">Edit</span>
                                     </button>
@@ -565,24 +597,48 @@
                                 </div>
                             </td>
                         </tr>
-                         <tr>
+                        <tr>
                             <td>#RSV004</td>
-                            <td>Budi Setiawan</td>
-                            <td>28 Juni 2024, 17:00</td>
-                            <td>D1</td>
+                            <td>Rafles</td>
+                            <td>15 Mei 2023</td>
+                            <td>T5</td>
                             <td>
-                                <span class="table-status status-cancelled">
-                                    <i class='bx bxs-circle mr-1 text-xs'></i>
-                                    Dibatalkan
+                                <span class="table-status status-confirmed">
+                                    <i class='bx bxs-check-circle mr-1 text-xs'></i>
+                                    Dikonfirmasi
                                 </span>
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                     <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('RSV004', 'Budi Setiawan', '2024-06-28T17:00', 'D1', 'cancelled')">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('RSV004', 'Rafles', '2023-05-15T20:00', 'T5', 'confirmed')">
                                         <i class='bx bx-edit-alt'></i>
                                         <span class="hidden sm:inline ml-1">Edit</span>
                                     </button>
                                     <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('RSV004')">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="hidden sm:inline ml-1">Hapus</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#RSV005</td>
+                            <td>Rafles</td>
+                            <td>28 Mei 2025</td>
+                            <td>T3</td>
+                            <td>
+                                <span class="table-status status-pending">
+                                    <i class='bx bxs-circle mr-1 text-xs'></i>
+                                    Menunggu Konfirmasi
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('RSV005', 'Rafles', '2025-05-28T16:00', 'T3', 'pending')">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="hidden sm:inline ml-1">Edit</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('RSV005')">
                                         <i class='bx bx-trash'></i>
                                         <span class="hidden sm:inline ml-1">Hapus</span>
                                     </button>
@@ -596,14 +652,14 @@
             <!-- Pagination -->
             <div class="pagination">
                 <div class="text-sm text-base-content/70">
-                    Menampilkan 1-4 dari 10 pemesanan
+                    Menampilkan 1-5 dari 5 pemesanan
                 </div>
                 <div class="pagination-buttons">
                     <button class="btn btn-sm btn-outline pagination-button" disabled>
                         <i class='bx bx-chevron-left'></i>
                         <span>Sebelumnya</span>
                     </button>
-                    <button class="btn btn-sm btn-outline pagination-button">
+                    <button class="btn btn-sm btn-outline pagination-button" disabled>
                         <span>Selanjutnya</span>
                         <i class='bx bx-chevron-right'></i>
                     </button>
@@ -625,7 +681,7 @@
                 </div>
 
                 <div class="form-control">
-                    <label class="label"><span class="label-text">Nama Pelanggan</span></label>
+                    <label class="label"><span class="label-text">Nama Pemesan</span></label>
                     <input type="text" id="customerName" class="input input-bordered" required>
                 </div>
                 
@@ -640,11 +696,17 @@
                         <!-- Ganti dengan select dinamis dari data meja -->
                         <select id="reservationTable" class="select select-bordered" required>
                             <option value="">Pilih Meja</option>
-                            <option value="A1">A1</option>
-                            <option value="A2">A2</option>
-                            <option value="B1">B1</option>
-                            <option value="C1">C1</option>
-                            <option value="D1">D1</option>
+                            <option value="T1">T1 - Persegi</option>
+                            <option value="T2">T2 - Persegi</option>
+                            <option value="T3">T3 - Persegi</option>
+                            <option value="T4">T4 - Persegi</option>
+                            <option value="T5">T5 - Bundar</option>
+                            <option value="T6">T6 - Bundar</option>
+                            <option value="T7">T7 - Bundar</option>
+                            <option value="T8">T8 - Persegi Panjang</option>
+                            <option value="T9">T9 - Persegi Panjang</option>
+                            <option value="T10">T10 - Persegi Panjang</option>
+                            <option value="T11">T11 - VIP</option>
                         </select>
                     </div>
                 </div>

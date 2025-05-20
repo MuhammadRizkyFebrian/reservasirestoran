@@ -17,14 +17,14 @@
                         <li><a href="{{ route('reservation') }}" class="flex items-center py-2"><i class='bx bx-calendar mr-2'></i>Reservasi</a></li>
                     </ul>
                 </div>
-                
+
                 <!-- Logo -->
                 <a href="{{ route('home') }}" class="btn btn-ghost text-lg flex items-center p-0 sm:p-2">
                     <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="w-8 h-8 rounded-full mr-2">
                     <span class="font-bold text-base sm:text-xl">Seatify</span>
                 </a>
             </div>
-            
+
             <!-- Desktop Menu -->
             <div class="hidden lg:flex">
                 <ul class="menu menu-horizontal px-1 gap-1">
@@ -35,7 +35,7 @@
                     <li><a href="{{ route('reservation') }}" class="hover:bg-base-200"><i class='bx bx-calendar mr-1'></i>Reservasi</a></li>
                 </ul>
             </div>
-            
+
             <!-- Controls -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <!-- Theme Switcher -->
@@ -45,20 +45,20 @@
                     </div>
                     <div tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-fit">
                         <div class="flex gap-1 p-1">
-                            <button onclick="document.documentElement.setAttribute('data-theme', 'lemonade')" 
+                            <button onclick="document.documentElement.setAttribute('data-theme', 'lemonade')"
                                 class="btn btn-xs btn-circle bg-success" title="Tema Lemonade"></button>
-                            <button onclick="document.documentElement.setAttribute('data-theme', 'light')" 
+                            <button onclick="document.documentElement.setAttribute('data-theme', 'light')"
                                 class="btn btn-xs btn-circle bg-info" title="Tema Light"></button>
-                            <button onclick="document.documentElement.setAttribute('data-theme', 'dark')" 
+                            <button onclick="document.documentElement.setAttribute('data-theme', 'dark')"
                                 class="btn btn-xs btn-circle bg-neutral" title="Tema Dark"></button>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- User Menu -->
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" class="w-9 h-9 flex items-center justify-center cursor-pointer rounded-full hover:bg-base-200 overflow-hidden focus:ring-2 focus:ring-base-content/20 focus:outline-none">
-                        <img alt="Avatar" src="{{ asset('images/logo.jpg') }}" class="w-full h-full object-cover" />
+                        <img alt="Avatar" src="https://ui-avatars.com/api/?name=Rafles&background=random&size=140" class="w-full h-full object-cover" />
                     </div>
                     <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52">
                         <li>
@@ -87,4 +87,4 @@
             </div>
         </div>
     </div>
-</div> 
+</div>

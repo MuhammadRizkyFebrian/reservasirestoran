@@ -313,41 +313,60 @@
         
         @media (max-width: 480px) {
             .header h1 {
-                font-size: 1.5rem;
+                font-size: 1.2rem;
             }
-            
             .content-wrapper h2 {
-                font-size: 1.25rem;
+                font-size: 1rem;
             }
-
             .stat-card {
                 flex-direction: column;
                 text-align: center;
                 gap: 0.5rem;
+                padding: 1rem;
             }
-
             .stat-icon {
                 margin-bottom: 0.5rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
             }
-            
             .sidebar {
-                width: 280px;
-                transform: translateX(-280px);
+                width: 80vw;
+                min-width: 0;
+                max-width: 280px;
+                transform: translateX(-80vw);
             }
-            
-            .menu-item {
-                padding: 1rem;
-                margin-bottom: 0.75rem;
+            .sidebar.active {
+                transform: translateX(0);
             }
-            
-            .menu-item i {
-                margin-right: 1rem;
-                font-size: 1.5rem;
+            .content-wrapper {
+                margin-left: 0;
+                padding: 3.5rem 0.5rem 1rem 0.5rem;
             }
-            
             .mobile-menu-toggle {
-                width: 42px;
-                height: 42px;
+                width: 36px;
+                height: 36px;
+                left: 0.5rem;
+                top: 0.5rem;
+            }
+            .sidebar-menu {
+                padding: 0.5rem;
+            }
+            .menu-item {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.95rem;
+            }
+        }
+        @media (max-width: 320px) {
+            .sidebar {
+                width: 95vw;
+                max-width: 95vw;
+            }
+            .content-wrapper {
+                padding: 3rem 0.2rem 1rem 0.2rem;
+            }
+            .stat-card {
+                padding: 0.7rem;
             }
         }
         

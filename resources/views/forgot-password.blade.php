@@ -63,6 +63,17 @@
             position: absolute;
             right: 0;
         }
+        
+        /* CSS untuk layar kecil (iPhone 5) */
+        @media (max-width: 320px) {
+            .input {
+                padding-right: 30px;
+            }
+            
+            button.absolute.right-3 {
+                right: 0.5rem;
+            }
+        }
     </style>
 </head>
 
@@ -116,7 +127,7 @@
                         <i class='bx bx-envelope text-xl text-base-content/70'></i>
                         <input type="email" id="email" name="email" value="{{ old('email') }}" 
                             class="grow" 
-                            placeholder="Masukkan email terdaftar" required>
+                            placeholder="Email terdaftar" required>
                     </label>
                     @error('email')
                         <label class="label py-0">
@@ -134,7 +145,7 @@
                         <i class='bx bx-lock-alt text-xl text-base-content/70'></i>
                         <input type="password" id="password" name="password" 
                             class="grow" 
-                            placeholder="Masukkan password baru" required>
+                            placeholder="Password baru" required>
                         <button type="button" onclick="togglePassword('password', 'eye-icon-password')" class="absolute right-3">
                             <i id="eye-icon-password" class='bx bx-hide text-xl text-base-content/70'></i>
                         </button>
@@ -155,7 +166,7 @@
                         <i class='bx bx-lock text-xl text-base-content/70'></i>
                         <input type="password" id="password_confirmation" name="password_confirmation" 
                             class="grow" 
-                            placeholder="Konfirmasi password baru" required>
+                            placeholder="Konfirmasi password" required>
                         <button type="button" onclick="togglePassword('password_confirmation', 'eye-icon-confirm')" class="absolute right-3">
                             <i id="eye-icon-confirm" class='bx bx-hide text-xl text-base-content/70'></i>
                         </button>

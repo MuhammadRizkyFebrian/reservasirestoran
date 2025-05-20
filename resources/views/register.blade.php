@@ -73,6 +73,17 @@
             position: absolute;
             right: 0;
         }
+        
+        /* CSS untuk layar kecil (iPhone 5) */
+        @media (max-width: 320px) {
+            .input {
+                padding-right: 30px;
+            }
+            
+            button.absolute.right-3 {
+                right: 0.5rem;
+            }
+        }
     </style>
 </head>
 
@@ -116,7 +127,7 @@
                         <i class='bx bx-envelope text-xl text-base-content/70'></i>
                         <input type="email" id="email" name="email" value="{{ old('email') }}" 
                             class="grow" 
-                            placeholder="Masukkan email" required>
+                            placeholder="Email" required>
                     </label>
                     @error('email')
                         <label class="label py-0">
@@ -134,7 +145,7 @@
                         <i class='bx bx-user text-xl text-base-content/70'></i>
                         <input type="text" id="username" name="username" value="{{ old('username') }}" 
                             class="grow" 
-                            placeholder="Masukkan username" required>
+                            placeholder="Username" required>
                     </label>
                     @error('username')
                         <label class="label py-0">
@@ -152,7 +163,7 @@
                         <i class='bx bx-lock-alt text-xl text-base-content/70'></i>
                         <input type="password" id="password" name="password" 
                             class="grow" 
-                            placeholder="Masukkan password" required>
+                            placeholder="Password" required>
                         <button type="button" onclick="togglePassword()" class="absolute right-3">
                             <i id="eye-icon" class='bx bx-hide text-xl text-base-content/70'></i>
                         </button>
@@ -173,7 +184,7 @@
                         <i class='bx bx-phone text-xl text-base-content/70'></i>
                         <input type="number" id="phone" name="phone" value="{{ old('phone') }}" 
                             class="grow" 
-                            placeholder="Masukkan nomor handphone" required>
+                            placeholder="No. Handphone" required>
                     </label>
                     @error('phone')
                         <label class="label py-0">

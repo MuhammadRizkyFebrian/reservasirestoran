@@ -86,17 +86,17 @@
             <div class="profile-sidebar">
                 <div class="flex flex-col items-center mb-6">
                     <div class="relative mb-4">
-                        <img src="https://ui-avatars.com/api/?name=Rwfles&background=random&size=140" alt="Profile" id="profileAvatar" class="profile-image">
+                        <img src="https://ui-avatars.com/api/?name=Rafles&background=random&size=140" alt="Profile" id="profileAvatar" class="profile-image">
                         <label for="avatarUpload" class="edit-button">
                             <i class='bx bx-plus'></i>
                             <input type="file" id="avatarUpload" class="hidden" accept="image/*" />
                         </label>
                     </div>
-                    <h2 class="text-xl font-bold mb-3">Rwfles</h2>
+                    <h2 class="text-xl font-bold mb-3">Rafles</h2>
                     <div class="flex flex-col items-center space-y-2 text-center">
                         <div class="flex items-center">
                             <i class='bx bx-envelope text-base-content/70 mr-2'></i>
-                            <span class="text-sm" id="displayEmail">Rwfles@gmail.com</span>
+                            <span class="text-sm" id="displayEmail">Rafles@gmail.com</span>
                         </div>
                         <div class="flex items-center">
                             <i class='bx bx-phone text-base-content/70 mr-2'></i>
@@ -139,14 +139,14 @@
                 <div class="grid grid-cols-1 gap-3">
                     <div>
                         <p class="text-base-content/70 text-sm">Username</p>
-                        <p class="font-medium" id="displayName">Rwfles</p>
+                        <p class="font-medium" id="displayName">Rafles</p>
                     </div>
                     <div>
                         <p class="text-base-content/70 text-sm">Email</p>
-                        <p class="font-medium">Rwfles@gmail.com</p>
+                        <p class="font-medium">Rafles@gmail.com</p>
                     </div>
                     <div>
-                        <p class="text-base-content/70 text-sm">Nomor Telepon</p>
+                        <p class="text-base-content/70 text-sm">Nomor Handphone</p>
                         <p class="font-medium">+62 812 3456 7890</p>
                     </div>
                 </div>
