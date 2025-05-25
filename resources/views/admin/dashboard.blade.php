@@ -388,14 +388,14 @@
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     
-    <!-- Sidebar -->
+        <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <div class="py-4 px-4 border-b border-base-200 flex justify-between items-center">
-            <h1 class="text-xl font-bold flex items-center">
-                <i class='bx bx-store-alt mr-2 text-2xl'></i>
-                Seatify Admin
+        <div class="py-4 px-6 border-b border-base-200 flex justify-between items-center">
+            <h1 class="text-2xl font-bold flex items-center">
+                <i class='bx bx-menu mr-2 text-3xl'></i>
+                Menu
             </h1>
-            <button class="btn btn-circle btn-sm btn-ghost lg:hidden" id="closeMobileMenu" aria-label="Close Menu">
+            <button class="btn btn-circle btn-sm btn-ghost lg:hidden" id="closeMobileMenu">
                 <i class='bx bx-x text-xl'></i>
             </button>
         </div>
@@ -411,9 +411,14 @@
                 <span>Data Pelanggan</span>
             </a>
             
-            <a href="{{ route('admin.tables') }}" class="menu-item">
+            <a href="{{ route('admin.tables') }}" class="menu-item ">
                 <i class='bx bx-table'></i>
                 <span>Daftar Meja</span>
+            </a>
+
+            <a href="{{ route('admin.menu') }}" class="menu-item">
+                <i class='bx  bx-food-menu'></i> 
+                <span>Daftar Menu</span>
             </a>
             
             <a href="{{ route('admin.pemesanan') }}" class="menu-item">

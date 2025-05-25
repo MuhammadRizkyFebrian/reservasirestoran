@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MenuController;
 
 // Home / Landing Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -51,6 +52,8 @@ Route::prefix('admin')->group(function () {
         return view('admin.tables');
     })->name('admin.tables');
     
+    Route::get('/menu', [MenuController::class, 'index'])->name('admin.menu');
+
     Route::get('/pemesanan', function () {
         return view('admin.pemesanan');
     })->name('admin.pemesanan');
@@ -58,4 +61,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/transactions', function () {
         return view('admin.riwayat-transaksi');
     })->name('admin.transactions');
+
+    
+    Route::resource('menus', MenuController::class);
 });

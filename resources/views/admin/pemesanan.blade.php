@@ -442,7 +442,7 @@
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     
-    <!-- Sidebar -->
+        <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="py-4 px-6 border-b border-base-200 flex justify-between items-center">
             <h1 class="text-2xl font-bold flex items-center">
@@ -465,12 +465,17 @@
                 <span>Data Pelanggan</span>
             </a>
             
-            <a href="{{ route('admin.tables') }}" class="menu-item">
+            <a href="{{ route('admin.tables') }}" class="menu-item ">
                 <i class='bx bx-table'></i>
                 <span>Daftar Meja</span>
             </a>
+
+            <a href="{{ route('admin.menu') }}" class="menu-item">
+                <i class='bx  bx-food-menu'></i> 
+                <span>Daftar Menu</span>
+            </a>
             
-            <a href="{{ route('admin.pemesanan') }}" class="menu-item active"> <!-- Set active -->
+            <a href="{{ route('admin.pemesanan') }}" class="menu-item active">
                 <i class='bx bx-calendar-edit'></i>
                 <span>Pemesanan</span>
             </a>

@@ -435,9 +435,14 @@
                 <span>Data Pelanggan</span>
             </a>
             
-            <a href="{{ route('admin.tables') }}" class="menu-item">
+            <a href="{{ route('admin.tables') }}" class="menu-item ">
                 <i class='bx bx-table'></i>
                 <span>Daftar Meja</span>
+            </a>
+
+            <a href="{{ route('admin.menu') }}" class="menu-item">
+                <i class='bx  bx-food-menu'></i> 
+                <span>Daftar Menu</span>
             </a>
             
             <a href="{{ route('admin.pemesanan') }}" class="menu-item">
