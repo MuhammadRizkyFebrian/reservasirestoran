@@ -7,18 +7,15 @@ use App\Http\Controllers\MenuController;
 
 // Home / Landing Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/menu', function () {
-    return view('menu');
-})->name('menu');
-Route::get('/reservation', function () {
-    return view('reservation');
-})->name('reservation');
-Route::get('/reservation-history', function () {
-    return view('reservation-history');
-})->name('reservation-history');
-Route::get('/payment', function () {
-    return view('payment');
-})->name('payment');
+
+// Route untuk menu pelanggan, pakai controller agar $makanan & $minuman terisi
+Route::get('/menu', [MenuController::class, 'menuPelanggan'])->name('menu');
+
+// Route static lainnya
+Route::view('/reservation', 'reservation')->name('reservation');
+Route::view('/reservation-history', 'reservation-history')->name('reservation-history');
+Route::view('/payment', 'payment')->name('payment');
+Route::view('/profile', 'profile')->name('profile');
 
 // Route autentikasi
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -40,28 +37,15 @@ Route::get('/profile', function () {
 
 // Admin Routes
 Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-    
-    Route::get('/customers', function () {
-        return view('admin.customers');
-    })->name('admin.customers');
-    
-    Route::get('/tables', function () {
-        return view('admin.tables');
-    })->name('admin.tables');
-    
+    Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
+    Route::view('/customers', 'admin.customers')->name('admin.customers');
+    Route::view('/tables', 'admin.tables')->name('admin.tables');
+    Route::view('/pemesanan', 'admin.pemesanan')->name('admin.pemesanan');
+    Route::view('/transactions', 'admin.riwayat-transaksi')->name('admin.transactions');
+
+    // Admin menu page
     Route::get('/menu', [MenuController::class, 'index'])->name('admin.menu');
 
-    Route::get('/pemesanan', function () {
-        return view('admin.pemesanan');
-    })->name('admin.pemesanan');
-    
-    Route::get('/transactions', function () {
-        return view('admin.riwayat-transaksi');
-    })->name('admin.transactions');
-
-    
-    Route::resource('menus', MenuController::class);
+    // Resource routes untuk CRUD menu
+    Route::resource('menus', MenuController::class)->except(['show']);
 });

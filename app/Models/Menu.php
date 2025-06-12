@@ -9,7 +9,12 @@ class Menu extends Model
 {
     use HasFactory;
 
-    protected $table = 'menus';
+    protected $table = 'menu'; 
+
+    protected $primaryKey = 'id_menu'; 
+
+    public $incrementing = true; 
+    protected $keyType = 'int';  
 
     protected $fillable = [
         'nama',

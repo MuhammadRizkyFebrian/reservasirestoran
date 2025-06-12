@@ -61,9 +61,9 @@
                         <td>{{ $menu->kategori }}</td>
                         <td>{{ ucfirst($menu->tipe) }}</td>
                         <td>
-                            <button onclick="document.getElementById('modal-desc-{{ $menu->id }}').showModal()" class="btn btn-xs btn-info">Lihat</button>
+                            <button onclick="document.getElementById('modal-desc-{{ $menu->id_menu }}').showModal()" class="btn btn-xs btn-info">Lihat</button>
 
-                            <dialog id="modal-desc-{{ $menu->id }}" class="modal">
+                            <dialog id="modal-desc-{{ $menu->id_menu }}" class="modal">
                                 <div class="modal-box">
                                 <h3 class="font-bold text-lg mb-2">Deskripsi Menu: {{ $menu->nama }}</h3>
                                 <p class="mb-4">{{ $menu->deskripsi }}</p>
@@ -77,8 +77,8 @@
                         </td>
                         <td>Rp {{ number_format($menu->harga, 0, ',', '.') }}</td>
                         <td>
-                            <button onclick="document.getElementById('modal-edit-{{ $menu->id }}').showModal()" class="btn btn-sm btn-warning">Edit</button>
-                            <form action="{{ route('menus.destroy', $menu->id) }}" method="POST" class="inline">
+                            <button onclick="document.getElementById('modal-edit-{{ $menu->id_menu }}').showModal()" class="btn btn-sm btn-warning">Edit</button>
+                            <form action="{{ route('menus.destroy', $menu->id_menu) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-error" onclick="return confirm('Yakin ingin menghapus menu ini?')">Hapus</button>
@@ -87,51 +87,51 @@
                     </tr>
 
                     <!-- Modal Edit -->
-                    <dialog id="modal-edit-{{ $menu->id }}" class="modal">
+                    <dialog id="modal-edit-{{ $menu->id_menu }}" class="modal">
                       <div class="modal-box max-w-3xl">
                         <h3 class="font-bold text-lg mb-4">Edit Menu: {{ $menu->nama }}</h3>
-                        <form action="{{ route('menus.update', $menu->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('menus.update', $menu->id_menu) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="form-control">
-                                    <label class="label" for="nama-{{ $menu->id }}">Nama Menu</label>
-                                    <input type="text" name="nama" id="nama-{{ $menu->id }}" class="input input-bordered" value="{{ old('nama', $menu->nama) }}" required>
+                                    <label class="label" for="nama-{{ $menu->id_menu }}">Nama Menu</label>
+                                    <input type="text" name="nama" id="nama-{{ $menu->id_menu }}" class="input input-bordered" value="{{ old('nama', $menu->nama) }}" required>
                                 </div>
 
                                 <div class="form-control">
-                                    <label class="label" for="kategori-{{ $menu->id }}">Kategori</label>
-                                    <input type="text" name="kategori" id="kategori-{{ $menu->id }}" class="input input-bordered" value="{{ old('kategori', $menu->kategori) }}" required>
+                                    <label class="label" for="kategori-{{ $menu->id_menu }}">Kategori</label>
+                                    <input type="text" name="kategori" id="kategori-{{ $menu->id_menu }}" class="input input-bordered" value="{{ old('kategori', $menu->kategori) }}" required>
                                 </div>
 
                                 <div class="form-control">
-                                    <label class="label" for="tipe-{{ $menu->id }}">Tipe</label>
-                                    <select name="tipe" id="tipe-{{ $menu->id }}" class="select select-bordered" required>
+                                    <label class="label" for="tipe-{{ $menu->id_menu }}">Tipe</label>
+                                    <select name="tipe" id="tipe-{{ $menu->id_menu }}" class="select select-bordered" required>
                                         <option value="makanan" {{ old('tipe', $menu->tipe) == 'makanan' ? 'selected' : '' }}>Makanan</option>
                                         <option value="minuman" {{ old('tipe', $menu->tipe) == 'minuman' ? 'selected' : '' }}>Minuman</option>
                                     </select>
                                 </div>
 
                                 <div class="form-control">
-                                    <label class="label" for="harga-{{ $menu->id }}">Harga</label>
-                                    <input type="number" name="harga" id="harga-{{ $menu->id }}" class="input input-bordered" value="{{ old('harga', $menu->harga) }}" required>
+                                    <label class="label" for="harga-{{ $menu->id_menu }}">Harga</label>
+                                    <input type="number" name="harga" id="harga-{{ $menu->id_menu }}" class="input input-bordered" value="{{ old('harga', $menu->harga) }}" required>
                                 </div>
 
                                 <div class="form-control md:col-span-2">
-                                    <label class="label" for="deskripsi-{{ $menu->id }}">Deskripsi</label>
-                                    <textarea name="deskripsi" id="deskripsi-{{ $menu->id }}" class="textarea textarea-bordered" rows="3" required>{{ old('deskripsi', $menu->deskripsi) }}</textarea>
+                                    <label class="label" for="deskripsi-{{ $menu->id_menu }}">Deskripsi</label>
+                                    <textarea name="deskripsi" id="deskripsi-{{ $menu->id_menu }}" class="textarea textarea-bordered" rows="3" required>{{ old('deskripsi', $menu->deskripsi) }}</textarea>
                                 </div>
 
                                 <div class="form-control md:col-span-2">
-                                    <label class="label" for="gambar-{{ $menu->id }}">Ganti Gambar</label>
-                                    <input type="file" name="gambar" id="gambar-{{ $menu->id }}" class="file-input file-input-bordered">
+                                    <label class="label" for="gambar-{{ $menu->id_menu }}">Ganti Gambar</label>
+                                    <input type="file" name="gambar" id="gambar-{{ $menu->id_menu }}" class="file-input file-input-bordered">
                                     <p class="text-sm text-gray-500 mt-1">Kosongkan jika tidak ingin mengganti gambar</p>
                                 </div>
                             </div>
 
                             <div class="modal-action mt-4 flex justify-between">
-                                <button type="button" class="btn" onclick="document.getElementById('modal-edit-{{ $menu->id }}').close()">Batal</button>
+                                <button type="button" class="btn" onclick="document.getElementById('modal-edit-{{ $menu->id_menu }}').close()">Batal</button>
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </form>

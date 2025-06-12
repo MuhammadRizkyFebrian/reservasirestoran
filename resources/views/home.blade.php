@@ -26,78 +26,23 @@
     <div class="container mx-auto">
         <h2 class="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">Makanan & Minuman</h2>
 
-        <div class="grid card-container gap-4 sm:gap-6">
-            <!-- Menu Item 1 -->
-            <div class="card card-menu bg-base-200 shadow-xl overflow-hidden">
-                <figure class="h-40 sm:h-48"><img src="https://images.unsplash.com/photo-1607330289024-1535c6b4e1c1?q=80&w=1936&auto=format&fit=crop" class="w-full h-full object-cover" alt="Makanan"></figure>
-                <div class="card-body p-4 sm:p-6">
-                    <h3 class="card-title text-base sm:text-lg">Seafood Special</h3>
-                    <p class="text-sm sm:text-base">Fresh seafood with special sauce</p>
-                    <div class="card-actions justify-end mt-2">
-                        <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp120.000</span>
+        <div class="grid card-container gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+            @forelse ($menus as $menu)
+                <div class="card card-menu bg-base-200 shadow-xl overflow-hidden">
+                    <figure class="h-40 sm:h-48">
+                        <img src="{{ asset('storage/menu/' . $menu->gambar) }}" class="w-full h-full object-cover" alt="{{ $menu->nama }}">
+                    </figure>
+                    <div class="card-body p-4 sm:p-6">
+                        <h3 class="card-title text-base sm:text-lg">{{ $menu->nama }}</h3>
+                        <p class="text-sm sm:text-base">{{ $menu->deskripsi }}</p>
+                        <div class="card-actions justify-end mt-2">
+                            <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp{{ number_format($menu->harga, 0, ',', '.') }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Menu Item 2 -->
-            <div class="card card-menu bg-base-200 shadow-xl overflow-hidden">
-                <figure class="h-40 sm:h-48"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1169&auto=format&fit=crop" class="w-full h-full object-cover" alt="Makanan"></figure>
-                <div class="card-body p-4 sm:p-6">
-                    <h3 class="card-title text-base sm:text-lg">Steak & Mushrooms</h3>
-                    <p class="text-sm sm:text-base">Premium beef with sautéed mushrooms</p>
-                    <div class="card-actions justify-end mt-2">
-                        <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp150.000</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Menu Item 3 -->
-            <div class="card card-menu bg-base-200 shadow-xl overflow-hidden">
-                <figure class="h-40 sm:h-48"><img src="https://images.unsplash.com/photo-1536935338788-846bb9981813?q=80&w=1172&auto=format&fit=crop" class="w-full h-full object-cover" alt="Makanan"></figure>
-                <div class="card-body p-4 sm:p-6">
-                    <h3 class="card-title text-base sm:text-lg">Signature Cocktail</h3>
-                    <p class="text-sm sm:text-base">Refreshing mix with local ingredients</p>
-                    <div class="card-actions justify-end mt-2">
-                        <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp80.000</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Menu Item 4 -->
-            <div class="card card-menu bg-base-200 shadow-xl overflow-hidden">
-                <figure class="h-40 sm:h-48"><img src="https://images.unsplash.com/photo-1576866209830-589e1bfbaa4d?q=80&w=1170&auto=format&fit=crop" class="w-full h-full object-cover" alt="Makanan"></figure>
-                <div class="card-body p-4 sm:p-6">
-                    <h3 class="card-title text-base sm:text-lg">Chef's Special</h3>
-                    <p class="text-sm sm:text-base">Daily creation by our head chef</p>
-                    <div class="card-actions justify-end mt-2">
-                        <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp135.000</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Menu Item 5 -->
-            <div class="card card-menu bg-base-200 shadow-xl overflow-hidden">
-                <figure class="h-40 sm:h-48"><img src="https://images.unsplash.com/photo-1612203985729-70726954388c?q=80&w=1064&auto=format&fit=crop" class="w-full h-full object-cover" alt="Makanan"></figure>
-                <div class="card-body p-4 sm:p-6">
-                    <h3 class="card-title text-base sm:text-lg">Chocolate Delight</h3>
-                    <p class="text-sm sm:text-base">Rich dessert with local chocolate</p>
-                    <div class="card-actions justify-end mt-2">
-                        <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp45.000</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Menu Item 6 -->
-            <div class="card card-menu bg-base-200 shadow-xl overflow-hidden">
-                <figure class="h-40 sm:h-48"><img src="https://images.unsplash.com/photo-1635685296916-95acaf58471f?q=80&w=1171&auto=format&fit=crop" class="w-full h-full object-cover" alt="Makanan"></figure>
-                <div class="card-body p-4 sm:p-6">
-                    <h3 class="card-title text-base sm:text-lg">Creamy Pasta</h3>
-                    <p class="text-sm sm:text-base">Pasta with creamy sauce and herbs</p>
-                    <div class="card-actions justify-end mt-2">
-                        <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp95.000</span>
-                    </div>
-                </div>
-            </div>
+            @empty
+                <p class="col-span-3 text-center text-gray-500">Menu belum tersedia.</p>
+            @endforelse
         </div>
 
         <div class="text-center mt-6 sm:mt-8">

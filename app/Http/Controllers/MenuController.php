@@ -96,4 +96,13 @@ class MenuController extends Controller
 
         return redirect()->route('menus.index')->with('success', 'Menu berhasil dihapus!');
     }
+
+    // Tampilkan menu untuk pelanggan
+    public function menuPelanggan()
+    {
+        $makanan = Menu::where('tipe', 'makanan')->get();
+        $minuman = Menu::where('tipe', 'minuman')->get();
+
+        return view('menu', compact('makanan', 'minuman'));
+    }
 }
