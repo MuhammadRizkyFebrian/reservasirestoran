@@ -40,6 +40,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'pelanggan' => [
+            'driver' => 'session',
+            'provider' => 'pelanggans',
+        ],
+
+        'staf' => [
+            'driver' => 'session',
+            'provider' => 'stafs',
+        ],
     ],
 
     /*
@@ -65,10 +75,15 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'pelanggans' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Pelanggan::class,
+        ],
+        
+        'stafs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\StafRestoran::class,
+        ],
     ],
 
     /*

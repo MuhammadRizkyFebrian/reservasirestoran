@@ -1,41 +1,42 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PelangganAuthController;
 
-// Home / Landing Page
+// ==========================
+// LANDING DAN MENU UMUM
+// ==========================
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// Route untuk menu pelanggan, pakai controller agar $makanan & $minuman terisi
 Route::get('/menu', [MenuController::class, 'menuPelanggan'])->name('menu');
 
-// Route static lainnya
-Route::view('/reservation', 'reservation')->name('reservation');
-Route::view('/reservation-history', 'reservation-history')->name('reservation-history');
-Route::view('/payment', 'payment')->name('payment');
-Route::view('/profile', 'profile')->name('profile');
+// ==========================
+// AUTENTIKASI PELANGGAN
+// ==========================
+Route::get('/login', [PelangganAuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [PelangganAuthController::class, 'login']);
+Route::post('/logout', [PelangganAuthController::class, 'logout'])->name('logout');
 
-// Route autentikasi
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register', [PelangganAuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [PelangganAuthController::class, 'register']);
 
-// Route registrasi
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+Route::get('/forgot-password', [PelangganAuthController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/reset-password', [PelangganAuthController::class, 'resetPassword'])->name('password.update');
 
-// Route reset password
-Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
-Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+// ==========================
+// HALAMAN YANG WAJIB LOGIN
+// ==========================
+Route::middleware('auth:pelanggan')->group(function () {
+    Route::view('/reservation', 'reservation')->name('reservation');
+    Route::view('/reservation-history', 'reservation-history')->name('reservation-history');
+    Route::view('/payment', 'payment')->name('payment');
+    Route::view('/profile', 'profile')->name('profile');
+});
 
-// Route profil
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile');
-
-// Admin Routes
+// ==========================
+// ADMIN PANEL
+// ==========================
 Route::prefix('admin')->group(function () {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Route::view('/customers', 'admin.customers')->name('admin.customers');
@@ -43,9 +44,9 @@ Route::prefix('admin')->group(function () {
     Route::view('/pemesanan', 'admin.pemesanan')->name('admin.pemesanan');
     Route::view('/transactions', 'admin.riwayat-transaksi')->name('admin.transactions');
 
-    // Admin menu page
+    // Halaman menu admin
     Route::get('/menu', [MenuController::class, 'index'])->name('admin.menu');
 
-    // Resource routes untuk CRUD menu
+    // CRUD menu admin
     Route::resource('menus', MenuController::class)->except(['show']);
 });

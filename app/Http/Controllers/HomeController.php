@@ -7,14 +7,13 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
         $menus = Menu::inRandomOrder()->take(6)->get();
-        return view('home', compact('menus'));
+
+        $isLoggedIn = Auth::guard('pelanggan')->check();
+        $user = Auth::guard('pelanggan')->user();
+
+        return view('home', compact('menus', 'isLoggedIn', 'user'));
     }
 } 
