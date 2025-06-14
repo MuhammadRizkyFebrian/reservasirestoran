@@ -7,6 +7,7 @@ use App\Models\StafRestoran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class PelangganAuthController extends Controller
 {
@@ -24,17 +25,17 @@ class PelangganAuthController extends Controller
 
         // Cek staf_restoran dulu
         $staf = StafRestoran::where('username', $request->username)->first();
-        if ($staf && \Hash::check($request->password, $staf->password)) {
-            \Auth::guard('staf')->login($staf); 
+        if ($staf && Hash::check($request->password, $staf->password)) {
+            Auth::guard('staf')->login($staf); 
             $request->session()->regenerate();
             return redirect()->route('admin.dashboard');
         }
 
         // Cek pelanggan
         $pelanggan = Pelanggan::where('username', $request->username)->first();
-        if ($pelanggan && \Hash::check($request->password, $pelanggan->password)) {
+        if ($pelanggan && Hash::check($request->password, $pelanggan->password)) {
             $remember = $request->has('remember');
-            \Auth::guard('pelanggan')->login($pelanggan, $remember);
+            Auth::guard('pelanggan')->login($pelanggan, $remember);
             $request->session()->regenerate();
             return redirect()->intended(route('home'));
         }
@@ -50,10 +51,22 @@ class PelangganAuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'username' => 'required|unique:pelanggan',
-            'email' => 'required|email|unique:pelanggan',
-            'nomor_handphone' => 'required',
+            'username' => 'required|unique:pelanggan,username',
+            'email' => 'required|email|unique:pelanggan,email',
+            'nomor_handphone' => 'required|numeric|unique:pelanggan,nomor_handphone',
             'password' => 'required|min:6|confirmed',
+        ], [
+            'username.required' => 'Username wajib diisi.',
+            'username.unique' => 'Username sudah digunakan.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah digunakan.',
+            'nomor_handphone.required' => 'Nomor handphone wajib diisi.',
+            'nomor_handphone.numeric' => 'Nomor handphone harus berupa angka.',
+            'nomor_handphone.unique' => 'Nomor handphone sudah terdaftar.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal 6 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
         Pelanggan::create([
@@ -78,5 +91,33 @@ class PelangganAuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
+    }
+
+    // =============================
+    // RESET PASSWORD FITUR MANUAL
+    // =============================
+
+    public function showForgotPasswordForm()
+    {
+        return view('forgot-password');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:pelanggan,email',
+            'password' => 'required|confirmed|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $pelanggan = Pelanggan::where('email', $request->email)->first();
+
+        $pelanggan->password = Hash::make($request->password);
+        $pelanggan->save();
+
+        return redirect()->route('login')->with('status', 'Password berhasil direset! Silakan login.');
     }
 }
