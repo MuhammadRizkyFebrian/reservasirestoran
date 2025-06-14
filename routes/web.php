@@ -37,7 +37,7 @@ Route::middleware('auth:pelanggan')->group(function () {
 // ==========================
 // ADMIN PANEL
 // ==========================
-Route::prefix('admin')->group(function () {
+Route::prefix('auth:staf')->group(function () {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Route::view('/customers', 'admin.customers')->name('admin.customers');
     Route::view('/tables', 'admin.tables')->name('admin.tables');
