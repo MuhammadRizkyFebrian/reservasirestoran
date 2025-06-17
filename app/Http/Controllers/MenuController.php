@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class MenuController extends Controller
 {
@@ -18,16 +19,16 @@ class MenuController extends Controller
     // Simpan menu baru ke database
     public function store(Request $request)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'kategori' => 'required|string|max:100',
-            'tipe' => 'required|in:makanan,minuman',
-            'harga' => 'required|numeric',
-            'deskripsi' => 'required|string',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
-
         try {
+            $request->validate([
+                'nama' => 'required|string|max:255',
+                'kategori' => 'required|string|max:100',
+                'tipe' => 'required|in:makanan,minuman',
+                'harga' => 'required|numeric',
+                'deskripsi' => 'required|string',
+                'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
             $gambarPath = $request->file('gambar')->store('menu', 'public');
 
             Menu::create([
@@ -40,8 +41,14 @@ class MenuController extends Controller
             ]);
 
             return redirect()->route('menus.index')->with('success', 'Menu berhasil ditambahkan!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validasi gagal: ' . json_encode($e->errors()));
+            return redirect()->back()->withInput()->with('error', 'Validasi gagal: ' . implode(', ', array_map(function ($errors) {
+                return implode(', ', $errors);
+            }, $e->errors())));
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'Data gagal disimpan. Cek input Anda!');
+            \Log::error('Error saat menyimpan menu: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Data gagal disimpan: ' . $e->getMessage());
         }
     }
 

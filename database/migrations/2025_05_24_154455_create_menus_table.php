@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('menus', function (Blueprint $table) {
-            $table->id();
+        Schema::create('menu', function (Blueprint $table) {
+            $table->id('id_menu');
             $table->string('nama');
             $table->string('gambar')->nullable();
             $table->string('kategori')->nullable();
             $table->enum('tipe', ['makanan', 'minuman']);
             $table->text('deskripsi')->nullable();
             $table->decimal('harga', 10, 0);
-            $table->timestamps();
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('menus');
+        Schema::dropIfExists('menu');
     }
 };

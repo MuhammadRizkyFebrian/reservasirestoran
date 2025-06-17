@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PelangganAuthController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProfileController;
 
 // ==========================
 // LANDING DAN MENU UMUM
@@ -31,22 +33,33 @@ Route::middleware('auth:pelanggan')->group(function () {
     Route::view('/reservation', 'reservation')->name('reservation');
     Route::view('/reservation-history', 'reservation-history')->name('reservation-history');
     Route::view('/payment', 'payment')->name('payment');
-    Route::view('/profile', 'profile')->name('profile');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 });
 
 // ==========================
 // ADMIN PANEL
 // ==========================
-Route::prefix('auth:staf')->group(function () {
-    Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
-    Route::view('/customers', 'admin.customers')->name('admin.customers');
-    Route::view('/tables', 'admin.tables')->name('admin.tables');
-    Route::view('/pemesanan', 'admin.pemesanan')->name('admin.pemesanan');
-    Route::view('/transactions', 'admin.riwayat-transaksi')->name('admin.transactions');
+Route::prefix('admin')->group(function () {
+    Route::get('/login', [PelangganAuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/login', [PelangganAuthController::class, 'login']);
+    Route::post('/logout', [PelangganAuthController::class, 'logout'])->name('admin.logout');
 
-    // Halaman menu admin
-    Route::get('/menu', [MenuController::class, 'index'])->name('admin.menu');
+    Route::middleware('auth:staf')->group(function () {
+        Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
+        Route::get('/customers', [AdminController::class, 'customers'])->name('admin.customers');
+        Route::post('/customers/update', [AdminController::class, 'updateCustomer'])->name('admin.customers.update');
+        Route::post('/customers/delete', [AdminController::class, 'deleteCustomer'])->name('admin.customers.delete');
+        Route::get('/tables', [AdminController::class, 'tables'])->name('admin.tables');
+        Route::post('/tables/update', [AdminController::class, 'updateTable'])->name('admin.tables.update');
+        Route::view('/pemesanan', 'admin.pemesanan')->name('admin.pemesanan');
+        Route::view('/transactions', 'admin.riwayat-transaksi')->name('admin.transactions');
 
-    // CRUD menu admin
-    Route::resource('menus', MenuController::class)->except(['show']);
+        // Halaman menu admin
+        Route::get('/menu', [MenuController::class, 'index'])->name('admin.menu');
+
+        // CRUD menu admin
+        Route::resource('menus', MenuController::class)->except(['show']);
+    });
 });

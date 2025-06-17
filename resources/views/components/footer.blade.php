@@ -24,18 +24,15 @@
                         <i class='bx bx-envelope mr-2 text-lg'></i>
                         <span class="text-sm sm:text-base">info@seatify.com</span>
                     </div>
-                    <div class="flex mt-3 space-x-2">
-                        <a href="#" class="btn btn-xs btn-circle btn-outline hover:bg-accent hover:border-accent" title="Facebook">
-                            <i class='bx bxl-facebook text-lg'></i>
+                    <div class="flex mt-3 space-x-3">
+                        <a href="#" class="btn btn-sm btn-circle btn-outline hover:bg-accent hover:border-accent hover:text-white transition-all duration-300" title="Facebook">
+                            <i class='bx bxl-facebook text-xl'></i>
                         </a>
-                        <a href="#" class="btn btn-xs btn-circle btn-outline hover:bg-accent hover:border-accent" title="Instagram">
-                            <i class='bx bxl-instagram text-lg'></i>
+                        <a href="#" class="btn btn-sm btn-circle btn-outline hover:bg-accent hover:border-accent hover:text-white transition-all duration-300" title="Instagram">
+                            <i class='bx bxl-instagram text-xl'></i>
                         </a>
-                        <a href="#" class="btn btn-xs btn-circle btn-outline hover:bg-accent hover:border-accent" title="Twitter">
-                            <i class='bx bxl-twitter text-lg'></i>
-                        </a>
-                        <a href="#" class="btn btn-xs btn-circle btn-outline hover:bg-accent hover:border-accent" title="YouTube">
-                            <i class='bx bxl-youtube text-lg'></i>
+                        <a href="#" class="btn btn-sm btn-circle btn-outline hover:bg-accent hover:border-accent hover:text-white transition-all duration-300" title="Twitter">
+                            <i class='bx bxl-twitter text-xl'></i>
                         </a>
                     </div>
                 </div>
@@ -46,15 +43,7 @@
                     <ul class="space-y-1">
                         <li class="text-sm sm:text-base flex items-center">
                             <i class='bx bx-time-five mr-2 text-lg'></i>
-                            <span>Senin - Jumat: 11:00 - 22:00</span>
-                        </li>
-                        <li class="text-sm sm:text-base flex items-center">
-                            <i class='bx bx-time-five mr-2 text-lg'></i>
-                            <span>Sabtu - Minggu: 10:00 - 23:00</span>
-                        </li>
-                        <li class="text-sm sm:text-base flex items-center">
-                            <i class='bx bx-time-five mr-2 text-lg'></i>
-                            <span>Hari Libur: 10:00 - 23:00</span>
+                            <span>Setiap Hari: 11:00 - 22:00</span>
                         </li>
                     </ul>
                 </div>

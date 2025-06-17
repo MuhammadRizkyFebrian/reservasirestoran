@@ -26,7 +26,7 @@ class PelangganAuthController extends Controller
         // Cek staf_restoran dulu
         $staf = StafRestoran::where('username', $request->username)->first();
         if ($staf && Hash::check($request->password, $staf->password)) {
-            Auth::guard('staf')->login($staf); 
+            Auth::guard('staf')->login($staf);
             $request->session()->regenerate();
             return redirect()->route('admin.dashboard');
         }
@@ -73,7 +73,7 @@ class PelangganAuthController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'nomor_handphone' => $request->nomor_handphone,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->password)
         ]);
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');

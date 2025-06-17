@@ -56,9 +56,16 @@
                 </div>
 
                 <!-- User Menu -->
+                @auth('pelanggan')
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" class="w-9 h-9 flex items-center justify-center cursor-pointer rounded-full hover:bg-base-200 overflow-hidden focus:ring-2 focus:ring-base-content/20 focus:outline-none">
-                        <img alt="Avatar" src="https://ui-avatars.com/api/?name=Rafles&background=random&size=140" class="w-full h-full object-cover" />
+                        @if(Auth::guard('pelanggan')->user()->foto_profil)
+                        <img alt="Avatar" src="{{ asset('storage/profile/' . Auth::guard('pelanggan')->user()->foto_profil) }}" class="w-full h-full object-cover" />
+                        @else
+                        <div class="w-full h-full flex items-center justify-center bg-primary text-primary-content font-medium">
+                            {{ strtoupper(substr(Auth::guard('pelanggan')->user()->username, 0, 2)) }}
+                        </div>
+                        @endif
                     </div>
                     <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52">
                         <li>
@@ -84,6 +91,12 @@
                         </li>
                     </ul>
                 </div>
+                @else
+                <a href="{{ route('login') }}" class="btn btn-primary btn-sm h-9 flex items-center justify-center">
+                    <i class='bx bx-log-in mr-1'></i>
+                    Masuk
+                </a>
+                @endauth
             </div>
         </div>
     </div>
