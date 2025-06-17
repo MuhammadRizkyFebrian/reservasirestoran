@@ -763,7 +763,7 @@
                                 tipe_meja: tableType,
                                 kapasitas: 4,
                                 harga: tablePrice,
-                                status: tableStatus === 'available' ? 'tersedia' : 'tidak_tersedia',
+                                status: tableStatus === 'available' ? 'tersedia' : 'dipesan',
                                 _token: '{{ csrf_token() }}'
                             })
                         })

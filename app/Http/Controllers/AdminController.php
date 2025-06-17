@@ -28,7 +28,7 @@ class AdminController extends Controller
                 'tipe_meja' => 'required',
                 'kapasitas' => 'required|numeric',
                 'harga' => 'required|numeric',
-                'status' => 'required|in:tersedia,tidak_tersedia'
+                'status' => 'required|in:tersedia,dipesan'
             ]);
 
             $meja = Meja::where('no_meja', $request->no_meja)->first();
