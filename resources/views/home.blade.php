@@ -3,10 +3,25 @@
 @section('title', 'Dashboard - ' . config('app.name'))
 
 @section('head')
-@include('components.home.home-styles')
+    @include('components.home.home-styles')
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 @endsection
 
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success fixed top-0 left-1/2 transform -translate-x-1/2 mt-4 z-50 w-fit shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>{{ session('success') }}</span>
+    </div>
+@endif
 <!-- Hero Section -->
 <div class="relative hero-section">
     <div class="absolute inset-0 bg-black bg-opacity-60"></div>
@@ -118,23 +133,69 @@
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8">
             <div>
                 <h2 class="text-2xl sm:text-3xl font-bold">Ulasan Pelanggan</h2>
+                <!-- Statistik Rating -->
                 <div id="ratingStats" class="mt-2 flex items-center gap-3">
                     <div class="rating-summary flex items-center">
-                        <span id="avgRating" class="text-lg sm:text-xl font-bold">0</span>
+                        <span id="avgRating" class="text-lg sm:text-xl font-bold">{{ $avgRating }}</span>
                         <div class="flex ml-2">
                             <i class='bx bxs-star text-accent text-lg sm:text-xl'></i>
                         </div>
                     </div>
                     <span class="text-base-content/70">|</span>
-                    <div id="totalReviews" class="text-sm sm:text-base text-base-content/70">0 ulasan</div>
+                    <div id="totalReviews" class="text-sm sm:text-base text-base-content/70">{{ $totalReviews }} ulasan</div>
                 </div>
             </div>
-            <button id="addReviewBtn" class="btn btn-warning mt-4 sm:mt-0">Tambah Ulasan</button>
+            <label for="modal-ulasan" class="btn btn-warning mt-4 sm:mt-0">Tambah Ulasan</label>
         </div>
 
         <!-- Daftar Ulasan -->
-        <div id="reviewsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            <!-- Ulasan akan di-render secara dinamis menggunakan JavaScript -->
+        <div id="ulasanSection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            @forelse($ulasans as $review)
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body p-4 sm:p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="avatar mb-2 sm:mb-3">
+                                    <div class="w-10 sm:w-12 rounded-full">
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($review->pelanggan->username ?? 'User') }}&background=random" />
+                                    </div>
+                                </div>
+                                <h3 class="font-bold text-base sm:text-lg">{{ $review->pelanggan->username ?? 'Anonim' }}</h3>
+                            </div>
+                        </div>
+                        <div class="flex mb-2 sm:mb-3 text-yellow-400 text-xl">
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($review->star_rating >= $i)
+                                    <i class='bx bxs-star'></i>
+                                @elseif ($review->star_rating >= $i - 0.5)
+                                    <i class='bx bxs-star-half'></i>
+                                @else
+                                    <i class='bx bx-star text-gray-400'></i>
+                                @endif
+                            @endfor
+                        </div>
+                        <p class="text-sm sm:text-base mb-4">"{{ $review->comments }}"</p>
+
+                        @if(auth()->guard('pelanggan')->check() && $review->id_pelanggan == auth()->guard('pelanggan')->user()->id_pelanggan)
+                            <div class="flex gap-2">
+                                <!-- Tombol Edit -->
+                                <button class="btn btn-sm btn-success" onclick="editUlasan({{ $review->id }}, `{{ $review->comments }}`, {{ $review->star_rating }})">
+                                    Edit
+                                </button>
+
+                                <!-- Tombol Hapus -->
+                                <form action="{{ route('ulasan.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus ulasan ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-error" type="submit">Hapus</button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <p class="text-center col-span-3 text-gray-500">Belum ada ulasan.</p>
+            @endforelse
         </div>
     </div>
 </section>
@@ -149,365 +210,127 @@
         </div>
     </div>
 </section>
-@endsection
 
-@section('modals')
-<!-- Modal Tambah/Edit Ulasan -->
-<dialog id="reviewModal" class="modal">
-    <div class="modal-box max-w-md">
-        <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-        </form>
-        <h3 id="modalTitle" class="font-bold text-lg mb-3">Tambah Ulasan Baru</h3>
-        <form id="reviewFormElement">
-            <input type="hidden" id="reviewId">
-            <div class="form-control mb-3">
-                <label class="label">
-                    <span class="label-text">Nama</span>
-                </label>
-                <input type="text" id="reviewerName" class="input input-bordered w-full" required>
-            </div>
+<!-- Modal Tambah Ulasan -->
+<input type="checkbox" id="modal-ulasan" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box max-w-md">
+    <h3 id="modalTitle" class="font-bold text-lg mb-3">Tambah Ulasan Baru</h3>
+    <form method="POST" id="reviewFormElement">
+        @csrf
+        <input type="hidden" name="id_pelanggan" value="{{ $user->id_pelanggan }}">
+        <input type="hidden" name="id_pemesanan" value="10"> {{-- sementara pakai 1 untuk testing --}}
 
-            <div class="form-control mb-3">
-                <label class="label">
-                    <span class="label-text">Rating</span>
-                </label>
-                <div class="rating rating-lg">
-                    <input type="radio" name="rating" id="rate1" value="1.0" class="hidden">
-                    <input type="radio" name="rating" id="rate15" value="1.5" class="hidden">
-                    <input type="radio" name="rating" id="rate2" value="2.0" class="hidden">
-                    <input type="radio" name="rating" id="rate25" value="2.5" class="hidden">
-                    <input type="radio" name="rating" id="rate3" value="3.0" class="hidden">
-                    <input type="radio" name="rating" id="rate35" value="3.5" class="hidden">
-                    <input type="radio" name="rating" id="rate4" value="4.0" class="hidden">
-                    <input type="radio" name="rating" id="rate45" value="4.5" class="hidden">
-                    <input type="radio" name="rating" id="rate5" value="5.0" checked class="hidden">
-
-                    <div class="flex flex-wrap gap-1">
-                        <div class="flex items-center" title="1 Bintang">
-                            <label for="rate1" class="cursor-pointer"><i class='bx bxs-star star-icon text-gray-400 hover:text-warning text-xl mr-1'></i></label>
-                        </div>
-                        <div class="flex items-center" title="1.5 Bintang">
-                            <label for="rate15" class="cursor-pointer"><i class='bx bxs-star-half star-icon text-gray-400 hover:text-warning text-xl mr-1'></i></label>
-                        </div>
-                        <div class="flex items-center" title="2 Bintang">
-                            <label for="rate2" class="cursor-pointer"><i class='bx bxs-star star-icon text-gray-400 hover:text-warning text-xl mr-1'></i></label>
-                        </div>
-                        <div class="flex items-center" title="2.5 Bintang">
-                            <label for="rate25" class="cursor-pointer"><i class='bx bxs-star-half star-icon text-gray-400 hover:text-warning text-xl mr-1'></i></label>
-                        </div>
-                        <div class="flex items-center" title="3 Bintang">
-                            <label for="rate3" class="cursor-pointer"><i class='bx bxs-star star-icon text-gray-400 hover:text-warning text-xl mr-1'></i></label>
-                        </div>
-                        <div class="flex items-center" title="3.5 Bintang">
-                            <label for="rate35" class="cursor-pointer"><i class='bx bxs-star-half star-icon text-gray-400 hover:text-warning text-xl mr-1'></i></label>
-                        </div>
-                        <div class="flex items-center" title="4 Bintang">
-                            <label for="rate4" class="cursor-pointer"><i class='bx bxs-star star-icon text-gray-400 hover:text-warning text-xl mr-1'></i></label>
-                        </div>
-                        <div class="flex items-center" title="4.5 Bintang">
-                            <label for="rate45" class="cursor-pointer"><i class='bx bxs-star-half star-icon text-gray-400 hover:text-warning text-xl mr-1'></i></label>
-                        </div>
-                        <div class="flex items-center" title="5 Bintang">
-                            <label for="rate5" class="cursor-pointer"><i class='bx bxs-star star-icon text-gray-400 hover:text-warning text-xl'></i></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-control mb-4">
-                <label class="label">
-                    <span class="label-text">Ulasan</span>
-                </label>
-                <textarea id="reviewText" class="textarea textarea-bordered h-24" required></textarea>
-            </div>
-
-            <div class="flex justify-end gap-2">
-                <button type="button" id="cancelReviewBtn" class="btn">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-            </div>
-        </form>
-    </div>
-</dialog>
-
-<!-- Modal Konfirmasi Hapus -->
-<dialog id="confirmDeleteModal" class="modal">
-    <div class="modal-box max-w-xs">
-        <h3 class="font-bold text-lg mb-3">Konfirmasi Penghapusan</h3>
-        <p>Apakah Anda yakin ingin menghapus ulasan ini?</p>
-        <div class="modal-action">
-            <button class="btn btn-ghost" onclick="confirmDeleteModal.close()">Batal</button>
-            <button id="confirmDeleteBtn" class="btn btn-error">Hapus</button>
+        <div class="form-control mb-3">
+            <label class="label"><span class="label-text">Nama</span></label>
+            <input type="text" value="{{ Auth::guard('pelanggan')->user()->username ?? '' }}" class="input input-bordered w-full" readonly>
         </div>
-    </div>
-</dialog>
+
+        <div class="form-control mb-4" x-data="{ rating: 0 }">
+            <label class="label">
+                <span class="label-text">Rating</span>
+            </label>
+            <div class="flex items-center gap-1 text-2xl text-gray-400">
+                <template x-for="star in 5" :key="star">
+                    <svg @click="rating = star"
+                         @mouseover="rating = star"
+                         @mouseleave="rating = rating"
+                         :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'"
+                         class="w-7 h-7 cursor-pointer transition-all duration-150"
+                         fill="currentColor"
+                         viewBox="0 0 20 20">
+                         <path d="M10 15l-5.878 3.09 1.122-6.545L0.487 6.91l6.572-.955L10 0l2.941 5.955 6.572.955-4.757 4.635 1.122 6.545z"/>
+                    </svg>
+                </template>
+            </div>
+            <input type="hidden" name="star_rating" x-model="rating">
+            <span class="text-sm text-gray-600 mt-1 block">Rating: <span x-text="rating"></span> bintang</span>
+        </div>
+
+        <div class="form-control mb-4">
+            <label class="label"><span class="label-text">Ulasan</span></label>
+            <textarea name="comments" id="reviewText" class="textarea textarea-bordered h-24" required></textarea>
+        </div>
+
+        <div class="modal-action">
+            <label for="modal-ulasan" class="btn">Batal</label>
+            <button type="button" id="submitReview" class="btn btn-primary">Simpan</button>
+        </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Edit Ulasan -->
+<input type="checkbox" id="modal-edit-ulasan" class="modal-toggle" />
+<div class="modal" role="dialog">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg mb-4">Edit Ulasan</h3>
+    <form id="editReviewForm" method="POST" action="{{ route('ulasan.update') }}">
+        @csrf
+        @method('PUT')
+        <input type="hidden" name="id" id="edit_id">
+
+        <div class="mb-3">
+            <label for="edit_comments" class="label">Komentar</label>
+            <textarea id="edit_comments" name="comments" class="textarea textarea-bordered w-full" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="edit_rating" class="label">Rating</label>
+            <select id="edit_rating" name="star_rating" class="select select-bordered w-full" required>
+                @for ($i = 1; $i <= 5; $i++)
+                    <option value="{{ $i }}">{{ $i }} Bintang</option>
+                @endfor
+            </select>
+        </div>
+
+        <div class="modal-action">
+            <label for="modal-edit-ulasan" class="btn">Batal</label>
+            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+        </div>
+    </form>
+  </div>
+</div>
+
 @endsection
 
 @section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Data ulasan (statis sebagai contoh)
-        let reviews = [{
-                id: 1,
-                name: "User 1",
-                rating: 4.5,
-                text: "Makanan lezat dengan penyajian yang menarik. Pelayanannya juga sangat baik dan ramah. Saya pasti akan kembali lagi!"
+    setTimeout(() => {
+        document.querySelector('.alert')?.remove();
+    }, 3000); // 3 detik
+
+    document.getElementById('submitReview').addEventListener('click', function () {
+        let form = document.getElementById('reviewFormElement');
+        let formData = new FormData(form);
+
+        fetch("{{ route('ulasan.store') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
             },
-            {
-                id: 2,
-                name: "User 2",
-                rating: 5.0,
-                text: "Saya merayakan ulang tahun di sini dan mendapat perlakuan istimewa dari seluruh staf. Makanan enak, suasana bagus, dan layanan luar biasa!"
-            },
-            {
-                id: 3,
-                name: "User 3",
-                rating: 4.7,
-                text: "Pelayanan cepat, makanan enak dan hangat. Suasananya nyaman untuk pertemuan bisnis maupun acara keluarga."
-            },
-        ];
-
-        // Pilih elemen-elemen DOM
-        const reviewsList = document.getElementById('reviewsList');
-        const reviewModal = document.getElementById('reviewModal');
-        const reviewFormElement = document.getElementById('reviewFormElement');
-        const modalTitle = document.getElementById('modalTitle');
-        const addReviewBtn = document.getElementById('addReviewBtn');
-        const cancelReviewBtn = document.getElementById('cancelReviewBtn');
-        const confirmDeleteModal = document.getElementById('confirmDeleteModal');
-        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        const avgRatingElement = document.getElementById('avgRating');
-        const totalReviewsElement = document.getElementById('totalReviews');
-
-        // ID dari ulasan yang akan dihapus
-        let reviewToDelete = null;
-
-        // Update statistik rating
-        function updateRatingStats() {
-            const totalReviews = reviews.length;
-            let totalRating = 0;
-
-            reviews.forEach(review => {
-                totalRating += review.rating;
-            });
-
-            // Menggunakan nilai dengan 1 angka di belakang koma untuk rata-rata rating
-            const avgRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : '0.0';
-
-            avgRatingElement.textContent = avgRating;
-            totalReviewsElement.textContent = `${totalReviews} ulasan`;
-        }
-
-        // Render ulasan
-        function renderReviews() {
-            reviewsList.innerHTML = '';
-
-            reviews.forEach(review => {
-                const stars = getStarsHTML(review.rating);
-
-                const reviewCard = document.createElement('div');
-                reviewCard.className = 'card bg-base-100 shadow-xl';
-                reviewCard.innerHTML = `
-                    <div class="card-body p-4 sm:p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="avatar mb-2 sm:mb-3">
-                                    <div class="w-10 sm:w-12 rounded-full">
-                                        <img src="https://ui-avatars.com/api/?name=${review.name.replace(' ', '+')}&background=random" />
-                                    </div>
-                                </div>
-                                <h3 class="font-bold text-base sm:text-lg">${review.name}</h3>
-                            </div>
-                            <div class="flex gap-1 sm:gap-2">
-                                <button class="btn btn-xs sm:btn-sm btn-outline btn-warning edit-review" data-id="${review.id}">
-                                    <i class='bx bx-edit text-base sm:text-lg'></i>
-                                </button>
-                                <button class="btn btn-xs sm:btn-sm btn-outline btn-error delete-review" data-id="${review.id}">
-                                    <i class='bx bx-trash text-base sm:text-lg text-error'></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex mb-2 sm:mb-3">
-                            ${stars}
-                        </div>
-                        <p class="text-sm sm:text-base">"${review.text}"</p>
-                    </div>
-                `;
-
-                reviewsList.appendChild(reviewCard);
-            });
-
-            // Update rating statistics
-            updateRatingStats();
-
-            // Tambahkan event listeners untuk tombol edit dan hapus
-            document.querySelectorAll('.edit-review').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = parseInt(this.getAttribute('data-id'));
-                    editReview(id);
-                });
-            });
-
-            document.querySelectorAll('.delete-review').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = parseInt(this.getAttribute('data-id'));
-                    reviewToDelete = id;
-                    confirmDeleteModal.showModal();
-                });
-            });
-        }
-
-        // Menghasilkan HTML untuk bintang rating
-        function getStarsHTML(rating) {
-            let stars = '';
-            // Mendapatkan bagian bulat dan desimal dari rating
-            const fullStars = Math.floor(rating);
-            const decimal = rating - fullStars;
-            const hasHalfStar = decimal >= 0.3 && decimal < 0.8;
-            const hasFullStar = decimal >= 0.8;
-
-            // Tambahkan bintang penuh
-            for (let i = 0; i < fullStars; i++) {
-                stars += `<i class='bx bxs-star text-accent text-base sm:text-xl'></i>`;
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Gagal menambahkan ulasan.');
             }
-
-            // Tambahkan bintang setengah jika perlu
-            if (hasHalfStar) {
-                stars += `<i class='bx bxs-star-half text-accent text-base sm:text-xl'></i>`;
-            } else if (hasFullStar) {
-                stars += `<i class='bx bxs-star text-accent text-base sm:text-xl'></i>`;
-            }
-
-            // Tambahkan bintang kosong yang tersisa
-            const remainingStars = 5 - fullStars - (hasHalfStar || hasFullStar ? 1 : 0);
-            for (let i = 0; i < remainingStars; i++) {
-                stars += `<i class='bx bx-star text-accent text-base sm:text-xl'></i>`;
-            }
-
-            return stars;
-        }
-
-        // Edit ulasan
-        function editReview(id) {
-            const review = reviews.find(r => r.id === id);
-            if (!review) return;
-
-            document.getElementById('reviewId').value = review.id;
-            document.getElementById('reviewerName').value = review.name;
-            document.getElementById('reviewText').value = review.text;
-
-            // Set rating
-            const ratingValue = Math.ceil(review.rating);
-            document.querySelector(`input[name="rating"][value="${ratingValue}"]`).checked = true;
-            updateStarRating(ratingValue);
-
-            modalTitle.textContent = 'Edit Ulasan';
-            reviewModal.showModal();
-        }
-
-        // Fungsi untuk update tampilan bintang rating berdasarkan nilai yang dipilih
-        function updateStarRating(value) {
-            const ratingInputs = document.querySelectorAll('input[name="rating"]');
-
-            // Temukan input yang sesuai dengan nilai yang dipilih
-            ratingInputs.forEach(input => {
-                if (parseFloat(input.value) === parseFloat(value)) {
-                    input.checked = true;
-                }
-            });
-
-            // Perbarui tampilan bintang sesuai dengan nilai yang dipilih
-            document.querySelector(`input[name="rating"][value="${value}"]`).checked = true;
-        }
-
-        // Tambah ulasan baru
-        addReviewBtn.addEventListener('click', function() {
-            // Reset form
-            reviewFormElement.reset();
-            document.getElementById('reviewId').value = '';
-            modalTitle.textContent = 'Tambah Ulasan Baru';
-            document.getElementById('rate5').checked = true;
-            updateStarRating(5);
-
-            reviewModal.showModal();
+            return response.json(); // Pastikan response dari controller berupa JSON
+        })
+        .then(data => {
+            alert("Ulasan berhasil ditambahkan!");
+            window.location.href = window.location.origin + window.location.pathname + "#ulasan";
+            window.location.reload();
+        })
+        .catch(error => {
+            alert("Terjadi kesalahan: " + error.message);
         });
+    });
 
-        // Batal tambah/edit ulasan
-        cancelReviewBtn.addEventListener('click', function() {
-            reviewModal.close();
-        });
-
-        // Submit form ulasan
-        reviewFormElement.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const reviewId = document.getElementById('reviewId').value;
-            const name = document.getElementById('reviewerName').value;
-            const text = document.getElementById('reviewText').value;
-            const rating = document.querySelector('input[name="rating"]:checked').value;
-
-            if (reviewId) {
-                // Edit ulasan yang ada
-                const index = reviews.findIndex(r => r.id === parseInt(reviewId));
-                if (index !== -1) {
-                    reviews[index] = {
-                        id: parseInt(reviewId),
-                        name,
-                        rating: parseFloat(rating), // Simpan sebagai nilai float
-                        text
-                    };
-                }
-            } else {
-                // Tambah ulasan baru
-                const newId = reviews.length > 0 ? Math.max(...reviews.map(r => r.id)) + 1 : 1;
-                reviews.push({
-                    id: newId,
-                    name,
-                    rating: parseFloat(rating), // Simpan sebagai nilai float
-                    text
-                });
-            }
-
-            // Render ulang daftar ulasan
-            renderReviews();
-
-            // Tutup modal
-            reviewModal.close();
-        });
-
-        // Konfirmasi hapus ulasan
-        confirmDeleteBtn.addEventListener('click', function() {
-            if (reviewToDelete) {
-                reviews = reviews.filter(r => r.id !== reviewToDelete);
-                renderReviews();
-                reviewToDelete = null;
-                confirmDeleteModal.close();
-            }
-        });
-
-        // Inisialisasi tampilan ulasan
-        renderReviews();
-
-        // Aktifkan bintang rating
-        const starLabels = document.querySelectorAll('.rating label');
-        starLabels.forEach(label => {
-            const input = document.getElementById(label.getAttribute('for'));
-
-            label.addEventListener('mouseover', function() {
-                // Highlight bintang yang di-hover dan sebelumnya
-                const value = parseInt(input.value);
-                updateStarRating(value);
-            });
-
-            input.addEventListener('change', function() {
-                const value = parseInt(this.value);
-                updateStarRating(value);
-            });
-        });
-
-        // Scroll behavior untuk navbar links
+    document.addEventListener('DOMContentLoaded', function () {
+        // Smooth scroll ke anchor di navbar
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
 
                 const targetId = this.getAttribute('href');
@@ -522,5 +345,15 @@
             });
         });
     });
+
+    function editUlasan(id, comments, rating) {
+        document.getElementById('edit_id').value = id;
+        document.getElementById('edit_comments').value = comments;
+        document.getElementById('edit_rating').value = rating;
+
+        // Buka modal
+        document.getElementById('modal-edit-ulasan').checked = true;
+    }
 </script>
+
 @endsection

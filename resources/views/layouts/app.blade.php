@@ -63,5 +63,6 @@
     @yield('modals')
     
     @yield('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js" defer></script>
 </body>
-</html> 
+</html>

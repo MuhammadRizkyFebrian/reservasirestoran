@@ -6,6 +6,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PelangganAuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UlasanController;
 
 // ==========================
 // LANDING DAN MENU UMUM
@@ -36,6 +37,9 @@ Route::middleware('auth:pelanggan')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
+    Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
+    Route::delete('/ulasan/{id}', [UlasanController::class, 'destroy'])->name('ulasan.destroy');
+    Route::put('/ulasan/update', [UlasanController::class, 'update'])->name('ulasan.update');
 });
 
 // ==========================
