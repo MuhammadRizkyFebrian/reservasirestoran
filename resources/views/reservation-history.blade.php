@@ -3,84 +3,86 @@
 @section('title', 'Riwayat Reservasi - ' . config('app.name'))
 
 @section('styles')
+<style>
 .reservation-card {
-background-color: var(--fallback-b2,oklch(var(--b2)));
-border-radius: 0.75rem;
-padding: 1.25rem;
-margin-bottom: 1.25rem;
-box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
-transition: transform 0.3s ease;
+    background-color: var(--fallback-b2,oklch(var(--b2)));
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease;
 }
 
 .reservation-card:hover {
-transform: translateY(-3px);
+    transform: translateY(-3px);
 }
 
 .reservation-filter {
-background-color: var(--fallback-b2,oklch(var(--b2)));
-border-radius: 0.75rem;
-padding: 1.25rem;
-margin-bottom: 1.25rem;
-box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+    background-color: var(--fallback-b2,oklch(var(--b2)));
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
 }
 
 .profile-sidebar {
-background-color: var(--fallback-b1,oklch(var(--b1)));
-border-radius: 1rem;
-padding: 2rem;
-height: 100%;
-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    background-color: var(--fallback-b1,oklch(var(--b1)));
+    border-radius: 1rem;
+    padding: 2rem;
+    height: 100%;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .profile-image {
-width: 140px;
-height: 140px;
-object-fit: cover;
-border-radius: 50%;
-border: 3px solid var(--fallback-primary,oklch(var(--p)));
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--fallback-primary,oklch(var(--p)));
 }
 
 .edit-button {
-position: absolute;
-bottom: 0;
-right: 10px;
-background-color: var(--fallback-primary,oklch(var(--p)));
-width: 32px;
-height: 32px;
-display: flex;
-align-items: center;
-justify-content: center;
-border-radius: 50%;
-color: white;
-cursor: pointer;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    background-color: var(--fallback-primary,oklch(var(--p)));
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .nav-item {
-padding: 0.75rem 1rem;
-border-radius: 0.5rem;
-margin-bottom: 0.5rem;
-transition: all 0.2s ease;
-cursor: pointer;
-display: flex;
-align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .nav-item:hover, .nav-item.active {
-background-color: var(--fallback-primary,oklch(var(--p)));
-color: var(--fallback-primary-content,oklch(var(--pc)));
+    background-color: var(--fallback-primary,oklch(var(--p)));
+    color: var(--fallback-primary-content,oklch(var(--pc)));
 }
 
 .nav-item i {
-margin-right: 0.75rem;
-font-size: 1.2rem;
+    margin-right: 0.75rem;
+    font-size: 1.2rem;
 }
 
 @media (max-width: 768px) {
-.profile-sidebar {
-margin-bottom: 2rem;
+    .profile-sidebar {
+        margin-bottom: 2rem;
+    }
 }
-}
+</style>
 @endsection
 
 @section('content')
@@ -91,21 +93,21 @@ margin-bottom: 2rem;
             <div class="profile-sidebar">
                 <div class="flex flex-col items-center mb-6">
                     <div class="relative mb-4">
-                        <img src="https://ui-avatars.com/api/?name=Rafles&background=random&size=140" alt="Profile" id="profileAvatar" class="profile-image">
+                        <img src="https://ui-avatars.com/api/?name={{ auth('pelanggan')->user()->username ?? 'User' }}&background=random&size=140" alt="Profile" id="profileAvatar" class="profile-image">
                         <label for="avatarUpload" class="edit-button">
                             <i class='bx bx-plus'></i>
                             <input type="file" id="avatarUpload" class="hidden" accept="image/*" />
                         </label>
                     </div>
-                    <h2 class="text-xl font-bold mb-3">Rafles</h2>
+                    <h2 class="text-xl font-bold mb-3">{{ auth('pelanggan')->user()->username ?? 'User' }}</h2>
                     <div class="flex flex-col items-center space-y-2 text-center">
                         <div class="flex items-center">
                             <i class='bx bx-envelope text-base-content/70 mr-2'></i>
-                            <span class="text-sm" id="displayEmail">Rafles@gmail.com</span>
+                            <span class="text-sm" id="displayEmail">{{ auth('pelanggan')->user()->email ?? 'user@example.com' }}</span>
                         </div>
                         <div class="flex items-center">
                             <i class='bx bx-phone text-base-content/70 mr-2'></i>
-                            <span class="text-sm" id="displayPhone">+62 812 3456 7890</span>
+                            <span class="text-sm" id="displayPhone">{{ auth('pelanggan')->user()->nomor_handphone ?? '+62 000 0000 0000' }}</span>
                         </div>
                     </div>
                 </div>
@@ -174,109 +176,74 @@ margin-bottom: 2rem;
 
             <!-- Reservations List -->
             <div id="reservationsList">
-                <!-- Reservasi Menunggu Konfirmasi (Baru) -->
-                <div class="reservation-card" data-status="pending" data-date="{{ date('Y-m-d') }}">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
-                        <div class="mb-2 sm:mb-0 max-w-full overflow-hidden">
-                            <h3 class="font-bold text-lg truncate">Reservasi-5</h3>
-                            <p class="text-sm text-base-content/70">28 Mei 2025 - 16:00</p>
+                @forelse ($reservasi as $item)
+                    @php
+                        $status = 'pending';
+                        $statusLabel = 'Menunggu Konfirmasi';
+                        $badgeClass = 'badge-warning';
+
+                        if (strtotime($item->jadwal) < now()->timestamp) {
+                            $status = 'completed';
+                            $statusLabel = 'Selesai';
+                            $badgeClass = 'badge-success';
+                        }
+
+                        $meja = 'Meja ' . ($item->no_meja ?? '0');
+                        $tanggal = \Carbon\Carbon::parse($item->jadwal)->translatedFormat('d M Y');
+                        $jam = \Carbon\Carbon::parse($item->jadwal)->format('H:i');
+                    @endphp
+
+                    <div class="reservation-card" data-status="{{ $status }}" data-date="{{ $item->jadwal }}">
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
+                            <div class="mb-2 sm:mb-0 max-w-full overflow-hidden">
+                                <h3 class="font-bold text-lg truncate">Reservasi-{{ $item->id_pemesanan }}</h3>
+                                <p class="text-sm text-base-content/70">{{ $tanggal }} - {{ $jam }}</p>
+                            </div>
+                            <span class="badge {{ $badgeClass }} whitespace-nowrap shrink-0 px-2 py-3">{{ $statusLabel }}</span>
                         </div>
-                        <span class="badge badge-warning whitespace-nowrap shrink-0 px-2 py-3">Menunggu Konfirmasi</span>
-                    </div>
 
-                    <div class="divider my-2"></div>
+                        <div class="divider my-2"></div>
 
-                    <div class="mb-2">
-                        <p class="text-sm text-base-content/70">Meja</p>
-                        <p class="font-medium break-words">Meja 3 (2 orang)</p>
-                    </div>
+                        <div class="mb-2">
+                            <p class="text-sm text-base-content/70">Meja</p>
+                            <p class="font-medium break-words">{{ $meja }} ({{ $item->jumlah_tamu }} orang)</p>
+                        </div>
 
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                        <p class="font-bold mb-2 sm:mb-0 break-words">Total: Rp25.000</p>
-                        <div class="flex flex-wrap gap-2 mt-3 justify-between">
-                            <div class="flex gap-2 flex-grow">
-                                <a href="{{ route('payment') }}" class="btn btn-sm btn-primary text-white flex-1 sm:flex-none">
-                                    <i class='bx bx-credit-card'></i>
-                                    <span class="hidden xs:inline">Lihat Pembayaran</span>
-                                </a>
-                                <button class="btn btn-sm btn-error flex-1 sm:flex-none" data-reservation="85716">
-                                    <i class='bx bx-x-circle'></i>
-                                    <span class="hidden xs:inline">Batalkan</span>
-                                </button>
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                            <p class="font-bold mb-2 sm:mb-0 break-words">Total: Rp{{ number_format(25000 + 15000, 0, ',', '.') }}</p>
+                            <div class="flex flex-wrap gap-2 mt-3 justify-between">
+                                <div class="flex gap-2 flex-grow">
+                                    @if(isset($item->kode))
+                                        <a href="{{ route('payment', ['kode' => $item->kode]) }}" class="btn btn-sm btn-primary text-white flex-1 sm:flex-none">
+                                            <i class='bx bx-credit-card'></i>
+                                            <span class="hidden xs:inline">Lihat Pembayaran</span>
+                                        </a>
+                                    @endif
+                                    @if($status !== 'cancelled' && $status !== 'completed')
+                                        <button class="btn btn-sm btn-error flex-1 sm:flex-none" data-reservation="{{ $item->id_pemesanan }}">
+                                            <i class='bx bx-x-circle'></i>
+                                            <span class="hidden xs:inline">Batalkan</span>
+                                        </button>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Reservation 2 -->
-                <div class="reservation-card" data-status="scheduled" data-date="2023-05-15">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
-                        <div class="mb-2 sm:mb-0 max-w-full overflow-hidden">
-                            <h3 class="font-bold text-lg truncate">Reservasi-4</h3>
-                            <p class="text-sm text-base-content/70">15 Mei 2023 - 20:00</p>
-                        </div>
-                        <span class="badge badge-primary whitespace-nowrap text-white shrink-0 px-2 py-3">Terjadwal</span>
+                @empty
+                    <div class="text-center text-gray-500 py-8">
+                        <i class='bx bx-calendar-x text-4xl mb-4'></i>
+                        <p class="text-lg">Belum ada riwayat reservasi.</p>
+                        <a href="{{ route('reservation') }}" class="btn btn-primary mt-4">
+                            <i class='bx bx-plus'></i>
+                            Buat Reservasi
+                        </a>
                     </div>
-
-                    <div class="divider my-2"></div>
-
-                    <div class="mb-2">
-                        <p class="text-sm text-base-content/70">Meja</p>
-                        <p class="font-medium break-words">Meja 5 (4 orang)</p>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                        <p class="font-bold mb-2 sm:mb-0 break-words">Total: Rp40.000</p>
-                        <div class="flex flex-wrap gap-2 mt-3 justify-between">
-                            <div class="flex gap-2 flex-grow">
-                                <button class="btn btn-sm btn-outline flex-1 sm:flex-none show-receipt" data-receipt="004" data-table="Meja 5" data-guests="4" data-date="15 Mei 2023" data-time="20:00" data-total="40000" data-status="scheduled">
-                                    <i class='bx bx-receipt'></i>
-                                </button>
-                                <button class="btn btn-sm btn-error flex-1 sm:flex-none" data-reservation="4">
-                                    <i class='bx bx-x-circle'></i>
-                                    <span class="hidden xs:inline">Batalkan</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Reservation 3 -->
-                <div class="reservation-card" data-status="cancelled" data-date="2023-04-10">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
-                        <div class="mb-2 sm:mb-0 max-w-full overflow-hidden">
-                            <h3 class="font-bold text-lg truncate">Reservasi-3</h3>
-                            <p class="text-sm text-base-content/70">10 April 2023 - 13:00</p>
-                        </div>
-                        <span class="badge badge-error whitespace-nowrap shrink-0 px-2 py-3">Dibatalkan</span>
-                    </div>
-
-                    <div class="divider my-2"></div>
-
-                    <div class="mb-2">
-                        <p class="text-sm text-base-content/70">Meja</p>
-                        <p class="font-medium break-words">Meja 8 (5 orang)</p>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                        <p class="font-bold mb-2 sm:mb-0 break-words">Total: Rp60.000 <span class="badge badge-error whitespace-nowrap shrink-0 px-2 py-3">Dibatalkan</span></p>
-                        <div class="flex flex-wrap gap-2 mt-3 justify-between">
-                            <div class="flex gap-2 flex-grow">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                        </div>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </div>
     </div>
 </div>
-@endsection
 
-@section('modals')
 <!-- Receipt Modal -->
 <dialog id="receipt-modal" class="modal">
     <div class="modal-box max-w-md">
@@ -472,7 +439,7 @@ margin-bottom: 2rem;
                     // Change the status of the card
                     const card = this.closest('.reservation-card');
                     const statusBadge = card.querySelector('.badge');
-                    statusBadge.className = 'badge badge-error whitespace-nowrap shrink-0';
+                    statusBadge.className = 'badge badge-error whitespace-nowrap shrink-0 px-2 py-3';
                     statusBadge.textContent = 'Dibatalkan';
 
                     // Change data attribute
@@ -487,9 +454,11 @@ margin-bottom: 2rem;
                         }
                     }
 
-                    // Hapus semua tombol dan tampilkan area kosong
+                    // Remove buttons
                     const buttonsContainer = card.querySelector('.flex.gap-2.flex-grow');
-                    buttonsContainer.innerHTML = '<!-- Tombol Detail dihapus -->';
+                    if (buttonsContainer) {
+                        buttonsContainer.innerHTML = '<span class="text-sm text-error">Reservasi dibatalkan</span>';
+                    }
 
                     alert('Reservasi berhasil dibatalkan');
                 }
@@ -497,9 +466,11 @@ margin-bottom: 2rem;
         });
 
         // Download receipt PDF button (dummy functionality)
-        document.getElementById('download-receipt').addEventListener('click', function() {
-            alert('Fitur unduh PDF sedang dalam pengembangan. Silakan gunakan fitur cetak untuk sementara.');
-        });
+        if (document.getElementById('download-receipt')) {
+            document.getElementById('download-receipt').addEventListener('click', function() {
+                alert('Fitur unduh PDF sedang dalam pengembangan. Silakan gunakan fitur cetak untuk sementara.');
+            });
+        }
     });
 </script>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
+use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -38,7 +39,6 @@ class ProfileController extends Controller
 
         $data = [];
 
-        // Hanya update field yang diisi
         if ($request->filled('username')) {
             $data['username'] = $request->username;
         }
@@ -50,12 +50,10 @@ class ProfileController extends Controller
         }
 
         if ($request->hasFile('foto_profil')) {
-            // Hapus foto lama jika bukan default
             if ($pelanggan->foto_profil != 'default.jpg' && Storage::disk('public')->exists('profile/' . $pelanggan->foto_profil)) {
                 Storage::disk('public')->delete('profile/' . $pelanggan->foto_profil);
             }
 
-            // Upload foto baru
             $fotoPath = $request->file('foto_profil')->store('profile', 'public');
             $data['foto_profil'] = basename($fotoPath);
         }
@@ -65,6 +63,18 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui!');
+    }
+
+    public function reservationHistory()
+    {
+        // Menggunakan id_pelanggan yang benar untuk relasi
+        $pelanggan = Auth::guard('pelanggan')->user();
+        
+        $reservasi = Pesanan::where('id_pelanggan', $pelanggan->id_pelanggan)
+            ->orderByDesc('jadwal')
+            ->get();
+
+        return view('reservation-history', compact('reservasi'));
     }
 
     public function updatePassword(Request $request)

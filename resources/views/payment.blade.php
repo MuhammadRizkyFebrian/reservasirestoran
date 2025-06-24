@@ -72,6 +72,10 @@
 @endsection
 
 @section('content')
+@php
+    $first = $pemesanan->first();
+@endphp
+
 <div class="container mx-auto px-4 py-8">
     <div class="payment-container">
         <!-- Payment Card -->
@@ -87,32 +91,24 @@
             </div>
             
             <!-- Payment Details -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-                <div>
-                    <div class="payment-info-item">
-                        <span class="payment-info-label">ID Transaksi</span>
-                        <span class="payment-info-value">#TRX005</span>
-                    </div>
-                    
-                    <div class="payment-info-item">
-                        <span class="payment-info-label">ID Pemesanan</span>
-                        <span class="payment-info-value">RSV-005</span>
-                    </div>
-                </div>
-                
-                <div>
-                    <div class="payment-info-item">
-                        <span class="payment-info-label">Nama Pemesan</span>
-                        <span class="payment-info-value">Rafles</span>
-                    </div>
-                    
-                    <div class="payment-info-item">
-                        <span class="payment-info-label">Nomor Telepon</span>
-                        <span class="payment-info-value">081234567890</span>
-                    </div>
-                </div>
+            <div class="payment-info-item">
+                <span class="payment-info-label">ID Transaksi: #{{ $kode }}</span>
             </div>
-            
+
+            <div class="payment-info-item">
+                <span class="payment-info-label">ID Pemesanan: RSV-{{ $first->id_pemesanan ?? '000' }}</span>
+            </div>
+
+            <div class="payment-info-item">
+                <span class="payment-info-label">Nama Pemesan</span>
+                <span class="payment-info-value">{{ $first->nama_pemesan ?? '-' }}</span>
+            </div>
+
+            <div class="payment-info-item">
+                <span class="payment-info-label">Nomor Telepon</span>
+                <span class="payment-info-value">{{ $first->no_handphone ?? '-' }}</span>
+            </div>
+
             <!-- Payment Separator -->
             <div class="payment-separator"></div>
             
@@ -127,10 +123,16 @@
                         <div class="payment-info-item">
                             <span class="payment-info-label">Bank</span>
                             <span class="payment-info-value">Bank BCA</span>
+                            <span class="payment-info-value">Bank BNI</span>
+                            <span class="payment-info-value">Bank BRI</span>
+                            <span class="payment-info-value">Bank Mandiri</span>
                         </div>
                         
                         <div class="payment-info-item">
                             <span class="payment-info-label">Nomor Rekening</span>
+                            <span class="payment-info-value">1234567890</span>
+                            <span class="payment-info-value">1234567890</span>
+                            <span class="payment-info-value">1234567890</span>
                             <span class="payment-info-value">1234567890</span>
                         </div>
                         
@@ -139,29 +141,64 @@
                             <span class="payment-info-value">PT Seatify Restaurant</span>
                         </div>
                         
-                        <div class="payment-info-item">
-                            <span class="payment-info-label">Jumlah</span>
-                            <span class="payment-info-value font-bold text-primary">Rp150.000</span>
-                        </div>
+                            <div class="payment-info-item">
+                                <span class="payment-info-label">Ringkasan Biaya </span>
+
+                                <div class="mt-2 px-4 py-2 bg-base-200 rounded-lg text-sm space-y-2">
+                                    @php
+                                        $totalMeja = 0;
+
+                                        foreach ($pemesanan as $p) {
+                                            $harga = match (true) {
+                                                $p->no_meja >= 1 && $p->no_meja <= 4 => 25000,
+                                                $p->no_meja >= 5 && $p->no_meja <= 7 => 40000,
+                                                $p->no_meja >= 8 && $p->no_meja <= 10 => 60000,
+                                                $p->no_meja == 11 => 90000,
+                                                default => 0,
+                                            };
+
+                                            $totalMeja += $harga;
+                                        }
+                                    @endphp
+
+                                    <div class="flex justify-between">
+                                        <span>Biaya Reservasi Meja</span>
+                                        <span>Rp{{ number_format($totalMeja, 0, ',', '.') }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Biaya Layanan</span>
+                                        <span>Rp15.000</span>
+                                    </div>
+                                    <div class="flex justify-between font-bold border-t border-base-300 pt-2"  style="color: red;">
+                                        <span>Total</span>
+                                        <span>Rp{{ number_format($totalMeja + 15000, 0, ',', '.') }}</span>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                 </div>
                 
                 <div class="mb-4 mt-4">
                     <div class="payment-info-item">
                         <span class="payment-info-label">Detail Pemesanan</span>
-                        <div class="flex flex-col mt-2 px-4 py-2 bg-base-200 rounded-lg">
-                            <div class="flex justify-between mb-1">
-                                <span class="text-sm">Meja</span>
-                                <span class="font-medium">Meja 3 (2 orang)</span>
+
+                        @foreach ($pemesanan as $pesan)
+                            <div class="flex flex-col mt-2 px-4 py-2 bg-base-200 rounded-lg mb-2">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm">Meja</span>
+                                    <span class="font-medium">Meja {{ $pesan->no_meja ?? '-' }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm">Jadwal</span>
+                                    <span class="font-medium">
+                                        {{ \Carbon\Carbon::parse($pesan->jadwal ?? '-')->format('d M Y - H:i') }}
+                                    </span>
+                                </div>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-sm">Jadwal</span>
-                                <span class="font-medium">28 Mei 2025 - 20:00</span>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
-                
+
                 <div class="alert alert-info mt-4">
                     <i class='bx bx-info-circle'></i>
                     <span>Pembayaran akan diverifikasi oleh admin setelah Anda mengupload bukti transfer.</span>
