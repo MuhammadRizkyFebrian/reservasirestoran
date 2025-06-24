@@ -107,7 +107,10 @@
 
 <!-- Modals -->
 @include('components.reservation.reservation-modal')
-@include('components.reservation.success-modal')
+@if (session('kode_transaksi'))
+    @include('components.reservation.success-modal', ['kode_transaksi' => session('kode_transaksi')])
+@endif
+
 @endsection
 
 @section('modals')

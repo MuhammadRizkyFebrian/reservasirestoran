@@ -1,5 +1,5 @@
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const tableBtns = document.querySelectorAll('.table-btn.available');
         const reservationModal = document.getElementById('reservation-modal');
         const closeReservationModal = document.getElementById('closeReservationModal');
@@ -10,165 +10,144 @@
         const modalTablePrice = document.getElementById('modalTablePrice');
         const modalTotalPrice = document.getElementById('modalTotalPrice');
         const reservationForm = document.getElementById('reservationForm');
-        
+        const hiddenTableInputs = document.getElementById('hiddenTableInputs');
+
         const selectedTables = [];
-        let totalPriceValue = 15000; // Default service fee
-        
-        // Handle open reservation modal button
+        let totalPriceValue = 15000; // Biaya layanan
+
+        // Buka modal reservasi
         if (openReservationModalBtn) {
-            openReservationModalBtn.addEventListener('click', function() {
+            openReservationModalBtn.addEventListener('click', function () {
                 reservationModal.showModal();
             });
         }
-        
-        // Handle reservation form button
+
         if (reservationFormBtn) {
-            reservationFormBtn.addEventListener('click', function() {
+            reservationFormBtn.addEventListener('click', function () {
                 reservationModal.showModal();
             });
         }
-        
-        // Handle close reservation modal
+
         if (closeReservationModal) {
-            closeReservationModal.addEventListener('click', function() {
+            closeReservationModal.addEventListener('click', function () {
                 reservationModal.close();
             });
         }
-        
-        // Handle table button clicks
+
+        // Klik tombol meja
         tableBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 const tableId = this.getAttribute('data-table');
                 const tablePrice = parseInt(this.getAttribute('data-price'));
                 const tableName = this.textContent.trim();
-                
+
                 const tableIndex = selectedTables.findIndex(t => t.id === tableId);
-                
+
                 if (tableIndex > -1) {
-                    // Remove table if already selected
                     selectedTables.splice(tableIndex, 1);
                     this.classList.remove('selected');
                 } else {
-                    // Add table if not selected
-                    selectedTables.push({
-                        id: tableId,
-                        name: tableName,
-                        price: tablePrice
-                    });
+                    selectedTables.push({ id: tableId, name: tableName, price: tablePrice });
                     this.classList.add('selected');
                 }
-                
+
                 updateSelectedTablesInfo();
                 updatePriceInfo();
                 updateTableSummary();
-                
-                // Enable or disable the reservation button
-                if (selectedTables.length > 0) {
-                    openReservationModalBtn.disabled = false;
-                } else {
-                    openReservationModalBtn.disabled = true;
-                }
+                updateHiddenTableInputs();
+
+                openReservationModalBtn.disabled = selectedTables.length === 0;
             });
         });
-        
-        // Update table summary on main page
+
         function updateTableSummary() {
             if (selectedTables.length === 0) {
                 tableSummary.textContent = 'Belum ada meja yang dipilih';
-                return;
+            } else {
+                tableSummary.textContent = selectedTables.map(t => t.name).join(', ');
             }
-            
-            const tableNames = selectedTables.map(table => table.name).join(', ');
-            tableSummary.textContent = tableNames;
         }
-        
-        // Update selected tables info in modal
+
         function updateSelectedTablesInfo() {
             if (selectedTables.length === 0) {
                 selectedTablesInfo.textContent = 'Belum ada meja yang dipilih';
                 return;
             }
-            
-            let infoHTML = '';
-            selectedTables.forEach(table => {
-                infoHTML += `<div class="flex justify-between items-center mb-1">
+
+            selectedTablesInfo.innerHTML = selectedTables.map(table => `
+                <div class="flex justify-between items-center mb-1">
                     <span>${table.name}</span>
                     <span>Rp ${table.price.toLocaleString('id-ID')}</span>
-                </div>`;
-            });
-            
-            selectedTablesInfo.innerHTML = infoHTML;
+                </div>
+            `).join('');
         }
-        
-        // Update price information
+
+        function updateHiddenTableInputs() {
+            hiddenTableInputs.innerHTML = '';
+            selectedTables.forEach(table => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'no_meja[]';
+                input.value = table.id;
+                hiddenTableInputs.appendChild(input);
+            });
+        }
+
         function updatePriceInfo() {
-            const tablePriceValue = selectedTables.reduce((sum, table) => sum + table.price, 0);
-            totalPriceValue = tablePriceValue + 15000; // Add service fee
-            
-            // Update in reservation modal
-            modalTablePrice.textContent = `Rp ${tablePriceValue.toLocaleString('id-ID')}`;
+            const mejaTotal = selectedTables.reduce((sum, t) => sum + t.price, 0);
+            totalPriceValue = mejaTotal + 15000;
+
+            modalTablePrice.textContent = `Rp ${mejaTotal.toLocaleString('id-ID')}`;
             modalTotalPrice.textContent = `Rp ${totalPriceValue.toLocaleString('id-ID')}`;
         }
-        
-        // Handle form submission
+
+        // Validasi dan submit form
         if (reservationForm) {
-            reservationForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Validasi form sederhana
+            reservationForm.addEventListener('submit', function (e) {
                 const customerName = document.getElementById('customerName')?.value;
                 const phoneNumber = document.getElementById('phoneNumber')?.value;
                 const reservationDate = document.getElementById('reservationDate')?.value;
                 const reservationTime = document.getElementById('reservationTime')?.value;
                 const guestCount = document.getElementById('guestCount')?.value;
-                
-                if (customerName && phoneNumber && reservationDate && reservationTime && guestCount) {
-                    // Generate random reservation order code
-                    const orderCode = 'RSV' + Math.floor(Math.random() * 90000 + 10000);
-                    
-                    // Set order code in success modal
-                    document.getElementById('successOrderCode').textContent = orderCode;
-                    
-                    // Close reservation modal and redirect to payment page
-                    reservationModal.close();
-                    
-                    // Redirect to payment page
-                    window.location.href = "{{ route('payment') }}";
+
+                if (!customerName || !phoneNumber || !reservationDate || !reservationTime || !guestCount || selectedTables.length === 0) {
+                    e.preventDefault();
+                    alert('Harap lengkapi semua data dan pilih meja terlebih dahulu.');
+                    return;
                 }
+
+                updateHiddenTableInputs(); // penting agar hidden input no_meja[] di-update sebelum submit
+
+                // Tidak ada e.preventDefault() jika valid, biarkan form submit ke Laravel
             });
         }
-        
-        // Reservation date validation
+
+        // Validasi tanggal
         const reservationDate = document.getElementById('reservationDate');
         if (reservationDate) {
             reservationDate.min = new Date().toISOString().split('T')[0];
         }
-        
-        // Guest count validation
+
+        // Validasi jumlah tamu
         const guestCount = document.getElementById('guestCount');
         if (guestCount) {
-            guestCount.addEventListener('input', function() {
+            guestCount.addEventListener('input', function () {
                 if (parseInt(this.value) < 1) this.value = 1;
                 if (parseInt(this.value) > 20) this.value = 20;
             });
         }
-        
-        // Notes character counter
+
+        // Hitung karakter catatan
         const notes = document.getElementById('notes');
         const charCount = document.getElementById('charCount');
-        
+
         if (notes && charCount) {
-            notes.addEventListener('input', function() {
-                const remaining = this.value.length;
-                charCount.textContent = remaining;
-                
-                // Truncate if somehow exceeds max length
+            notes.addEventListener('input', function () {
+                charCount.textContent = this.value.length > 200 ? 200 : this.value.length;
                 if (this.value.length > 200) {
                     this.value = this.value.substring(0, 200);
-                    charCount.textContent = 200;
                 }
             });
         }
     });
-</script> 
- 
+</script>

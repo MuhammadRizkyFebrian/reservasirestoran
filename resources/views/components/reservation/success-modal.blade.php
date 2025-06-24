@@ -15,7 +15,7 @@
         <p class="mb-4 text-xs text-base-content/70">Silakan lanjutkan ke halaman pembayaran.</p>
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
             <div class="modal-action justify-center">
-                <a href="{{ route('payment') }}" class="btn btn-primary w-full sm:w-auto">
+                <a href="{{ route('payment', ['kode' => $kode_transaksi]) }}" class="btn btn-primary w-full sm:w-auto">
                     <i class='bx bx-credit-card'></i> Lanjutkan ke Pembayaran
                 </a>
             </div>
@@ -25,4 +25,3 @@
         </div>
     </div>
 </dialog> 
- 
