@@ -145,7 +145,11 @@
                     <div id="totalReviews" class="text-sm sm:text-base text-base-content/70">{{ $totalReviews }} ulasan</div>
                 </div>
             </div>
-            <label for="modal-ulasan" class="btn btn-warning mt-4 sm:mt-0">Tambah Ulasan</label>
+            @if(auth()->guard('pelanggan')->check())
+                <label for="modal-ulasan" class="btn btn-warning mt-4 sm:mt-0">Tambah Ulasan</label>
+            @else
+                <a href="{{ route('login') }}" class="btn btn-warning mt-4 sm:mt-0">Login untuk Menambah Ulasan</a>
+            @endif
         </div>
 
         <!-- Daftar Ulasan -->
@@ -218,7 +222,11 @@
     <h3 id="modalTitle" class="font-bold text-lg mb-3">Tambah Ulasan Baru</h3>
     <form method="POST" id="reviewFormElement">
         @csrf
-        <input type="hidden" name="id_pelanggan" value="{{ $user->id_pelanggan }}">
+        @if(auth()->guard('pelanggan')->check())
+            <input type="hidden" name="id_pelanggan" value="{{ auth()->guard('pelanggan')->user()->id_pelanggan }}">
+        @else
+            <input type="hidden" name="id_pelanggan" value="">
+        @endif
         <input type="hidden" name="id_pemesanan" value="10"> {{-- sementara pakai 1 untuk testing --}}
 
         <div class="form-control mb-3">

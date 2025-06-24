@@ -8,6 +8,8 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\UlasanController;
+
 // ==========================
 // LANDING DAN MENU UMUM
 // ==========================
@@ -45,39 +47,46 @@ Route::middleware('auth:pelanggan')->group(function () {
         return view('reservation');
     })->name('reservation');
     Route::post('/reservation', [ReservationController::class, 'store'])->name('reservation.store');
-    
+
     // Payment route
     Route::get('/payment/{kode}', [ReservationController::class, 'payment'])->name('payment');
-    
+
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 
-    // Reservation history route - FIXED
+    // Reservation history route
     Route::get('/reservation-history', [ProfileController::class, 'reservationHistory'])->name('reservation-history');
+
+    // ==========================
+    // ULASAN (Review)
+    // ==========================
+    Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
+    Route::put('/ulasan/update', [UlasanController::class, 'update'])->name('ulasan.update');
+    Route::delete('/ulasan/{id}', [UlasanController::class, 'destroy'])->name('ulasan.destroy');
 });
 
 // ==========================
 // ADMIN PANEL (AUTH:STAF)
 // ==========================
 Route::prefix('admin')->middleware('auth:staf')->group(function () {
-    Route::get('/dashboard', function() {
+    Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
-    
+
     Route::get('/customers', [AdminController::class, 'customers'])->name('admin.customers');
     Route::post('/customers/update', [AdminController::class, 'updateCustomer'])->name('admin.customers.update');
     Route::post('/customers/delete', [AdminController::class, 'deleteCustomer'])->name('admin.customers.delete');
-    
+
     Route::get('/tables', [AdminController::class, 'tables'])->name('admin.tables');
     Route::post('/tables/update', [AdminController::class, 'updateTable'])->name('admin.tables.update');
-    
-    Route::get('/pemesanan', function() {
+
+    Route::get('/pemesanan', function () {
         return view('admin.pemesanan');
     })->name('admin.pemesanan');
-    
-    Route::get('/transactions', function() {
+
+    Route::get('/transactions', function () {
         return view('admin.riwayat-transaksi');
     })->name('admin.transactions');
 
