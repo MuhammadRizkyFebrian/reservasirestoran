@@ -26,5 +26,24 @@ class Pesanan extends Model
         'catatan',
         'jadwal',
         'kode_transaksi',
+        'status',
     ];
+
+    // Relasi ke pelanggan
+    public function pelanggan()
+    {
+        return $this->belongsTo(Pelanggan::class, 'id_pelanggan', 'id_pelanggan');
+    }
+
+    // Relasi ke pembayaran
+    public function pembayaran()
+    {
+        return $this->hasOne(Pembayaran::class, 'id_pemesanan', 'id_pemesanan');
+    }
+
+    // Relasi ke meja
+    public function meja()
+    {
+        return $this->belongsTo(Meja::class, 'no_meja', 'no_meja');
+    }
 }

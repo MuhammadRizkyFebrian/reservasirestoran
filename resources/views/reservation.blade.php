@@ -1,22 +1,125 @@
 @extends('layouts.app')
 
-@section('title', 'Pemilihan Meja - ' . config('app.name'))
+@section('title', 'Reservasi Meja - ' . config('app.name'))
 
 @section('head')
+<style>
+    .table-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+    }
+
+    .table-btn.available {
+        background-color: #86efac;
+        border: 1px solid #22c55e;
+    }
+
+    .table-btn.reserved {
+        background-color: #fca5a5;
+        border: 1px solid #ef4444;
+        cursor: not-allowed;
+        opacity: 0.8;
+    }
+
+    .table-btn.selected {
+        background-color: #93c5fd;
+        border: 1px solid #3b82f6;
+        transform: scale(1.05);
+    }
+
+    .table-btn.available:hover {
+        transform: scale(1.05);
+    }
+
+    .table-btn .tooltip {
+        visibility: hidden;
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        text-align: center;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        z-index: 10;
+        margin-bottom: 0.25rem;
+    }
+
+    .table-btn:hover .tooltip {
+        visibility: visible;
+    }
+</style>
 @include('components.reservation.reservation-styles')
 @endsection
 
 @section('content')
 <!-- Header -->
 @component('components.page-header')
-@slot('title', 'Pemilihan Meja')
-@slot('subtitle', 'Pilih meja yang tersedia untuk pengalaman bersantap terbaik Anda')
+@slot('title', 'Reservasi Meja')
+@slot('subtitle', 'Pilih waktu kunjungan dan meja yang tersedia untuk pengalaman bersantap terbaik Anda')
 @endcomponent
 
 <!-- Main Content -->
 <div class="container mx-auto px-4 py-8">
-    <!-- Table Selection -->
+    <!-- Datetime Selection -->
     <div class="card bg-base-200 shadow-xl mb-6 max-w-5xl mx-auto">
+        <div class="card-body p-4">
+            <h2 class="card-title text-lg font-bold mb-4">Pilih Waktu Kunjungan</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Tanggal Kunjungan</span>
+                    </label>
+                    <input type="date" id="reservationDate" class="input input-bordered" required>
+                    <label class="label">
+                        <span class="label-text-alt text-base-content/70">*Pemesanan hanya tersedia untuk 7 hari ke depan</span>
+                    </label>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Waktu Kunjungan</span>
+                    </label>
+                    <select id="reservationTime" class="select select-bordered" required>
+                        <option value="" disabled selected>Pilih Waktu</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                        <option value="18:00">18:00</option>
+                        <option value="19:00">19:00</option>
+                        <option value="20:00">20:00</option>
+                        <option value="21:00">21:00</option>
+                        <option value="22:00">22:00</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button id="checkAvailabilityBtn" class="btn btn-primary" disabled>
+                    Cek Ketersediaan Meja
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Selection (Initially Hidden) -->
+    <div id="tableSelectionSection" class="card bg-base-200 shadow-xl mb-6 max-w-5xl mx-auto hidden">
         <div class="card-body p-4">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3">
                 <h2 class="card-title text-lg font-bold">Denah Meja Restoran</h2>
@@ -46,59 +149,9 @@
                     <img src="{{ asset('images/restaurant_floor_plan (1).png') }}" alt="Denah Restoran" class="w-10/12 h-auto rounded-lg shadow-md">
                 </div>
 
-                <!-- Tombol Meja -->
-                <div>
-                    <h3 class="font-bold text-base mb-2">Pilih Meja</h3>
-
-                    <!-- Area 1: Meja Persegi -->
-                    <div class="mb-2">
-                        <h4 class="font-semibold text-sm mb-1">Meja Persegi</h4>
-                        <div class="grid grid-cols-4 gap-2">
-                            <button class="table-btn available" data-table="1" data-price="25000">Meja 1</button>
-                            <button class="table-btn available" data-table="2" data-price="25000">Meja 2</button>
-                            <button class="table-btn available" data-table="3" data-price="25000">Meja 3</button>
-                            <button class="table-btn reserved" data-table="4" data-price="25000">Meja 4</button>
-                        </div>
-                    </div>
-
-                    <!-- Area 2: Meja Bundar -->
-                    <div class="mb-2">
-                        <h4 class="font-semibold text-sm mb-1">Meja Bundar</h4>
-                        <div class="grid grid-cols-4 gap-2">
-                            <button class="table-btn available" data-table="5" data-price="40000">Meja 5</button>
-                            <button class="table-btn reserved" data-table="6" data-price="40000">Meja 6</button>
-                            <button class="table-btn reserved" data-table="7" data-price="40000">Meja 7</button>
-                        </div>
-                    </div>
-
-                    <!-- Area 3: Meja Persegi Panjang -->
-                    <div class="mb-2">
-                        <h4 class="font-semibold text-sm mb-1">Meja Persegi Panjang</h4>
-                        <div class="grid grid-cols-4 gap-2">
-                            <button class="table-btn available" data-table="8" data-price="60000">Meja 8</button>
-                            <button class="table-btn available" data-table="9" data-price="60000">Meja 9</button>
-                            <button class="table-btn reserved" data-table="10" data-price="60000">Meja 10</button>
-                        </div>
-                    </div>
-
-                    <!-- Area 4: Meja VIP -->
-                    <div>
-                        <h4 class="font-semibold text-sm mb-1">Meja VIP</h4>
-                        <div class="grid grid-cols-4 gap-2">
-                            <button class="table-btn available" data-table="11" data-price="90000">VIP-1</button>
-                            <div class="col-span-2"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Summary -->
-            <div class="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                <div>
-                    <h3 class="font-bold text-base">Meja Dipilih: <span id="tableSummary" class="text-secondary">Belum ada meja yang dipilih</span></h3>
-                </div>
-                <div class="mt-2 sm:mt-0">
-                    <button id="openReservationModalBtn" class="btn btn-secondary btn-sm" disabled>Lanjutkan</button>
+                <!-- Daftar Meja -->
+                <div id="tableList" class="space-y-6">
+                    <!-- Daftar meja akan diisi melalui JavaScript -->
                 </div>
             </div>
         </div>
@@ -108,7 +161,7 @@
 <!-- Modals -->
 @include('components.reservation.reservation-modal')
 @if (session('kode_transaksi'))
-    @include('components.reservation.success-modal', ['kode_transaksi' => session('kode_transaksi')])
+@include('components.reservation.success-modal', ['kode_transaksi' => session('kode_transaksi')])
 @endif
 
 @endsection

@@ -26,7 +26,7 @@
         </a>
 
         <a href="{{ route('admin.menu') }}" class="menu-item {{ request()->routeIs('admin.menu') ? 'active' : '' }}">
-            <i class='bx bx-food-menu'></i> 
+            <i class='bx bx-food-menu'></i>
             <span>Daftar Menu</span>
         </a>
 
@@ -37,7 +37,7 @@
 
         <a href="{{ route('admin.transactions') }}" class="menu-item {{ request()->routeIs('admin.transactions') ? 'active' : '' }}">
             <i class='bx bx-history'></i>
-            <span>Riwayat Transaksi</span>
+            <span>Transaksi Selesai</span>
         </a>
     </div>
 </div>

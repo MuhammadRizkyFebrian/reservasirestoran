@@ -11,7 +11,7 @@ class Pemesanan extends Model
 
     protected $table = 'pemesanan'; // Nama tabel di database
 
-    protected $primaryKey = 'id_pemesanan'; 
+    protected $primaryKey = 'id_pemesanan';
 
     public $timestamps = false; // Optional, tergantung tabel kamu ada created_at/updated_at atau tidak
 

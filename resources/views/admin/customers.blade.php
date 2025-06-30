@@ -466,7 +466,7 @@
 
             <a href="{{ route('admin.transactions') }}" class="menu-item">
                 <i class='bx bx-history'></i>
-                <span>Riwayat Transaksi</span>
+                <span>Transaksi Selesai</span>
             </a>
         </div>
     </div>
@@ -504,7 +504,7 @@
                 <table class="customer-table bg-base-100">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>No.</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>No. Handphone</th>
@@ -512,20 +512,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($pelanggan as $p)
+                        @forelse ($pelanggan as $index => $customer)
                         <tr>
-                            <td>{{ $p->id_pelanggan }}</td>
-                            <td>{{ $p->username }}</td>
-                            <td>{{ $p->email }}</td>
-                            <td>{{ $p->nomor_handphone }}</td>
+                            <td>{{ ($pelanggan->currentPage() - 1) * $pelanggan->perPage() + $index + 1 }}</td>
+                            <td>{{ $customer->username }}</td>
+                            <td>{{ $customer->email }}</td>
+                            <td>{{ $customer->nomor_handphone }}</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('{{ $p->id_pelanggan }}', '{{ $p->email }}', '{{ $p->username }}', '{{ $p->nomor_handphone }}')"><i class='bx bx-edit-alt'></i></button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('{{ $p->id_pelanggan }}', '{{ $p->username }}')"><i class='bx bx-trash'></i></button>
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('{{ $customer->id_pelanggan }}', '{{ $customer->email }}', '{{ $customer->username }}', '{{ $customer->nomor_handphone }}')">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="hidden sm:inline ml-1">Edit</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('{{ $customer->id_pelanggan }}')">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="hidden sm:inline ml-1">Hapus</span>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                Tidak ada data pelanggan
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -533,17 +545,32 @@
             <!-- Pagination -->
             <div class="pagination">
                 <div class="text-sm text-base-content/70">
-                    Menampilkan 1-5 dari 25 pelanggan
+                    Menampilkan {{ $pelanggan->firstItem() }}-{{ $pelanggan->lastItem() }} dari {{ $pelanggan->total() }} pelanggan
                 </div>
                 <div class="pagination-buttons">
+                    @if ($pelanggan->onFirstPage())
                     <button class="btn btn-sm btn-outline pagination-button" disabled>
                         <i class='bx bx-chevron-left'></i>
                         <span>Sebelumnya</span>
                     </button>
-                    <button class="btn btn-sm btn-outline pagination-button">
+                    @else
+                    <a href="{{ $pelanggan->previousPageUrl() }}" class="btn btn-sm btn-outline pagination-button">
+                        <i class='bx bx-chevron-left'></i>
+                        <span>Sebelumnya</span>
+                    </a>
+                    @endif
+
+                    @if ($pelanggan->hasMorePages())
+                    <a href="{{ $pelanggan->nextPageUrl() }}" class="btn btn-sm btn-outline pagination-button">
+                        <span>Selanjutnya</span>
+                        <i class='bx bx-chevron-right'></i>
+                    </a>
+                    @else
+                    <button class="btn btn-sm btn-outline pagination-button" disabled>
                         <span>Selanjutnya</span>
                         <i class='bx bx-chevron-right'></i>
                     </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -592,7 +619,7 @@
     <dialog id="deleteConfirmModal" class="modal">
         <div class="modal-box">
             <h3 class="font-bold text-lg mb-4">Konfirmasi Hapus Pelanggan</h3>
-            <p>Apakah Anda yakin ingin menghapus data pelanggan <span id="deleteCustomerName" class="font-bold"></span>?</p>
+            <p>Apakah Anda yakin ingin menghapus pelanggan ini?</p>
             <p class="text-error text-sm mt-2">Tindakan ini tidak dapat dibatalkan.</p>
             <div class="modal-action">
                 <button class="btn btn-outline" onclick="closeDeleteModal()">Batal</button>
@@ -756,11 +783,8 @@
         }
 
         // Function to open delete confirmation modal
-        function confirmDelete(id, username) {
+        function confirmDelete(id) {
             const modal = document.getElementById('deleteConfirmModal');
-
-            // Set customer name in confirmation message
-            document.getElementById('deleteCustomerName').textContent = username;
 
             // Store customer ID for deletion
             window.customerToDelete = id;
@@ -769,17 +793,10 @@
             modal.showModal();
         }
 
-        // Function to close delete modal
-        function closeDeleteModal() {
-            const modal = document.getElementById('deleteConfirmModal');
-            modal.close();
-        }
-
         // Function to delete customer
         function deleteCustomer() {
-            const id = window.customerToDelete;
+            const customerId = window.customerToDelete;
 
-            // Kirim request ke server
             fetch('{{ route("admin.customers.delete") }}', {
                     method: 'POST',
                     headers: {
@@ -787,26 +804,35 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     body: JSON.stringify({
-                        id_pelanggan: id
+                        id_pelanggan: customerId,
+                        _token: '{{ csrf_token() }}'
                     })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        alert(data.message);
-                        if (data.message.includes('berhasil')) {
-                            // Reload halaman untuk menampilkan data terbaru
-                            window.location.reload();
-                        }
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Terjadi kesalahan saat menghapus pelanggan');
+                        });
                     }
+                    return response.json();
+                })
+                .then(data => {
+                    // Langsung reload tanpa alert
+                    window.location.reload();
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Terjadi kesalahan saat menghapus data pelanggan');
+                    alert(error.message);
                 });
 
             // Close the modal
             closeDeleteModal();
+        }
+
+        // Function to close delete modal
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteConfirmModal');
+            modal.close();
         }
     </script>
 </body>

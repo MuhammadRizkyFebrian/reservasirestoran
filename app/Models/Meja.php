@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\StafRestoran;
+use App\Models\Pesanan;
 
 class Meja extends Model
 {
@@ -29,5 +30,11 @@ class Meja extends Model
     public function staf()
     {
         return $this->belongsTo(StafRestoran::class, 'id_staf', 'id_staf');
+    }
+
+    // Relasi dengan model Pesanan
+    public function pesanan()
+    {
+        return $this->hasMany(Pesanan::class, 'no_meja', 'no_meja');
     }
 }

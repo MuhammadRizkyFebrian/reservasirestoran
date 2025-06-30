@@ -12,7 +12,7 @@ class MenuController extends Controller
     // Tampilkan semua menu
     public function index()
     {
-        $menus = Menu::all();
+        $menus = Menu::paginate(10);
         return view('admin.menu', compact('menus'));
     }
 
@@ -31,7 +31,7 @@ class MenuController extends Controller
 
             $gambarPath = $request->file('gambar')->store('menu', 'public');
 
-            Menu::create([
+            $menu = Menu::create([
                 'nama' => $request->nama,
                 'kategori' => $request->kategori,
                 'tipe' => $request->tipe,
@@ -40,22 +40,32 @@ class MenuController extends Controller
                 'gambar' => basename($gambarPath),
             ]);
 
-            return redirect()->route('menus.index')->with('success', 'Menu berhasil ditambahkan!');
+            return response()->json([
+                'success' => true,
+                'message' => 'Menu berhasil ditambahkan!',
+                'menu' => $menu
+            ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('Validasi gagal: ' . json_encode($e->errors()));
-            return redirect()->back()->withInput()->with('error', 'Validasi gagal: ' . implode(', ', array_map(function ($errors) {
-                return implode(', ', $errors);
-            }, $e->errors())));
+            Log::error('Validasi gagal: ' . json_encode($e->errors()));
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal: ' . implode(', ', array_map(function ($errors) {
+                    return implode(', ', $errors);
+                }, $e->errors()))
+            ], 422);
         } catch (\Exception $e) {
-            \Log::error('Error saat menyimpan menu: ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', 'Data gagal disimpan: ' . $e->getMessage());
+            Log::error('Error saat menyimpan menu: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Data gagal disimpan: ' . $e->getMessage()
+            ], 500);
         }
     }
 
     // Tampilkan form edit menu
     public function edit(Menu $menu)
     {
-        return view('admin.menus.edit', compact('menu'));
+        return response()->json($menu);
     }
 
     // Update menu di database
@@ -84,24 +94,42 @@ class MenuController extends Controller
 
             $menu->update($data);
 
-            return redirect()->route('menus.index')->with('success', 'Menu berhasil diupdate!');
+            return response()->json([
+                'success' => true,
+                'message' => 'Menu berhasil diupdate!',
+                'menu' => $menu
+            ]);
         } catch (\Exception $e) {
-            \Log::error('Gagal update menu: ' . $e->getMessage()); // untuk debugging
-            return redirect()->route('menus.index')->with('error', 'Gagal mengupdate menu!');
+            \Log::error('Gagal update menu: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengupdate menu!'
+            ], 500);
         }
     }
 
     // Hapus menu
     public function destroy(Menu $menu)
     {
-        // Hapus gambar jika ada
-        if ($menu->gambar && Storage::disk('public')->exists('menu/' . $menu->gambar)) {
-            Storage::disk('public')->delete('menu/' . $menu->gambar);
+        try {
+            // Hapus gambar jika ada
+            if ($menu->gambar && Storage::disk('public')->exists('menu/' . $menu->gambar)) {
+                Storage::disk('public')->delete('menu/' . $menu->gambar);
+            }
+
+            $menu->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Menu berhasil dihapus!'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Gagal menghapus menu: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus menu!'
+            ], 500);
         }
-
-        $menu->delete();
-
-        return redirect()->route('menus.index')->with('success', 'Menu berhasil dihapus!');
     }
 
     // Tampilkan menu untuk pelanggan

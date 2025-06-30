@@ -4,26 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
 use App\Models\StafRestoran;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class PelangganAuthController extends Controller
+class AuthController extends Controller
 {
-    public function showLoginForm()
+    // Admin Authentication
+    public function showAdminLoginForm()
+    {
+        return view('admin.login');
+    }
+
+    public function adminLogin(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard('web')->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->route('admin.dashboard');
+        }
+
+        return back()->withErrors([
+            'loginError' => 'Email atau password salah.',
+        ]);
+    }
+
+    public function adminLogout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('admin.login');
+    }
+
+    // Customer Authentication
+    public function showCustomerLoginForm()
     {
         return view('login');
     }
 
-    public function login(Request $request)
+    public function customerLogin(Request $request)
     {
         $request->validate([
             'username' => 'required',
             'password' => 'required',
         ]);
 
-        // Cek staf_restoran dulu
+        // Cek staf_restoran
         $staf = StafRestoran::where('username', $request->username)->first();
         if ($staf && Hash::check($request->password, $staf->password)) {
             Auth::guard('staf')->login($staf);
@@ -41,6 +71,17 @@ class PelangganAuthController extends Controller
         }
 
         return back()->withErrors(['loginError' => 'Username atau password salah.']);
+    }
+
+    public function customerLogout(Request $request)
+    {
+        if (Auth::guard('pelanggan')->check()) {
+            Auth::guard('pelanggan')->logout();
+        }
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('login');
     }
 
     public function showRegisterForm()
@@ -79,24 +120,7 @@ class PelangganAuthController extends Controller
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 
-    public function logout(Request $request)
-    {
-        if (Auth::guard('pelanggan')->check()) {
-            Auth::guard('pelanggan')->logout();
-        } else {
-            Auth::logout(); // Untuk admin
-        }
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect()->route('login');
-    }
-
-    // =============================
-    // RESET PASSWORD FITUR MANUAL
-    // =============================
-
+    // Password Reset
     public function showForgotPasswordForm()
     {
         return view('forgot-password');
@@ -114,7 +138,6 @@ class PelangganAuthController extends Controller
         }
 
         $pelanggan = Pelanggan::where('email', $request->email)->first();
-
         $pelanggan->password = Hash::make($request->password);
         $pelanggan->save();
 

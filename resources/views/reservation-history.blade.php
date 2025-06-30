@@ -4,84 +4,69 @@
 
 @section('styles')
 <style>
-.reservation-card {
-    background-color: var(--fallback-b2,oklch(var(--b2)));
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    margin-bottom: 1.25rem;
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
-    transition: transform 0.3s ease;
-}
-
-.reservation-card:hover {
-    transform: translateY(-3px);
-}
-
-.reservation-filter {
-    background-color: var(--fallback-b2,oklch(var(--b2)));
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    margin-bottom: 1.25rem;
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
-}
-
-.profile-sidebar {
-    background-color: var(--fallback-b1,oklch(var(--b1)));
-    border-radius: 1rem;
-    padding: 2rem;
-    height: 100%;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.profile-image {
-    width: 140px;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid var(--fallback-primary,oklch(var(--p)));
-}
-
-.edit-button {
-    position: absolute;
-    bottom: 0;
-    right: 10px;
-    background-color: var(--fallback-primary,oklch(var(--p)));
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.nav-item {
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 0.5rem;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.nav-item:hover, .nav-item.active {
-    background-color: var(--fallback-primary,oklch(var(--p)));
-    color: var(--fallback-primary-content,oklch(var(--pc)));
-}
-
-.nav-item i {
-    margin-right: 0.75rem;
-    font-size: 1.2rem;
-}
-
-@media (max-width: 768px) {
-    .profile-sidebar {
-        margin-bottom: 2rem;
+    .reservation-card {
+        background-color: var(--fallback-b2, oklch(var(--b2)));
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+        transition: transform 0.3s ease;
     }
-}
+
+    .reservation-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .reservation-filter {
+        background-color: var(--fallback-b2, oklch(var(--b2)));
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .profile-sidebar {
+        background-color: var(--fallback-b1, oklch(var(--b1)));
+        border-radius: 1rem;
+        padding: 2rem;
+        height: 100%;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .profile-image {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid var(--fallback-primary, oklch(var(--p)));
+    }
+
+    .nav-item {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+        background-color: var(--fallback-primary, oklch(var(--p)));
+        color: var(--fallback-primary-content, oklch(var(--pc)));
+    }
+
+    .nav-item i {
+        margin-right: 0.75rem;
+        font-size: 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+        .profile-sidebar {
+            margin-bottom: 2rem;
+        }
+    }
 </style>
 @endsection
 
@@ -92,22 +77,24 @@
         <div class="md:col-span-1">
             <div class="profile-sidebar">
                 <div class="flex flex-col items-center mb-6">
-                    <div class="relative mb-4">
-                        <img src="https://ui-avatars.com/api/?name={{ auth('pelanggan')->user()->username ?? 'User' }}&background=random&size=140" alt="Profile" id="profileAvatar" class="profile-image">
-                        <label for="avatarUpload" class="edit-button">
-                            <i class='bx bx-plus'></i>
-                            <input type="file" id="avatarUpload" class="hidden" accept="image/*" />
-                        </label>
+                    <div class="mb-4">
+                        @if(auth('pelanggan')->user()->foto_profil)
+                        <img src="{{ asset('storage/profile/' . auth('pelanggan')->user()->foto_profil) }}" alt="Profile" class="profile-image">
+                        @else
+                        <div class="profile-image flex items-center justify-center bg-primary text-primary-content font-medium text-4xl">
+                            {{ strtoupper(substr(auth('pelanggan')->user()->username, 0, 2)) }}
+                        </div>
+                        @endif
                     </div>
-                    <h2 class="text-xl font-bold mb-3">{{ auth('pelanggan')->user()->username ?? 'User' }}</h2>
+                    <h2 class="text-xl font-bold mb-3">{{ auth('pelanggan')->user()->username }}</h2>
                     <div class="flex flex-col items-center space-y-2 text-center">
                         <div class="flex items-center">
                             <i class='bx bx-envelope text-base-content/70 mr-2'></i>
-                            <span class="text-sm" id="displayEmail">{{ auth('pelanggan')->user()->email ?? 'user@example.com' }}</span>
+                            <span class="text-sm" id="displayEmail">{{ auth('pelanggan')->user()->email }}</span>
                         </div>
                         <div class="flex items-center">
                             <i class='bx bx-phone text-base-content/70 mr-2'></i>
-                            <span class="text-sm" id="displayPhone">{{ auth('pelanggan')->user()->nomor_handphone ?? '+62 000 0000 0000' }}</span>
+                            <span class="text-sm" id="displayPhone">{{ auth('pelanggan')->user()->nomor_handphone }}</span>
                         </div>
                     </div>
                 </div>
@@ -119,13 +106,13 @@
                     </a>
                     <a href="{{ route('reservation-history') }}" class="nav-item active">
                         <i class='bx bx-history'></i>
-                        <span>Riwayat Pemesanan</span>
+                        <span>Riwayat Reservasi</span>
                     </a>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="nav-item w-full text-left">
                             <i class='bx bx-log-out'></i>
-                            <span>Logout</span>
+                            <span>Keluar</span>
                         </button>
                     </form>
                 </div>
@@ -177,67 +164,108 @@
             <!-- Reservations List -->
             <div id="reservationsList">
                 @forelse ($reservasi as $item)
-                    @php
-                        $status = 'pending';
-                        $statusLabel = 'Menunggu Konfirmasi';
-                        $badgeClass = 'badge-warning';
+                @php
+                $status = $item->status;
+                $statusLabel = ucfirst($status);
+                $badgeClass = match($status) {
+                'menunggu' => 'badge-warning',
+                'dikonfirmasi' => 'badge-success',
+                'selesai' => 'badge-info',
+                'dibatalkan' => 'badge-error',
+                default => 'badge-warning'
+                };
 
-                        if (strtotime($item->jadwal) < now()->timestamp) {
-                            $status = 'completed';
-                            $statusLabel = 'Selesai';
-                            $badgeClass = 'badge-success';
-                        }
+                $meja_array = explode(',', $item->meja_list);
+                $meja_text = count($meja_array) > 1
+                ? 'Meja ' . implode(', ', $meja_array)
+                : 'Meja ' . $meja_array[0];
 
-                        $meja = 'Meja ' . ($item->no_meja ?? '0');
-                        $tanggal = \Carbon\Carbon::parse($item->jadwal)->translatedFormat('d M Y');
-                        $jam = \Carbon\Carbon::parse($item->jadwal)->format('H:i');
-                    @endphp
+                $tanggal = \Carbon\Carbon::parse($item->jadwal)->translatedFormat('d M Y');
+                $jam = \Carbon\Carbon::parse($item->jadwal)->format('H:i');
 
-                    <div class="reservation-card" data-status="{{ $status }}" data-date="{{ $item->jadwal }}">
-                        <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
-                            <div class="mb-2 sm:mb-0 max-w-full overflow-hidden">
-                                <h3 class="font-bold text-lg truncate">Reservasi-{{ $item->id_pemesanan }}</h3>
-                                <p class="text-sm text-base-content/70">{{ $tanggal }} - {{ $jam }}</p>
-                            </div>
+                // Hitung total harga
+                $biaya_layanan = 3000;
+                $total_harga = $item->total_harga ?? 0;
+                if ($total_harga == 0) {
+                // Jika total_harga belum tersedia, hitung dari jumlah meja
+                $total_meja = count($meja_array);
+                $harga_meja = \App\Models\Meja::whereIn('no_meja', $meja_array)->sum('harga');
+                $total_harga = $harga_meja + $biaya_layanan;
+                }
+                @endphp
+
+                <div class="reservation-card" data-status="{{ $status }}" data-date="{{ $item->jadwal }}">
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-4">
+                        <div>
+                            <h3 class="font-bold">{{ $item->kode_transaksi }}</h3>
+                            <p class="text-sm text-gray-600">{{ $tanggal }}, {{ $jam }}</p>
+                        </div>
+                        <div class="flex items-center gap-2 mt-2 sm:mt-0">
                             <span class="badge {{ $badgeClass }} whitespace-nowrap shrink-0 px-2 py-3">{{ $statusLabel }}</span>
                         </div>
+                    </div>
 
-                        <div class="divider my-2"></div>
+                    <div class="divider my-2"></div>
 
-                        <div class="mb-2">
-                            <p class="text-sm text-base-content/70">Meja</p>
-                            <p class="font-medium break-words">{{ $meja }} ({{ $item->jumlah_tamu }} orang)</p>
+                    <div class="mb-4">
+                        <div class="flex flex-col gap-2">
+                            <div>
+                                <p class="text-sm text-base-content/70">Detail Meja</p>
+                                <p class="font-medium">{{ $meja_text }}</p>
+                                <p class="text-sm">Total {{ count($meja_array) }} meja untuk {{ $item->jumlah_tamu }} orang</p>
+                            </div>
+                            @if($item->catatan)
+                            <div>
+                                <p class="text-sm text-base-content/70">Catatan</p>
+                                <p class="text-sm">{{ $item->catatan }}</p>
+                            </div>
+                            @endif
                         </div>
+                    </div>
 
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                            <p class="font-bold mb-2 sm:mb-0 break-words">Total: Rp{{ number_format(25000 + 15000, 0, ',', '.') }}</p>
-                            <div class="flex flex-wrap gap-2 mt-3 justify-between">
-                                <div class="flex gap-2 flex-grow">
-                                    @if(isset($item->kode))
-                                        <a href="{{ route('payment', ['kode' => $item->kode]) }}" class="btn btn-sm btn-primary text-white flex-1 sm:flex-none">
-                                            <i class='bx bx-credit-card'></i>
-                                            <span class="hidden xs:inline">Lihat Pembayaran</span>
-                                        </a>
-                                    @endif
-                                    @if($status !== 'cancelled' && $status !== 'completed')
-                                        <button class="btn btn-sm btn-error flex-1 sm:flex-none" data-reservation="{{ $item->id_pemesanan }}">
-                                            <i class='bx bx-x-circle'></i>
-                                            <span class="hidden xs:inline">Batalkan</span>
-                                        </button>
-                                    @endif
-                                </div>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <p class="font-bold mb-2 sm:mb-0">Total: Rp{{ number_format($total_harga, 0, ',', '.') }}</p>
+                        <div class="flex flex-wrap gap-2 mt-3 justify-between">
+                            <div class="flex gap-2 flex-grow">
+                                @if($status === 'menunggu')
+                                <button class="btn btn-sm btn-info flex-1 sm:flex-none" onclick="showDetailReservation('{{ $item->kode_transaksi }}')">
+                                    <i class='bx bx-info-circle'></i>
+                                    <span class="hidden xs:inline">Detail</span>
+                                </button>
+                                <button class="btn btn-sm btn-error flex-1 sm:flex-none" onclick="cancelReservation('{{ $item->kode_transaksi }}')">
+                                    <i class='bx bx-x-circle'></i>
+                                    <span class="hidden xs:inline">Batalkan</span>
+                                </button>
+                                @endif
+
+                                @if(in_array($status, ['dikonfirmasi', 'selesai']))
+                                <button type="button" class="btn btn-sm btn-info flex-1 sm:flex-none"
+                                    data-kode="{{ $item->kode_transaksi }}"
+                                    data-tanggal="{{ $tanggal }}"
+                                    data-jam="{{ $jam }}"
+                                    data-meja="{{ $meja_text }}"
+                                    data-tamu="{{ $item->jumlah_tamu }}"
+                                    data-total="{{ $total_harga }}"
+                                    data-status="{{ $statusLabel }}"
+                                    onclick="showReceiptFromData(this)">
+                                    <i class='bx bx-receipt'></i>
+                                    <span class="hidden xs:inline">Lihat Resi</span>
+                                </button>
+                                @endif
                             </div>
                         </div>
                     </div>
+                    <div class="divider my-4"></div>
+                </div>
                 @empty
-                    <div class="text-center text-gray-500 py-8">
-                        <i class='bx bx-calendar-x text-4xl mb-4'></i>
-                        <p class="text-lg">Belum ada riwayat reservasi.</p>
-                        <a href="{{ route('reservation') }}" class="btn btn-primary mt-4">
-                            <i class='bx bx-plus'></i>
-                            Buat Reservasi
-                        </a>
-                    </div>
+                <div class="text-center text-gray-500 py-8">
+                    <i class='bx bx-calendar-x text-4xl mb-4'></i>
+                    <p class="text-lg">Belum ada riwayat reservasi.</p>
+                    <a href="{{ route('reservation') }}" class="btn btn-primary mt-4">
+                        <i class='bx bx-plus'></i>
+                        Buat Reservasi
+                    </a>
+                </div>
                 @endforelse
             </div>
         </div>
@@ -270,7 +298,7 @@
 
             <div class="flex justify-between">
                 <p class="text-sm">Kode Resi</p>
-                <p class="font-bold text-sm" id="receipt-code">RCP-{{ rand(10000, 99999) }}</p>
+                <p class="font-bold text-sm" id="receipt-code"></p>
             </div>
 
             <div class="flex justify-between">
@@ -338,6 +366,131 @@
         </div>
     </div>
 </dialog>
+
+<!-- Detail Reservation Modal -->
+<dialog id="detail-reservation-modal" class="modal">
+    <div class="modal-box max-w-md">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-lg">Detail Reservasi</h3>
+            <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost">✕</button>
+            </form>
+        </div>
+
+        <div class="space-y-4">
+            <div>
+                <h4 class="font-semibold mb-2">Informasi Reservasi</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <p class="text-sm text-base-content/70">Kode Reservasi</p>
+                        <p class="font-medium text-sm" id="detail-kode"></p>
+                    </div>
+                    <div class="flex justify-between">
+                        <p class="text-sm text-base-content/70">Tanggal & Waktu</p>
+                        <p class="text-sm" id="detail-jadwal"></p>
+                    </div>
+                    <div class="flex justify-between">
+                        <p class="text-sm text-base-content/70">Status</p>
+                        <p class="text-sm" id="detail-status"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider my-2"></div>
+
+            <div>
+                <h4 class="font-semibold mb-2">Detail Meja</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <p class="text-sm text-base-content/70">Nomor Meja</p>
+                        <p class="text-sm" id="detail-meja"></p>
+                    </div>
+                    <div class="flex justify-between">
+                        <p class="text-sm text-base-content/70">Jumlah Tamu</p>
+                        <p class="text-sm" id="detail-tamu"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider my-2"></div>
+
+            <div>
+                <h4 class="font-semibold mb-2">Pembayaran</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <p class="text-sm text-base-content/70">Harga Meja</p>
+                        <p class="text-sm" id="detail-harga-meja"></p>
+                    </div>
+                    <div class="flex justify-between">
+                        <p class="text-sm text-base-content/70">Biaya Layanan</p>
+                        <p class="text-sm" id="detail-biaya-layanan"></p>
+                    </div>
+                    <div class="flex justify-between">
+                        <p class="text-sm text-base-content/70">Total Pembayaran</p>
+                        <p class="font-medium" id="detail-total"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider my-2"></div>
+
+            <div>
+                <h4 class="font-semibold mb-2">Bukti Pembayaran</h4>
+                <div id="bukti-pembayaran-container" class="space-y-2">
+                    <div class="flex justify-between">
+                        <p class="text-sm text-base-content/70">Status Pembayaran</p>
+                        <p class="text-sm" id="detail-status-pembayaran"></p>
+                    </div>
+                    <div class="flex justify-between">
+                        <p class="text-sm text-base-content/70">Metode Pembayaran</p>
+                        <p class="text-sm" id="detail-metode-pembayaran">-</p>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm text-base-content/70 mb-2">Bukti Transfer</p>
+                        <p class="text-sm" id="detail-bukti-text">Belum ada bukti pembayaran</p>
+                        <img id="detail-bukti" src="" alt="Bukti Pembayaran" class="mt-2 max-w-full h-auto rounded-lg shadow-lg hidden">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-2">Upload Bukti Pembayaran</h4>
+                <form id="uploadPaymentForm" class="space-y-4">
+                    @csrf
+                    <input type="hidden" name="kode_transaksi" id="payment-kode">
+
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text">Bank Tujuan</span>
+                        </label>
+                        <select name="metode_pembayaran" class="select select-bordered select-sm w-full" required>
+                            <option value="">Pilih Bank</option>
+                            <option value="bca">BCA</option>
+                            <option value="bni">BNI</option>
+                            <option value="bri">BRI</option>
+                            <option value="mandiri">Mandiri</option>
+                        </select>
+                    </div>
+
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text">Bukti Pembayaran</span>
+                        </label>
+                        <input type="file" name="bukti_pembayaran" accept="image/*" class="file-input file-input-bordered file-input-sm w-full" required />
+                        <label class="label">
+                            <span class="label-text-alt text-base-content/70">Format: JPG, PNG, JPEG (Max. 2MB)</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm w-full">
+                        <i class='bx bx-upload'></i>
+                        Upload Bukti Pembayaran
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</dialog>
 @endsection
 
 @section('scripts')
@@ -349,43 +502,11 @@
         const filterButton = document.getElementById('filterButton');
         const receiptModal = document.getElementById('receipt-modal');
 
-        // Detail buttons handling
-        document.querySelectorAll('.show-receipt').forEach(button => {
+        // Handle cancel buttons
+        document.querySelectorAll('[data-reservation]').forEach(button => {
             button.addEventListener('click', function() {
-                const receiptId = this.getAttribute('data-receipt');
-                const table = this.getAttribute('data-table');
-                const guests = this.getAttribute('data-guests');
-                const date = this.getAttribute('data-date');
-                const time = this.getAttribute('data-time');
-                const total = parseInt(this.getAttribute('data-total')).toLocaleString('id-ID');
-                const status = this.getAttribute('data-status');
-
-                // Populate modal with reservation details
-                document.getElementById('receipt-number').textContent = 'RSV-' + receiptId;
-                document.getElementById('receipt-code').textContent = 'RCP-' + (parseInt(receiptId) + 5000);
-                document.getElementById('receipt-date').textContent = date;
-                document.getElementById('receipt-time').textContent = time;
-                document.getElementById('receipt-table').textContent = table;
-                document.getElementById('receipt-guests').textContent = guests + ' Orang';
-                document.getElementById('receipt-total').textContent = 'Rp' + total;
-
-                // Set status badges
-                if (status === 'completed') {
-                    document.getElementById('receipt-status').innerHTML = '<span class="badge badge-success badge-sm">Selesai</span>';
-                    document.getElementById('receipt-payment-status').innerHTML = '<span class="badge badge-success badge-sm">Lunas</span>';
-                } else if (status === 'scheduled') {
-                    document.getElementById('receipt-status').innerHTML = '<span class="badge badge-primary badge-sm">Terjadwal</span>';
-                    document.getElementById('receipt-payment-status').innerHTML = '<span class="badge badge-success badge-sm">Lunas</span>';
-                } else if (status === 'pending') {
-                    document.getElementById('receipt-status').innerHTML = '<span class="badge badge-warning badge-sm">Menunggu Konfirmasi</span>';
-                    document.getElementById('receipt-payment-status').innerHTML = '<span class="badge badge-warning badge-sm">Menunggu Konfirmasi</span>';
-                } else if (status === 'cancelled') {
-                    document.getElementById('receipt-status').innerHTML = '<span class="badge badge-error badge-sm">Dibatalkan</span>';
-                    document.getElementById('receipt-payment-status').innerHTML = '<span class="badge badge-error badge-sm">Dibatalkan</span>';
-                }
-
-                // Show modal
-                receiptModal.showModal();
+                const kode = this.closest('.reservation-card').querySelector('h3.font-bold').textContent;
+                cancelReservation(kode);
             });
         });
 
@@ -429,48 +550,206 @@
                 }
             });
         });
+    });
 
-        // Handle cancel buttons
-        document.querySelectorAll('[data-reservation]').forEach(button => {
-            button.addEventListener('click', function() {
-                const reservationId = this.getAttribute('data-reservation');
+    // Global function for showing receipt
+    function showReceipt(kode, tanggal, jam, meja, jumlahTamu, totalHarga, status) {
+        // Ambil detail resi dari server
+        fetch(`/get-receipt-detail/${kode}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update receipt modal content
+                document.getElementById('receipt-number').textContent = kode;
+                document.getElementById('receipt-code').textContent = data.id_resi || '-';
+                document.getElementById('receipt-date').textContent = tanggal;
+                document.getElementById('receipt-time').textContent = jam;
+                document.getElementById('receipt-table').textContent = meja;
+                document.getElementById('receipt-guests').textContent = jumlahTamu + ' Orang';
+                document.getElementById('receipt-total').textContent = 'Rp' + totalHarga.toLocaleString('id-ID');
 
-                if (confirm(`Apakah Anda yakin ingin membatalkan reservasi #${reservationId}?`)) {
-                    // Change the status of the card
-                    const card = this.closest('.reservation-card');
-                    const statusBadge = card.querySelector('.badge');
-                    statusBadge.className = 'badge badge-error whitespace-nowrap shrink-0 px-2 py-3';
-                    statusBadge.textContent = 'Dibatalkan';
+                // Update status badges
+                const statusBadgeClass = status.toLowerCase() === 'selesai' ? 'badge-info' : 'badge-success';
+                document.getElementById('receipt-status').innerHTML = `<span class="badge ${statusBadgeClass} badge-sm">${status}</span>`;
+                document.getElementById('receipt-payment-status').innerHTML = `<span class="badge badge-success badge-sm">Lunas</span>`;
 
-                    // Change data attribute
-                    card.setAttribute('data-status', 'cancelled');
+                // Show modal
+                document.getElementById('receipt-modal').showModal();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengambil detail resi');
+            });
+    }
 
-                    // Update price to show cancelled
-                    const priceElement = card.querySelector('.font-bold.mb-2.sm\\:mb-0');
-                    if (priceElement) {
-                        const priceText = priceElement.textContent;
-                        if (!priceText.includes('(Dibatalkan)')) {
-                            priceElement.innerHTML = `${priceText} <span class="text-error text-sm">(Dibatalkan)</span>`;
+    // Global function for showing receipt from button data
+    function showReceiptFromData(button) {
+        const data = button.dataset;
+        showReceipt(
+            data.kode,
+            data.tanggal,
+            data.jam,
+            data.meja,
+            parseInt(data.tamu),
+            parseFloat(data.total),
+            data.status
+        );
+    }
+
+    function cancelReservation(kode) {
+        if (!confirm('Apakah Anda yakin ingin membatalkan reservasi ini?')) {
+            return;
+        }
+
+        fetch(`/reservation/cancel/${kode}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Perbarui tampilan kartu reservasi
+                    const cards = document.querySelectorAll('.reservation-card');
+                    const card = Array.from(cards).find(card => {
+                        const titleElement = card.querySelector('h3.font-bold');
+                        return titleElement && titleElement.textContent.trim() === kode;
+                    });
+
+                    if (card) {
+                        // Update status badge
+                        const statusBadge = card.querySelector('.badge');
+                        statusBadge.className = 'badge badge-error whitespace-nowrap shrink-0 px-2 py-3';
+                        statusBadge.textContent = 'Dibatalkan';
+
+                        // Update data attribute
+                        card.setAttribute('data-status', 'dibatalkan');
+
+                        // Hapus tombol aksi
+                        const buttonsContainer = card.querySelector('.flex.gap-2.flex-grow');
+                        if (buttonsContainer) {
+                            buttonsContainer.innerHTML = '<span class="text-sm text-error">Reservasi dibatalkan</span>';
                         }
                     }
+                    alert(data.message);
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(error => {
+                alert(error.message || 'Terjadi kesalahan saat membatalkan reservasi');
+            });
+    }
 
-                    // Remove buttons
-                    const buttonsContainer = card.querySelector('.flex.gap-2.flex-grow');
-                    if (buttonsContainer) {
-                        buttonsContainer.innerHTML = '<span class="text-sm text-error">Reservasi dibatalkan</span>';
+    function showDetailReservation(kodeTransaksi) {
+        // Ambil data detail pemesanan
+        fetch(`/get-reservation-detail/${kodeTransaksi}`)
+            .then(response => response.json())
+            .then(response => {
+                if (response.success) {
+                    const data = response.data;
+
+                    // Isi data ke dalam modal
+                    document.getElementById('detail-kode').textContent = data.kode_transaksi;
+                    document.getElementById('detail-jadwal').textContent = `${data.tanggal}, ${data.jam}`;
+                    document.getElementById('detail-meja').textContent = data.meja_list;
+                    document.getElementById('detail-tamu').textContent = `${data.jumlah_tamu} Orang`;
+
+                    // Format dan tampilkan rincian biaya
+                    const hargaMeja = parseInt(data.harga_meja) || 0;
+                    const biayaLayanan = parseInt(data.biaya_layanan) || 0;
+                    const totalHarga = parseInt(data.total_harga) || 0;
+
+                    document.getElementById('detail-harga-meja').textContent = `Rp${hargaMeja.toLocaleString('id-ID')}`;
+                    document.getElementById('detail-biaya-layanan').textContent = `Rp${biayaLayanan.toLocaleString('id-ID')}`;
+                    document.getElementById('detail-total').textContent = `Rp${totalHarga.toLocaleString('id-ID')}`;
+
+                    // Set status pemesanan dengan badge
+                    const statusBadgeClass =
+                        data.status_pemesanan === 'selesai' ? 'badge-info' :
+                        data.status_pemesanan === 'dibatalkan' ? 'badge-error' :
+                        data.status_pemesanan === 'dikonfirmasi' ? 'badge-success' :
+                        'badge-warning';
+                    document.getElementById('detail-status').innerHTML =
+                        `<span class="badge ${statusBadgeClass} badge-sm">${data.status_pemesanan}</span>`;
+
+                    // Set status pembayaran dengan badge
+                    const paymentStatus = data.status_pembayaran.toLowerCase();
+                    const paymentBadgeClass =
+                        paymentStatus === 'dikonfirmasi' ? 'badge-success' :
+                        paymentStatus === 'selesai' ? 'badge-info' :
+                        paymentStatus === 'dibatalkan' ? 'badge-error' :
+                        'badge-warning';
+                    document.getElementById('detail-status-pembayaran').innerHTML =
+                        `<span class="badge ${paymentBadgeClass} badge-sm">${data.status_pembayaran}</span>`;
+
+                    // Set metode pembayaran
+                    document.getElementById('detail-metode-pembayaran').textContent =
+                        data.metode_pembayaran ? data.metode_pembayaran.toUpperCase() : '-';
+
+                    // Tampilkan bukti pembayaran jika ada
+                    if (data.bukti_pembayaran) {
+                        document.getElementById('detail-bukti-text').style.display = 'none';
+                        const buktiUrl = `/storage/bukti_pembayaran/${data.bukti_pembayaran}`;
+                        const buktiImg = document.getElementById('detail-bukti');
+                        buktiImg.src = buktiUrl;
+                        buktiImg.style.display = 'block';
+                        buktiImg.onerror = function() {
+                            this.style.display = 'none';
+                            document.getElementById('detail-bukti-text').style.display = 'block';
+                            document.getElementById('detail-bukti-text').textContent = 'Gambar tidak dapat dimuat';
+                        };
+                    } else {
+                        document.getElementById('detail-bukti-text').style.display = 'block';
+                        document.getElementById('detail-bukti').style.display = 'none';
+                        document.getElementById('detail-bukti-text').textContent = 'Belum ada bukti pembayaran';
                     }
 
-                    alert('Reservasi berhasil dibatalkan');
-                }
-            });
-        });
+                    // Set kode transaksi untuk form upload
+                    document.getElementById('payment-kode').value = data.kode_transaksi;
 
-        // Download receipt PDF button (dummy functionality)
-        if (document.getElementById('download-receipt')) {
-            document.getElementById('download-receipt').addEventListener('click', function() {
-                alert('Fitur unduh PDF sedang dalam pengembangan. Silakan gunakan fitur cetak untuk sementara.');
+                    // Show modal
+                    document.getElementById('detail-reservation-modal').showModal();
+                } else {
+                    alert('Gagal mengambil detail reservasi');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengambil detail reservasi');
             });
-        }
+    }
+
+    // Handle form submission
+    document.getElementById('uploadPaymentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('/upload-payment-proof', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Bukti pembayaran berhasil diupload');
+                    location.reload();
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message || 'Terjadi kesalahan saat mengupload bukti pembayaran');
+            });
     });
 </script>
 @endsection

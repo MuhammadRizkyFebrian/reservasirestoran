@@ -496,7 +496,7 @@
 
             <a href="{{ route('admin.transactions') }}" class="menu-item">
                 <i class='bx bx-history'></i>
-                <span>Riwayat Transaksi</span>
+                <span>Transaksi Selesai</span>
             </a>
         </div>
     </div>
@@ -512,6 +512,14 @@
                     Keluar
                 </button>
             </form>
+        </div>
+
+        <!-- Notifikasi -->
+        <div id="notification" class="toast toast-end hidden">
+            <div class="alert shadow-lg">
+                <i class='bx bx-check-circle'></i>
+                <span id="notificationMessage"></span>
+            </div>
         </div>
 
         <div class="mb-8">
@@ -532,12 +540,12 @@
                 <div class="flex gap-2">
                     <select class="select select-bordered" id="statusFilter">
                         <option value="">Semua Status</option>
-                        <option value="available">Tersedia</option>
-                        <option value="booked">Dipesan</option>
+                        <option value="tersedia">Tersedia</option>
+                        <option value="dipesan">Dipesan</option>
                     </select>
-                    <button class="btn btn-primary">
-                        <i class='bx bx-search mr-1'></i>
-                        <span>Cari</span>
+                    <button type="button" class="btn btn-primary" onclick="filterTable()">
+                        <i class='bx bx-search'></i>
+                        Cari
                     </button>
                 </div>
             </div>
@@ -556,44 +564,72 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($meja as $m)
+                        @forelse ($meja as $index => $table)
                         <tr>
-                            <td>{{ $m->no_meja }}</td>
-                            <td>{{ $m->tipe_meja }}</td>
-                            <td>{{ $m->kapasitas }} orang</td>
-                            <td>Rp {{ number_format($m->harga, 0, ',', '.') }}</td>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ ucfirst($table->tipe_meja) }}</td>
+                            <td>{{ $table->kapasitas }} orang</td>
+                            <td>Rp{{ number_format($table->harga, 0, ',', '.') }}</td>
                             <td>
-                                <span class="table-status {{ $m->status == 'tersedia' ? 'status-available' : 'status-booked' }}">
-                                    <i class='bx bxs-circle mr-1 text-xs'></i>
-                                    {{ $m->status == 'tersedia' ? 'Tersedia' : 'Dipesan' }}
-                                </span>
+                                <button onclick="showSchedule({{ $table->no_meja }})"
+                                    class="btn btn-sm {{ $table->status === 'tersedia' ? 'btn-success' : 'btn-error' }}">
+                                    {{ ucfirst($table->status) }}
+                                    <i class='bx bx-calendar-event ml-1'></i>
+                                </button>
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('{{ $m->no_meja }}', '{{ $m->tipe_meja }}', '{{ $m->harga }}', '{{ $m->status }}')">
+                                    <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('{{ $table->no_meja }}', '{{ $table->tipe_meja }}', '{{ $table->harga }}', '{{ $table->status }}', '{{ $table->kapasitas }}')">
                                         <i class='bx bx-edit-alt'></i>
                                         <span class="hidden sm:inline ml-1">Edit</span>
                                     </button>
-                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('{{ $m->no_meja }}')">
+                                    <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('{{ $table->no_meja }}')">
                                         <i class='bx bx-trash'></i>
                                         <span class="hidden sm:inline ml-1">Hapus</span>
                                     </button>
                                 </div>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center py-4">
+                                Tidak ada data meja
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
 
             <!-- Pagination -->
-            <div class="pagination" id="paginationNav">
-                <div class="text-sm text-base-content/70" id="paginationInfo">
-                    Menampilkan 1-5 dari 11 meja
+            <div class="pagination">
+                <div class="text-sm text-base-content/70">
+                    Menampilkan {{ $meja->firstItem() }}-{{ $meja->lastItem() }} dari {{ $meja->total() }} meja
                 </div>
                 <div class="pagination-buttons">
-                    <button class="btn btn-sm btn-outline pagination-button" id="prevPage" disabled>Sebelumnya</button>
-                    <button class="btn btn-sm btn-outline pagination-button" id="nextPage">Selanjutnya</button>
+                    @if ($meja->onFirstPage())
+                    <button class="btn btn-sm btn-outline pagination-button" disabled>
+                        <i class='bx bx-chevron-left'></i>
+                        <span>Sebelumnya</span>
+                    </button>
+                    @else
+                    <a href="{{ $meja->previousPageUrl() }}" class="btn btn-sm btn-outline pagination-button">
+                        <i class='bx bx-chevron-left'></i>
+                        <span>Sebelumnya</span>
+                    </a>
+                    @endif
+
+                    @if ($meja->hasMorePages())
+                    <a href="{{ $meja->nextPageUrl() }}" class="btn btn-sm btn-outline pagination-button">
+                        <span>Selanjutnya</span>
+                        <i class='bx bx-chevron-right'></i>
+                    </a>
+                    @else
+                    <button class="btn btn-sm btn-outline pagination-button" disabled>
+                        <span>Selanjutnya</span>
+                        <i class='bx bx-chevron-right'></i>
+                    </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -628,6 +664,13 @@
 
                 <div class="form-control">
                     <label class="label">
+                        <span class="label-text">Kapasitas (Orang)</span>
+                    </label>
+                    <input type="number" id="tableCapacity" class="input input-bordered" min="1" required>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
                         <span class="label-text">Harga (Rp)</span>
                     </label>
                     <input type="number" id="tablePrice" class="input input-bordered" required>
@@ -638,13 +681,13 @@
                         <span class="label-text">Status</span>
                     </label>
                     <select id="tableStatus" class="select select-bordered" required>
-                        <option value="available">Tersedia</option>
-                        <option value="booked">Dipesan</option>
+                        <option value="tersedia">Tersedia</option>
+                        <option value="dipesan">Dipesan</option>
                     </select>
                 </div>
 
                 <div class="modal-action">
-                    <button type="button" class="btn btn-outline" onclick="closeModal()">Batal</button>
+                    <button type="button" class="btn btn-outline" onclick="closeEditModal()">Batal</button>
                     <button type="submit" class="btn btn-primary" id="saveButton">Simpan</button>
                 </div>
             </form>
@@ -687,7 +730,275 @@
         </div>
     </div>
 
+    <!-- Modal Detail Jadwal -->
+    <dialog id="scheduleModal" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg mb-4">Detail Jadwal Meja <span id="tableNumber"></span></h3>
+            <div id="scheduleContent" class="space-y-4">
+                <!-- Jadwal akan ditampilkan di sini -->
+            </div>
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn">Tutup</button>
+                </form>
+            </div>
+        </div>
+    </dialog>
+
     <script>
+        // Fungsi untuk membuka modal tambah
+        function openAddModal() {
+            const modal = document.getElementById('tableModal');
+            const form = document.getElementById('tableForm');
+            const modalTitle = document.getElementById('modalTitle');
+            const saveButton = document.getElementById('saveButton');
+            const isEditMode = document.getElementById('isEditMode');
+
+            // Reset form
+            form.reset();
+
+            // Set mode to add
+            isEditMode.value = 'false';
+            modalTitle.textContent = 'Tambah Meja Baru';
+            saveButton.textContent = 'Simpan';
+
+            // Enable table number field
+            document.getElementById('tableNumber').disabled = false;
+            document.getElementById('tableNumber').readOnly = false;
+
+            // Open modal
+            modal.showModal();
+        }
+
+        // Fungsi untuk membuka modal edit
+        function openEditModal(noMeja, tipeMeja, harga, status, kapasitas) {
+            console.log('Edit modal opened with:', {
+                noMeja,
+                tipeMeja,
+                harga,
+                status,
+                kapasitas
+            });
+
+            const modal = document.getElementById('tableModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const isEditMode = document.getElementById('isEditMode');
+            const tableNumber = document.getElementById('tableNumber');
+            const tableType = document.getElementById('tableType');
+            const tableCapacity = document.getElementById('tableCapacity');
+            const tablePrice = document.getElementById('tablePrice');
+            const tableStatus = document.getElementById('tableStatus');
+
+            // Set mode edit
+            isEditMode.value = 'true';
+            modalTitle.textContent = 'Edit Meja';
+
+            // Set nilai form
+            tableNumber.value = noMeja;
+            tableType.value = tipeMeja.charAt(0).toUpperCase() + tipeMeja.slice(1);
+            tableCapacity.value = kapasitas;
+            tablePrice.value = harga;
+            tableStatus.value = status;
+
+            // Disable nomor meja
+            tableNumber.readOnly = true;
+
+            // Buka modal
+            modal.showModal();
+        }
+
+        // Fungsi untuk menutup modal edit
+        function closeEditModal() {
+            document.getElementById('tableModal').close();
+        }
+
+        // Fungsi untuk konfirmasi hapus
+        function confirmDelete(noMeja) {
+            console.log('Confirm delete for:', noMeja);
+
+            const modal = document.getElementById('deleteConfirmModal');
+            const deleteTableNumber = document.getElementById('deleteTableNumber');
+
+            // Simpan nomor meja yang akan dihapus
+            window.tableToDelete = noMeja;
+
+            // Set nomor meja di pesan konfirmasi
+            deleteTableNumber.textContent = noMeja;
+
+            // Buka modal konfirmasi
+            modal.showModal();
+        }
+
+        // Fungsi untuk menutup modal hapus
+        function closeDeleteModal() {
+            document.getElementById('deleteConfirmModal').close();
+        }
+
+        // Fungsi untuk menghapus meja
+        function deleteTable() {
+            const tableNumber = window.tableToDelete;
+            console.log('Deleting table:', tableNumber);
+
+            fetch('{{ route("admin.tables.delete") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        no_meja: tableNumber,
+                        _token: '{{ csrf_token() }}'
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Terjadi kesalahan saat menghapus meja');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Hapus baris dari tabel
+                    removeTableRow(tableNumber);
+
+                    // Tampilkan notifikasi
+                    showNotification('Meja berhasil dihapus', 'alert-success');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification(error.message, 'alert-error');
+                });
+
+            // Tutup modal
+            closeDeleteModal();
+        }
+
+        // Fungsi untuk memperbarui data tabel
+        function updateTableRow(tableData, isNewData = false) {
+            console.log('Updating table row:', {
+                tableData,
+                isNewData
+            });
+
+            const tableBody = document.querySelector('.table-data-table tbody');
+
+            if (isNewData) {
+                // Jika tidak ada data, hapus pesan "Tidak ada data meja"
+                const emptyRow = tableBody.querySelector('tr td[colspan="6"]');
+                if (emptyRow) {
+                    emptyRow.parentElement.remove();
+                }
+
+                // Tambah baris baru
+                const newRow = document.createElement('tr');
+
+                newRow.innerHTML = `
+                    <td>${tableData.no_meja}</td>
+                    <td>${tableData.tipe_meja.charAt(0).toUpperCase() + tableData.tipe_meja.slice(1)}</td>
+                    <td>${tableData.kapasitas} Orang</td>
+                    <td>Rp${new Intl.NumberFormat('id-ID').format(tableData.harga)}</td>
+                    <td>
+                        <button onclick="showSchedule(${tableData.no_meja})"
+                            class="btn btn-sm ${tableData.status === 'tersedia' ? 'btn-success' : 'btn-error'}">
+                            ${tableData.status.charAt(0).toUpperCase() + tableData.status.slice(1)}
+                            <i class='bx bx-calendar-event ml-1'></i>
+                        </button>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('${tableData.no_meja}', '${tableData.tipe_meja}', '${tableData.harga}', '${tableData.status}', '${tableData.kapasitas}')">
+                                <i class='bx bx-edit-alt'></i>
+                                <span class="hidden sm:inline ml-1">Edit</span>
+                            </button>
+                            <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('${tableData.no_meja}')">
+                                <i class='bx bx-trash'></i>
+                                <span class="hidden sm:inline ml-1">Hapus</span>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                tableBody.appendChild(newRow);
+            } else {
+                // Update baris yang sudah ada
+                const rows = tableBody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const cells = row.cells;
+                    if (cells[0].textContent === tableData.no_meja) {
+                        cells[1].textContent = tableData.tipe_meja.charAt(0).toUpperCase() + tableData.tipe_meja.slice(1);
+                        cells[2].textContent = `${tableData.kapasitas} Orang`;
+                        cells[3].textContent = `Rp${new Intl.NumberFormat('id-ID').format(tableData.harga)}`;
+                        cells[4].innerHTML = `
+                            <button onclick="showSchedule(${tableData.no_meja})"
+                                class="btn btn-sm ${tableData.status === 'tersedia' ? 'btn-success' : 'btn-error'}">
+                                ${tableData.status.charAt(0).toUpperCase() + tableData.status.slice(1)}
+                                <i class='bx bx-calendar-event ml-1'></i>
+                            </button>
+                        `;
+                        cells[5].innerHTML = `
+                            <div class="action-buttons">
+                                <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('${tableData.no_meja}', '${tableData.tipe_meja}', '${tableData.harga}', '${tableData.status}', '${tableData.kapasitas}')">
+                                    <i class='bx bx-edit-alt'></i>
+                                    <span class="hidden sm:inline ml-1">Edit</span>
+                                </button>
+                                <button class="btn btn-sm btn-error action-delete-btn" onclick="confirmDelete('${tableData.no_meja}')">
+                                    <i class='bx bx-trash'></i>
+                                    <span class="hidden sm:inline ml-1">Hapus</span>
+                                </button>
+                            </div>
+                        `;
+                    }
+                });
+            }
+        }
+
+        // Fungsi untuk menghapus baris tabel
+        function removeTableRow(tableNumber) {
+            console.log('Removing table row:', tableNumber);
+
+            const tableBody = document.querySelector('.table-data-table tbody');
+            const rows = tableBody.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                if (row.cells[0].textContent === tableNumber) {
+                    row.remove();
+
+                    // Cek jika tabel kosong
+                    const remainingRows = tableBody.querySelectorAll('tr');
+                    if (remainingRows.length === 0) {
+                        const emptyRow = document.createElement('tr');
+                        emptyRow.innerHTML = `
+                            <td colspan="6" class="text-center py-4">
+                                Tidak ada data meja
+                            </td>
+                        `;
+                        tableBody.appendChild(emptyRow);
+                    }
+                }
+            });
+        }
+
+        // Fungsi untuk menampilkan notifikasi
+        function showNotification(message, type = 'alert-success') {
+            const notification = document.getElementById('notification');
+            const notificationMessage = notification.querySelector('span');
+            const alert = notification.querySelector('.alert');
+
+            // Set pesan dan tipe alert
+            notificationMessage.textContent = message;
+            alert.className = `alert shadow-lg ${type}`;
+
+            // Tampilkan notifikasi
+            notification.classList.remove('hidden');
+
+            // Sembunyikan notifikasi setelah 3 detik
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Event listener saat dokumen dimuat
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuToggle = document.getElementById('mobileMenuToggle');
             const closeMobileMenu = document.getElementById('closeMobileMenu');
@@ -740,225 +1051,163 @@
                 });
             });
 
-            // Handle table form submission
+            // Handle form submission
             tableForm.addEventListener('submit', function(e) {
                 e.preventDefault();
 
                 const isEditMode = document.getElementById('isEditMode').value === 'true';
                 const tableNumber = document.getElementById('tableNumber').value;
                 const tableType = document.getElementById('tableType').value;
+                const tableCapacity = document.getElementById('tableCapacity').value;
                 const tablePrice = document.getElementById('tablePrice').value;
                 const tableStatus = document.getElementById('tableStatus').value;
 
-                if (isEditMode) {
-                    // Update existing table
-                    fetch('{{ route("admin.tables.update") }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                no_meja: tableNumber,
-                                tipe_meja: tableType,
-                                kapasitas: 4,
-                                harga: tablePrice,
-                                status: tableStatus === 'available' ? 'tersedia' : 'dipesan',
-                                _token: '{{ csrf_token() }}'
-                            })
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                return response.json().then(data => {
-                                    throw new Error(data.message || 'Terjadi kesalahan saat memperbarui data meja');
-                                });
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            alert(data.message);
-                            window.location.reload();
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert(error.message);
-                        });
-                }
+                const tableData = {
+                    no_meja: tableNumber,
+                    tipe_meja: tableType.toLowerCase(),
+                    kapasitas: parseInt(tableCapacity),
+                    harga: tablePrice,
+                    status: tableStatus
+                };
 
-                // Close the modal
-                tableModal.close();
+                const endpoint = isEditMode ?
+                    '{{ route("admin.tables.update") }}' :
+                    '{{ route("admin.tables.create") }}';
+
+                fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            ...tableData,
+                            _token: '{{ csrf_token() }}'
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(data => {
+                                const errorMessage = data.message.includes('The no meja has already been taken') ?
+                                    'Nomor meja sudah digunakan' : data.message;
+                                throw new Error(errorMessage);
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Update tabel
+                        updateTableRow(tableData, !isEditMode);
+
+                        // Tampilkan notifikasi
+                        showNotification(data.message, 'alert-success');
+
+                        // Tutup modal
+                        document.getElementById('tableModal').close();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification(error.message, 'alert-error');
+                    });
             });
 
-            // Status filter functionality
-            statusFilter.addEventListener('change', function() {
-                const filterValue = this.value.toLowerCase();
-                const rows = document.querySelectorAll('.table-data-table tbody tr');
-
-                rows.forEach(row => {
-                    const statusCell = row.cells[3].querySelector('.table-status');
-                    const statusClass = Array.from(statusCell.classList).find(cls => cls.startsWith('status-'));
-                    const status = statusClass ? statusClass.replace('status-', '') : '';
-
-                    if (filterValue === '' || status === filterValue) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-
-            // Search functionality
+            // Search and filter functionality
             const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('input', function() {
-                const searchText = this.value.toLowerCase();
-                const rows = document.querySelectorAll('.table-data-table tbody tr');
+            const rows = document.querySelectorAll('.table-data-table tbody tr');
+
+            function filterTable() {
+                const searchText = searchInput.value.toLowerCase();
+                const statusValue = statusFilter.value.toLowerCase();
 
                 rows.forEach(row => {
-                    const tableNumber = row.cells[0].textContent.toLowerCase();
-                    const tableType = row.cells[1].textContent.toLowerCase();
+                    const noMeja = row.cells[0].textContent.toLowerCase();
+                    const tipeMeja = row.cells[1].textContent.toLowerCase();
+                    const status = row.cells[4].textContent.toLowerCase().trim();
 
-                    if (tableNumber.includes(searchText) || tableType.includes(searchText)) {
+                    const matchesSearch = noMeja.includes(searchText) || tipeMeja.includes(searchText);
+                    const matchesStatus = statusValue === '' || status.includes(statusValue);
+
+                    if (matchesSearch && matchesStatus) {
                         row.style.display = '';
                     } else {
                         row.style.display = 'none';
                     }
                 });
-            });
-
-            // PAGINATION LOGIC
-            const rows = document.querySelectorAll('.table-data-table tbody tr');
-            const rowsPerPage = 5;
-            let currentPage = 1;
-            const totalRows = rows.length;
-            const totalPages = Math.ceil(totalRows / rowsPerPage);
-            const paginationInfo = document.getElementById('paginationInfo');
-            const prevPageBtn = document.getElementById('prevPage');
-            const nextPageBtn = document.getElementById('nextPage');
-
-            function showPage(page) {
-                // Hide all rows
-                rows.forEach(row => row.style.display = 'none');
-                // Show only rows for this page
-                const start = (page - 1) * rowsPerPage;
-                const end = Math.min(start + rowsPerPage, totalRows);
-                for (let i = start; i < end; i++) {
-                    rows[i].style.display = '';
-                }
-                // Update info
-                paginationInfo.textContent = `Menampilkan ${start + 1}-${end} dari ${totalRows} meja`;
-                // Update button state
-                prevPageBtn.disabled = page === 1;
-                nextPageBtn.disabled = page === totalPages;
             }
 
-            prevPageBtn.addEventListener('click', function() {
-                if (currentPage > 1) {
-                    currentPage--;
-                    showPage(currentPage);
-                }
-            });
-            nextPageBtn.addEventListener('click', function() {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    showPage(currentPage);
-                }
-            });
-            // Inisialisasi
-            showPage(currentPage);
+            searchInput.addEventListener('input', filterTable);
+            statusFilter.addEventListener('change', filterTable);
         });
 
-        // Function to open add modal
-        function openAddModal() {
-            const modal = document.getElementById('tableModal');
-            const form = document.getElementById('tableForm');
-            const modalTitle = document.getElementById('modalTitle');
-            const saveButton = document.getElementById('saveButton');
-            const isEditMode = document.getElementById('isEditMode');
+        async function showSchedule(noMeja) {
+            try {
+                const response = await fetch(`/admin/tables/${noMeja}/schedule`);
+                const data = await response.json();
 
-            // Reset form
-            form.reset();
+                if (data.success) {
+                    document.getElementById('tableNumber').textContent = noMeja;
+                    const scheduleContent = document.getElementById('scheduleContent');
 
-            // Set mode to add
-            isEditMode.value = 'false';
-            modalTitle.textContent = 'Tambah Meja Baru';
-            saveButton.textContent = 'Simpan';
+                    if (data.data.length === 0) {
+                        scheduleContent.innerHTML = `
+                            <div class="text-center py-4 text-gray-500">
+                                Tidak ada jadwal pemesanan untuk meja ini
+                            </div>
+                        `;
 
-            // Enable table number field
-            document.getElementById('tableNumber').disabled = false;
+                        // Update tampilan status meja menjadi tersedia
+                        const statusButton = document.querySelector(`button[onclick="showSchedule(${noMeja})"]`);
+                        if (statusButton) {
+                            statusButton.className = 'btn btn-sm btn-success';
+                            statusButton.innerHTML = `
+                                Tersedia
+                                <i class='bx bx-calendar-event ml-1'></i>
+                            `;
+                        }
+                    } else {
+                        const scheduleHTML = data.data.map(jadwal => {
+                            const statusText = jadwal.status === 'dikonfirmasi' ? 'Dikonfirmasi' : 'Menunggu';
+                            const badgeClass = jadwal.status === 'dikonfirmasi' ? 'badge-success' : 'badge-warning';
 
-            // Open modal
-            modal.showModal();
-        }
+                            return `
+                                <div class="bg-base-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-semibold">${jadwal.tanggal}</span>
+                                        <span class="text-sm">${jadwal.waktu}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm">${jadwal.nama_pemesan}</span>
+                                        <span class="badge ${badgeClass}">
+                                            ${statusText}
+                                        </span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        Kode: ${jadwal.kode_transaksi}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
 
-        // Function to open edit modal
-        function openEditModal(tableNumber, tableType, tablePrice, tableStatus) {
-            const modal = document.getElementById('tableModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const saveButton = document.getElementById('saveButton');
-            const isEditMode = document.getElementById('isEditMode');
+                        scheduleContent.innerHTML = scheduleHTML;
 
-            // Set mode to edit
-            isEditMode.value = 'true';
-            modalTitle.textContent = 'Edit Data Meja';
-            saveButton.textContent = 'Simpan Perubahan';
+                        // Update tampilan status meja menjadi dipesan
+                        const statusButton = document.querySelector(`button[onclick="showSchedule(${noMeja})"]`);
+                        if (statusButton) {
+                            statusButton.className = 'btn btn-sm btn-error';
+                            statusButton.innerHTML = `
+                                Dipesan
+                                <i class='bx bx-calendar-event ml-1'></i>
+                            `;
+                        }
+                    }
 
-            // Set values in form
-            document.getElementById('tableNumber').value = tableNumber;
-            document.getElementById('tableNumber').disabled = true; // Disable editing table number
-            document.getElementById('tableType').value = tableType;
-            document.getElementById('tablePrice').value = tablePrice;
-            document.getElementById('tableStatus').value = tableStatus;
-
-            // Open modal
-            modal.showModal();
-        }
-
-        // Function to close modal
-        function closeModal() {
-            const modal = document.getElementById('tableModal');
-            modal.close();
-        }
-
-        // Function to open delete confirmation modal
-        function confirmDelete(tableNumber) {
-            const modal = document.getElementById('deleteConfirmModal');
-
-            // Set table number in confirmation message
-            document.getElementById('deleteTableNumber').textContent = tableNumber;
-
-            // Store table number for deletion
-            window.tableToDelete = tableNumber;
-
-            // Open modal
-            modal.showModal();
-        }
-
-        // Function to close delete modal
-        function closeDeleteModal() {
-            const modal = document.getElementById('deleteConfirmModal');
-            modal.close();
-        }
-
-        // Function to delete table
-        function deleteTable() {
-            const tableNumber = window.tableToDelete;
-
-            // Here you would normally make an AJAX request to delete the table
-            console.log(`Deleting table with number: ${tableNumber}`);
-
-            // Show success notification (in a real app)
-            alert('Data meja berhasil dihapus!');
-
-            // Close the modal
-            closeDeleteModal();
-
-            // Remove the row from the table (for demo purposes)
-            const rows = document.querySelectorAll('.table-data-table tbody tr');
-            rows.forEach(row => {
-                if (row.cells[0].textContent === tableNumber) {
-                    row.remove();
+                    document.getElementById('scheduleModal').showModal();
+                } else {
+                    throw new Error(data.message);
                 }
-            });
+            } catch (error) {
+                alert('Terjadi kesalahan: ' + error.message);
+            }
         }
     </script>
 </body>

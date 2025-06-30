@@ -12,8 +12,8 @@ return new class extends Migration {
             $table->integer('id_pemesanan');
             $table->decimal('total_harga', 10, 2);
             $table->enum('metode_pembayaran', ['bca', 'bni', 'bri', 'mandiri']);
-            $table->enum('status_pembayaran', ['dikonfirmasi', 'menunggu', 'dibatalkan']);
-            $table->integer('id_staf');
+            $table->enum('status', ['dikonfirmasi', 'menunggu', 'dibatalkan'])->default('menunggu');
+            $table->integer('id_staf')->nullable();
             $table->string('bukti_pembayaran');
         });
     }

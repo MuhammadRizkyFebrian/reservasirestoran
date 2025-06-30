@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin Panel') - Seatify</title>
+    <title>@yield('title') - Seatify</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -165,7 +165,6 @@
             border-spacing: 0;
             overflow: hidden;
             border-radius: 0.75rem;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
 
         .table-data-table th {
@@ -447,65 +446,88 @@
     </style>
 </head>
 
-<body>
-    {{-- Mobile menu toggle button --}}
+<body class="font-poppins">
+    <!-- Mobile Menu Toggle -->
     <div class="mobile-menu-toggle" id="mobileMenuToggle">
         <i class='bx bx-menu'></i>
     </div>
 
-    {{-- Sidebar --}}
-    @include('admin.layouts.sidebar')
-
-    {{-- Sidebar overlay (for mobile) --}}
+    <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    {{-- Main Content --}}
+    <!-- Sidebar -->
+    @include('admin.layouts.sidebar')
+
+    <!-- Main Content -->
     <div class="content-wrapper" id="contentWrapper">
-        {{-- Header --}}
-        <header class="mb-8 flex justify-between items-center">
-            <h1 class="text-3xl font-bold">@yield('page-title', 'Dashboard')</h1>
-            <form action="{{ route('logout') }}" method="POST">
+        <div class="header flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold">@yield('title')</h1>
+            <form action="{{ route('admin.logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-outline">
                     <i class='bx bx-log-out mr-2'></i>Keluar
                 </button>
             </form>
-        </header>
+        </div>
 
-        {{-- Page content --}}
         @yield('content')
     </div>
 
-    {{-- Scripts --}}
+    <!-- Theme Switcher -->
+    <div class="theme-switcher dropdown dropdown-right dropdown-end">
+        <div tabindex="0" class="w-full h-full flex items-center justify-center cursor-pointer">
+            <i class='bx bx-palette text-lg'></i>
+        </div>
+        <div tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-fit">
+            <div class="flex gap-1 p-1">
+                <button onclick="document.documentElement.setAttribute('data-theme', 'lemonade')"
+                    class="btn btn-xs btn-circle bg-success" title="Tema Lemonade"></button>
+                <button onclick="document.documentElement.setAttribute('data-theme', 'light')"
+                    class="btn btn-xs btn-circle bg-info" title="Tema Light"></button>
+                <button onclick="document.documentElement.setAttribute('data-theme', 'dark')"
+                    class="btn btn-xs btn-circle bg-neutral" title="Tema Dark"></button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        const closeMobileMenu = document.getElementById('closeMobileMenu');
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const closeMobileMenu = document.getElementById('closeMobileMenu');
 
-        mobileMenuToggle.addEventListener('click', () => {
-            sidebar.classList.add('active');
-            sidebarOverlay.classList.add('active');
-        });
+            mobileMenuToggle.addEventListener('click', () => {
+                sidebar.classList.add('active');
+                sidebarOverlay.classList.add('active');
+            });
 
-        if (closeMobileMenu) {
-            closeMobileMenu.addEventListener('click', () => {
+            if (closeMobileMenu) {
+                closeMobileMenu.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                });
+            }
+
+            sidebarOverlay.addEventListener('click', () => {
                 sidebar.classList.remove('active');
                 sidebarOverlay.classList.remove('active');
             });
-        }
 
-        sidebarOverlay.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            sidebarOverlay.classList.remove('active');
+            // Theme persistence
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+
+            document.querySelectorAll('.dropdown-content button[title^="Tema"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const theme = this.getAttribute('title').toLowerCase().split(' ')[1];
+                    localStorage.setItem('theme', theme);
+                });
+            });
         });
-
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('[role="alert"]');
-            alerts.forEach(alert => alert.style.display = 'none');
-        }, 5000);
     </script>
-    @stack('scripts')
 </body>
 
 </html>

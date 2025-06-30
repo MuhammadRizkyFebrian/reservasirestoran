@@ -1,13 +1,27 @@
 <!-- Reservation Modal Form Component -->
 @if ($errors->any())
-    <div class="alert alert-error">
-        <ul class="list-disc ml-5 text-sm">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+<div class="alert alert-error">
+    <ul class="list-disc ml-5 text-sm">
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 @endif
+
+<!-- Alert Modal -->
+<dialog id="alertModal" class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg" id="alertTitle">Peringatan</h3>
+        <p class="py-4" id="alertMessage"></p>
+        <div class="modal-action">
+            <button class="btn btn-primary" onclick="closeAlertModal()">Mengerti</button>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
 
 <dialog id="reservation-modal" class="modal">
     <div class="modal-box max-w-lg">
@@ -15,7 +29,7 @@
             @csrf
 
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" id="closeReservationModal" type="button">✕</button>
-            
+
             <h3 class="font-bold text-lg mb-3 text-center">Detail Reservasi</h3>
 
             <!-- Input nama pemesan -->
@@ -34,32 +48,9 @@
                 <input type="tel" name="no_handphone" id="phoneNumber" class="input input-bordered" placeholder="Masukkan nomor handphone" required>
             </div>
 
-            <!-- Grid untuk tanggal dan waktu -->
-            <div class="grid grid-cols-2 gap-3">
-                <div class="form-control">
-                    <label class="label py-1">
-                        <span class="label-text text-sm">Tanggal</span>
-                    </label>
-                    <input type="date" name="tanggal" id="reservationDate" class="input input-bordered" min="{{ date('Y-m-d') }}" required>
-                </div>
-                
-                <div class="form-control">
-                    <label class="label py-1">
-                        <span class="label-text text-sm">Waktu</span>
-                    </label>
-                    <select name="jam" id="reservationTime" class="select select-bordered" required>
-                        <option value="" disabled selected>Pilih Waktu</option>
-                        <option value="11:00">11:00</option>
-                        <option value="12:00">12:00</option>
-                        <option value="13:00">13:00</option>
-                        <option value="14:00">14:00</option>
-                        <option value="18:00">18:00</option>
-                        <option value="19:00">19:00</option>
-                        <option value="20:00">20:00</option>
-                        <option value="21:00">21:00</option>
-                    </select>
-                </div>
-            </div>
+            <!-- Input tersembunyi untuk tanggal dan waktu -->
+            <input type="hidden" name="tanggal" id="reservationDate">
+            <input type="hidden" name="jam" id="reservationTime">
 
             <div class="form-control">
                 <label class="label py-1">
@@ -96,11 +87,11 @@
                 </div>
                 <div class="flex justify-between text-sm">
                     <span>Biaya Layanan</span>
-                    <span>Rp 15.000</span>
+                    <span>Rp 3.000</span>
                 </div>
                 <div class="flex justify-between font-bold mt-1">
                     <span>Total</span>
-                    <span id="modalTotalPrice">Rp 15.000</span>
+                    <span id="modalTotalPrice">Rp 3.000</span>
                 </div>
             </div>
 

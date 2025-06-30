@@ -81,12 +81,12 @@
                             </a>
                         </li>
                         <li>
-                            <form action="{{ route('logout') }}" method="POST" class="w-full">
+                            <a href="#" class="py-2" onclick="document.getElementById('logoutForm').submit(); return false;">
+                                <i class='bx bx-log-out mr-2'></i>
+                                Keluar
+                            </a>
+                            <form id="logoutForm" action="{{ route('logout') }}" method="POST" class="hidden">
                                 @csrf
-                                <button type="submit" class="w-full text-left flex items-center py-2">
-                                    <i class='bx bx-log-out mr-2'></i>
-                                    Keluar
-                                </button>
                             </form>
                         </li>
                     </ul>

@@ -141,13 +141,13 @@ margin-bottom: 2rem;
                     </a>
                     <a href="{{ route('reservation-history') }}" class="nav-item">
                         <i class='bx bx-history'></i>
-                        <span>Riwayat Pemesanan</span>
+                        <span>Riwayat Reservasi</span>
                     </a>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="nav-item w-full text-left">
                             <i class='bx bx-log-out'></i>
-                            <span>Logout</span>
+                            <span>Keluar</span>
                         </button>
                     </form>
                 </div>

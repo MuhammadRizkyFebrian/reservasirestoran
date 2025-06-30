@@ -10,27 +10,50 @@ class UlasanController extends Controller
     // Create
     public function store(Request $request)
     {
-        // Validasi input dari form
-        $request->validate([
-            'id_pemesanan' => 'required|exists:pemesanan,id_pemesanan',
-            'id_pelanggan' => 'required|exists:pelanggan,id_pelanggan',
-            'comments' => 'required|string',
-            'star_rating' => 'required|integer|min:1|max:5',
-        ]);
+        try {
+            // Validasi input dari form
+            $request->validate([
+                'id_pemesanan' => 'required|exists:pemesanan,id_pemesanan',
+                'id_pelanggan' => 'required|exists:pelanggan,id_pelanggan',
+                'comments' => 'required|string',
+                'star_rating' => 'required|integer|min:1|max:5',
+            ], [
+                'id_pemesanan.required' => 'ID pemesanan wajib diisi.',
+                'id_pemesanan.exists' => 'ID pemesanan tidak valid.',
+                'id_pelanggan.required' => 'ID pelanggan wajib diisi.',
+                'id_pelanggan.exists' => 'ID pelanggan tidak valid.',
+                'comments.required' => 'Komentar wajib diisi.',
+                'star_rating.required' => 'Rating wajib diisi.',
+                'star_rating.integer' => 'Rating harus berupa angka.',
+                'star_rating.min' => 'Rating minimal 1.',
+                'star_rating.max' => 'Rating maksimal 5.'
+            ]);
 
-        // Simpan ke tabel ulasan
-        Ulasan::create([
-            'id_pemesanan' => $request->id_pemesanan,
-            'id_pelanggan' => $request->id_pelanggan,
-            'comments' => $request->comments,
-            'star_rating' => $request->star_rating,
-            'status' => 'active',
-        ]);
+            // Simpan ke tabel ulasan
+            Ulasan::create([
+                'id_pemesanan' => $request->id_pemesanan,
+                'id_pelanggan' => $request->id_pelanggan,
+                'comments' => $request->comments,
+                'star_rating' => $request->star_rating,
+                'status' => 'active',
+            ]);
 
-        // Ini akan dikembalikan ke fetch() di JS
-        return response()->json([
-            'message' => 'Ulasan berhasil ditambahkan!',
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Ulasan berhasil ditambahkan!'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal: ' . $e->getMessage(),
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     // Delete

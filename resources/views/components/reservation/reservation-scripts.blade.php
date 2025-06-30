@@ -1,152 +1,342 @@
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const tableBtns = document.querySelectorAll('.table-btn.available');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inisialisasi variabel
+        const dateInput = document.getElementById('reservationDate');
+        const timeInput = document.getElementById('reservationTime');
+        const checkAvailabilityBtn = document.getElementById('checkAvailabilityBtn');
+        const tableSelectionSection = document.getElementById('tableSelectionSection');
+        const tableList = document.getElementById('tableList');
         const reservationModal = document.getElementById('reservation-modal');
         const closeReservationModal = document.getElementById('closeReservationModal');
-        const reservationFormBtn = document.getElementById('reservationFormBtn');
-        const openReservationModalBtn = document.getElementById('openReservationModalBtn');
         const selectedTablesInfo = document.getElementById('selectedTablesInfo');
-        const tableSummary = document.getElementById('tableSummary');
         const modalTablePrice = document.getElementById('modalTablePrice');
         const modalTotalPrice = document.getElementById('modalTotalPrice');
         const reservationForm = document.getElementById('reservationForm');
         const hiddenTableInputs = document.getElementById('hiddenTableInputs');
+        const alertModal = document.getElementById('alertModal');
+        const alertTitle = document.getElementById('alertTitle');
+        const alertMessage = document.getElementById('alertMessage');
 
-        const selectedTables = [];
-        let totalPriceValue = 15000; // Biaya layanan
+        // Map untuk menyimpan meja yang dipilih
+        const selectedTables = new Map();
+        let totalPrice = 0;
 
-        // Buka modal reservasi
-        if (openReservationModalBtn) {
-            openReservationModalBtn.addEventListener('click', function () {
-                reservationModal.showModal();
-            });
-        }
+        // Set batasan tanggal (hari ini sampai 7 hari ke depan)
+        if (dateInput) {
+            const today = new Date();
+            const maxDate = new Date();
+            maxDate.setDate(today.getDate() + 7);
 
-        if (reservationFormBtn) {
-            reservationFormBtn.addEventListener('click', function () {
-                reservationModal.showModal();
-            });
-        }
+            // Format tanggal untuk input date (YYYY-MM-DD)
+            const formatDate = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
 
-        if (closeReservationModal) {
-            closeReservationModal.addEventListener('click', function () {
-                reservationModal.close();
-            });
-        }
+            // Set nilai minimal dan maksimal untuk input tanggal
+            dateInput.min = formatDate(today);
+            dateInput.max = formatDate(maxDate);
 
-        // Klik tombol meja
-        tableBtns.forEach(btn => {
-            btn.addEventListener('click', function () {
-                const tableId = this.getAttribute('data-table');
-                const tablePrice = parseInt(this.getAttribute('data-price'));
-                const tableName = this.textContent.trim();
+            // Set nilai default ke hari ini
+            dateInput.value = formatDate(today);
 
-                const tableIndex = selectedTables.findIndex(t => t.id === tableId);
-
-                if (tableIndex > -1) {
-                    selectedTables.splice(tableIndex, 1);
-                    this.classList.remove('selected');
-                } else {
-                    selectedTables.push({ id: tableId, name: tableName, price: tablePrice });
-                    this.classList.add('selected');
+            // Event listener untuk validasi tanggal
+            dateInput.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                if (selectedDate < today || selectedDate > maxDate) {
+                    showAlert('Peringatan', 'Tanggal harus antara hari ini dan 7 hari ke depan');
+                    this.value = formatDate(today);
                 }
-
-                updateSelectedTablesInfo();
-                updatePriceInfo();
-                updateTableSummary();
-                updateHiddenTableInputs();
-
-                openReservationModalBtn.disabled = selectedTables.length === 0;
+                updateCheckAvailabilityButton();
             });
+        }
+
+        // Fungsi untuk menampilkan alert
+        function showAlert(title, message) {
+            alertTitle.textContent = title;
+            alertMessage.textContent = message;
+            alertModal.showModal();
+        }
+
+        // Fungsi untuk menutup alert modal
+        window.closeAlertModal = function() {
+            alertModal.close();
+        };
+
+        // Enable/disable check availability button
+        function updateCheckAvailabilityButton() {
+            checkAvailabilityBtn.disabled = !dateInput.value || !timeInput.value;
+        }
+
+        // Event listener untuk perubahan waktu
+        timeInput.addEventListener('change', updateCheckAvailabilityButton);
+
+        // Check table availability
+        checkAvailabilityBtn.addEventListener('click', async function() {
+            const date = dateInput.value;
+            const time = timeInput.value;
+
+            try {
+                const response = await fetch(`/api/check-table-availability?date=${date}&time=${time}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    // Show table selection section
+                    tableSelectionSection.classList.remove('hidden');
+
+                    // Group tables by type
+                    const groupedTables = {};
+                    data.tables.forEach(table => {
+                        if (!groupedTables[table.tipe_meja]) {
+                            groupedTables[table.tipe_meja] = [];
+                        }
+                        groupedTables[table.tipe_meja].push(table);
+                    });
+
+                    // Generate table list HTML
+                    let html = '';
+                    for (const [type, tables] of Object.entries(groupedTables)) {
+                        html += `
+                        <div class="space-y-2">
+                            <h3 class="font-semibold capitalize">Meja ${type}</h3>
+                            <div class="grid grid-cols-6 gap-2">
+                        `;
+
+                        tables.forEach(table => {
+                            const isAvailable = table.status === 'tersedia';
+                            html += `
+                            <button
+                                class="table-btn ${isAvailable ? 'available' : 'reserved'}"
+                                data-table="${table.no_meja}"
+                                data-price="${table.harga}"
+                                data-capacity="${table.kapasitas}"
+                                ${!isAvailable ? 'disabled' : ''}>
+                                ${table.no_meja}
+                                <div class="tooltip">
+                                    Kapasitas: ${table.kapasitas} orang<br>
+                                    Harga: Rp ${new Intl.NumberFormat('id-ID').format(table.harga)}
+                                </div>
+                            </button>
+                        `;
+                        });
+
+                        html += `
+                            </div>
+                        </div>
+                    `;
+                    }
+
+                    // Add summary section
+                    html += `
+                    <div class="mt-8 p-4 bg-base-200 rounded-lg">
+                        <h3 class="font-semibold mb-2">Ringkasan</h3>
+                        <div id="tableSummary" class="text-sm mb-4">Belum ada meja yang dipilih</div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-sm font-semibold">Total Pembayaran:</span>
+                                <span id="totalPrice" class="text-sm">Rp 0</span>
+                            </div>
+                            <button id="openReservationModalBtn" class="btn btn-primary" disabled>
+                                Lanjutkan Reservasi
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                    tableList.innerHTML = html;
+
+                    // Initialize table selection functionality
+                    initializeTableSelection();
+
+                    // Scroll to table selection
+                    tableSelectionSection.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                showAlert('Error', error.message || 'Terjadi kesalahan saat mengecek ketersediaan meja');
+            }
         });
 
+        function initializeTableSelection() {
+            const tables = document.querySelectorAll('.table-btn.available');
+            const tableSummary = document.getElementById('tableSummary');
+            const totalPriceElement = document.getElementById('totalPrice');
+            const openReservationModalBtn = document.getElementById('openReservationModalBtn');
+
+            // Reset selected tables
+            selectedTables.clear();
+            totalPrice = 0;
+
+            tables.forEach(table => {
+                table.addEventListener('click', function() {
+                    const tableNo = this.dataset.table;
+                    const price = parseInt(this.dataset.price);
+                    const capacity = parseInt(this.dataset.capacity);
+
+                    if (this.classList.contains('selected')) {
+                        this.classList.remove('selected');
+                        selectedTables.delete(tableNo);
+                        totalPrice -= price;
+                    } else {
+                        this.classList.add('selected');
+                        selectedTables.set(tableNo, {
+                            capacity: capacity,
+                            price: price
+                        });
+                        totalPrice += price;
+                    }
+
+                    updateTableSummary();
+                });
+            });
+
+            // Tambahkan event listener untuk tombol Lanjutkan Reservasi
+            if (openReservationModalBtn) {
+                openReservationModalBtn.addEventListener('click', function() {
+                    if (selectedTables.size === 0) {
+                        showAlert('Peringatan', 'Silakan pilih meja terlebih dahulu');
+                        return;
+                    }
+
+                    // Set tanggal dan waktu dari form utama ke form modal
+                    const modalDate = document.querySelector('#reservation-modal #reservationDate');
+                    const modalTime = document.querySelector('#reservation-modal #reservationTime');
+
+                    if (modalDate) modalDate.value = dateInput.value;
+                    if (modalTime) modalTime.value = timeInput.value;
+
+                    // Tambahkan informasi tanggal dan waktu ke ringkasan
+                    const formattedDate = new Date(dateInput.value).toLocaleDateString('id-ID', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+
+                    updateSelectedTablesInfo();
+                    updatePriceInfo();
+                    reservationModal.showModal();
+                });
+            }
+        }
+
         function updateTableSummary() {
-            if (selectedTables.length === 0) {
-                tableSummary.textContent = 'Belum ada meja yang dipilih';
+            const tableSummary = document.getElementById('tableSummary');
+            const totalPriceElement = document.getElementById('totalPrice');
+            const openReservationModalBtn = document.getElementById('openReservationModalBtn');
+
+            if (selectedTables.size > 0) {
+                const tableDetails = Array.from(selectedTables).map(([no, data]) =>
+                    `Meja ${no} (Kapasitas: ${data.capacity} orang)`
+                ).join(', ');
+                tableSummary.innerHTML = tableDetails;
+                totalPriceElement.textContent = `Rp ${(totalPrice + 3000).toLocaleString('id-ID')}`;
+                openReservationModalBtn.disabled = false;
             } else {
-                tableSummary.textContent = selectedTables.map(t => t.name).join(', ');
+                tableSummary.innerHTML = 'Belum ada meja yang dipilih';
+                totalPriceElement.textContent = 'Rp 0';
+                openReservationModalBtn.disabled = true;
+            }
+
+            // Update hidden inputs for form submission
+            if (hiddenTableInputs) {
+                hiddenTableInputs.innerHTML = Array.from(selectedTables.keys())
+                    .map(no => `<input type="hidden" name="no_meja[]" value="${no}">`)
+                    .join('');
             }
         }
 
         function updateSelectedTablesInfo() {
-            if (selectedTables.length === 0) {
-                selectedTablesInfo.textContent = 'Belum ada meja yang dipilih';
+            if (!selectedTablesInfo) return;
+
+            if (selectedTables.size === 0) {
+                selectedTablesInfo.innerHTML = '<div class="text-center text-gray-500">Belum ada meja yang dipilih</div>';
                 return;
             }
 
-            selectedTablesInfo.innerHTML = selectedTables.map(table => `
-                <div class="flex justify-between items-center mb-1">
-                    <span>${table.name}</span>
-                    <span>Rp ${table.price.toLocaleString('id-ID')}</span>
-                </div>
-            `).join('');
-        }
+            let totalCapacity = 0;
+            const tableInfoHTML = Array.from(selectedTables).map(([no, data]) => {
+                totalCapacity += data.capacity;
+                return `
+                    <div class="flex justify-between items-center mb-2">
+                        <span>Meja ${no} (Kapasitas: ${data.capacity} orang)</span>
+                        <span>Rp ${data.price.toLocaleString('id-ID')}</span>
+                    </div>
+                `;
+            }).join('');
 
-        function updateHiddenTableInputs() {
-            hiddenTableInputs.innerHTML = '';
-            selectedTables.forEach(table => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'no_meja[]';
-                input.value = table.id;
-                hiddenTableInputs.appendChild(input);
-            });
+            selectedTablesInfo.innerHTML = `
+                <div class="bg-base-200 p-4 rounded-lg">
+                    <div class="font-semibold mb-2">Detail Meja yang Dipilih:</div>
+                    ${tableInfoHTML}
+                    <div class="border-t border-base-300 mt-2 pt-2">
+                        <div class="flex justify-between items-center">
+                            <span>Total Kapasitas:</span>
+                            <span>${totalCapacity} orang</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-1">
+                            <span>Tanggal & Waktu:</span>
+                            <span>${dateInput.value} ${timeInput.value}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Update input jumlah tamu dengan kapasitas maksimal
+            const guestCountInput = document.getElementById('guestCount');
+            if (guestCountInput) {
+                guestCountInput.max = totalCapacity;
+                guestCountInput.placeholder = `Maksimal ${totalCapacity} orang`;
+            }
         }
 
         function updatePriceInfo() {
-            const mejaTotal = selectedTables.reduce((sum, t) => sum + t.price, 0);
-            totalPriceValue = mejaTotal + 15000;
+            if (!modalTablePrice || !modalTotalPrice) return;
 
-            modalTablePrice.textContent = `Rp ${mejaTotal.toLocaleString('id-ID')}`;
-            modalTotalPrice.textContent = `Rp ${totalPriceValue.toLocaleString('id-ID')}`;
+            const tableTotal = Array.from(selectedTables.values())
+                .reduce((sum, table) => sum + table.price, 0);
+            const serviceCharge = 3000;
+            const total = tableTotal + serviceCharge;
+
+            modalTablePrice.textContent = `Rp ${tableTotal.toLocaleString('id-ID')}`;
+            modalTotalPrice.textContent = `Rp ${total.toLocaleString('id-ID')}`;
         }
 
-        // Validasi dan submit form
+        // Event listener untuk form reservasi
         if (reservationForm) {
-            reservationForm.addEventListener('submit', function (e) {
-                const customerName = document.getElementById('customerName')?.value;
-                const phoneNumber = document.getElementById('phoneNumber')?.value;
-                const reservationDate = document.getElementById('reservationDate')?.value;
-                const reservationTime = document.getElementById('reservationTime')?.value;
-                const guestCount = document.getElementById('guestCount')?.value;
+            reservationForm.addEventListener('submit', function(e) {
+                const guestCount = document.getElementById('guestCount');
+                const totalCapacity = Array.from(selectedTables.values())
+                    .reduce((sum, table) => sum + table.capacity, 0);
 
-                if (!customerName || !phoneNumber || !reservationDate || !reservationTime || !guestCount || selectedTables.length === 0) {
+                if (parseInt(guestCount.value) > totalCapacity) {
                     e.preventDefault();
-                    alert('Harap lengkapi semua data dan pilih meja terlebih dahulu.');
+                    showAlert('Peringatan', `Jumlah tamu melebihi kapasitas meja (maksimal ${totalCapacity} orang)`);
                     return;
                 }
-
-                updateHiddenTableInputs(); // penting agar hidden input no_meja[] di-update sebelum submit
-
-                // Tidak ada e.preventDefault() jika valid, biarkan form submit ke Laravel
             });
         }
 
-        // Validasi tanggal
-        const reservationDate = document.getElementById('reservationDate');
-        if (reservationDate) {
-            reservationDate.min = new Date().toISOString().split('T')[0];
-        }
-
-        // Validasi jumlah tamu
-        const guestCount = document.getElementById('guestCount');
-        if (guestCount) {
-            guestCount.addEventListener('input', function () {
-                if (parseInt(this.value) < 1) this.value = 1;
-                if (parseInt(this.value) > 20) this.value = 20;
-            });
-        }
-
-        // Hitung karakter catatan
-        const notes = document.getElementById('notes');
+        // Event listener untuk textarea catatan
+        const notesTextarea = document.getElementById('notes');
         const charCount = document.getElementById('charCount');
 
-        if (notes && charCount) {
-            notes.addEventListener('input', function () {
-                charCount.textContent = this.value.length > 200 ? 200 : this.value.length;
-                if (this.value.length > 200) {
-                    this.value = this.value.substring(0, 200);
-                }
+        if (notesTextarea && charCount) {
+            notesTextarea.addEventListener('input', function() {
+                const count = this.value.length;
+                charCount.textContent = count;
+            });
+        }
+
+        // Handle modal close
+        if (closeReservationModal) {
+            closeReservationModal.addEventListener('click', function() {
+                reservationModal.close();
             });
         }
     });

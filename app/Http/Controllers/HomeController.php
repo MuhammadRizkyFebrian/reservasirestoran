@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Menu;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Pesanan;
 use App\Models\Ulasan;
-use App\Models\Pelanggan;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -15,13 +15,32 @@ class HomeController extends Controller
         $isLoggedIn = Auth::guard('pelanggan')->check();
         $user = Auth::guard('pelanggan')->user();
 
-        // Ambil ulasan aktif
-        $ulasans = Ulasan::where('status', 'active')->latest()->with('pelanggan')->get();
+        $ulasans = Ulasan::where('status', 'active')
+            ->latest()
+            ->with('pelanggan')
+            ->get();
 
-        // Hitung rating rata-rata dan total ulasan
-        $avgRating = number_format(Ulasan::where('status', 'active')->avg('star_rating'), 1);
+        $avgRating = number_format(
+            Ulasan::where('status', 'active')->avg('star_rating'),
+            1
+        );
+
         $totalReviews = Ulasan::where('status', 'active')->count();
 
-        return view('home', compact('menus', 'isLoggedIn', 'user', 'ulasans', 'avgRating', 'totalReviews'));
+        $lastOrder = $isLoggedIn
+            ? Pesanan::where('id_pelanggan', $user->id_pelanggan)
+            ->orderBy('jadwal', 'desc')
+            ->first()
+            : null;
+
+        return view('home', compact(
+            'menus',
+            'isLoggedIn',
+            'user',
+            'ulasans',
+            'avgRating',
+            'totalReviews',
+            'lastOrder'
+        ));
     }
-} 
+}

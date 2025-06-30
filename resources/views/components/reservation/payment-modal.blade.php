@@ -5,7 +5,7 @@
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" id="closePaymentModal">✕</button>
         </form>
         <h3 class="font-bold text-lg mb-3 text-center">Pembayaran Reservasi</h3>
-        
+
         <div class="bg-primary/10 p-2 rounded-lg border border-primary mb-3">
             <div class="grid grid-cols-2 gap-2 mb-2">
                 <div class="bg-white/70 rounded-lg p-2 text-center">
@@ -23,7 +23,7 @@
                 <p class="text-sm">a.n. Restaurant Seatify</p>
             </div>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
                 <h4 class="font-medium text-sm mb-1">Rincian Reservasi</h4>
@@ -46,7 +46,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div>
                 <h4 class="font-medium text-sm mb-1">Upload Bukti Pembayaran</h4>
                 <div class="bg-base-200 rounded-lg p-2 text-sm space-y-1">
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="bg-base-200 rounded-lg p-2 text-sm my-3">
             <div class="grid grid-cols-2 gap-2">
                 <div>
@@ -76,16 +76,14 @@
                 <span class="font-bold" id="paymentTotalPrice">Rp 15.000</span>
             </div>
         </div>
-        
+
         <div class="alert alert-info p-2 text-xs mb-3">
             <i class='bx bx-info-circle'></i>
             <span>Reservasi akan dikonfirmasi setelah verifikasi (1-3 jam kerja)</span>
         </div>
-        
+
         <button id="confirmPaymentBtn" class="btn btn-primary btn-sm w-full">
             <i class='bx bx-check-circle mr-1'></i> Konfirmasi Pembayaran
         </button>
     </div>
-</dialog> 
- 
- 
+</dialog>

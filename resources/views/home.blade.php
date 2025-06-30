@@ -3,24 +3,24 @@
 @section('title', 'Dashboard - ' . config('app.name'))
 
 @section('head')
-    @include('components.home.home-styles')
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
-    </style>
+@include('components.home.home-styles')
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
 @endsection
 
 @section('content')
 @if(session('success'))
-    <div class="alert alert-success fixed top-0 left-1/2 transform -translate-x-1/2 mt-4 z-50 w-fit shadow-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
-            viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <span>{{ session('success') }}</span>
-    </div>
+<div class="alert alert-success fixed top-0 left-1/2 transform -translate-x-1/2 mt-4 z-50 w-fit shadow-lg">
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
+        viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span>{{ session('success') }}</span>
+</div>
 @endif
 <!-- Hero Section -->
 <div class="relative hero-section">
@@ -43,20 +43,20 @@
 
         <div class="grid card-container gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             @forelse ($menus as $menu)
-                <div class="card card-menu bg-base-200 shadow-xl overflow-hidden">
-                    <figure class="h-40 sm:h-48">
-                        <img src="{{ asset('storage/menu/' . $menu->gambar) }}" class="w-full h-full object-cover" alt="{{ $menu->nama }}">
-                    </figure>
-                    <div class="card-body p-4 sm:p-6">
-                        <h3 class="card-title text-base sm:text-lg">{{ $menu->nama }}</h3>
-                        <p class="text-sm sm:text-base">{{ $menu->deskripsi }}</p>
-                        <div class="card-actions justify-end mt-2">
-                            <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp{{ number_format($menu->harga, 0, ',', '.') }}</span>
-                        </div>
+            <div class="card card-menu bg-base-200 shadow-xl overflow-hidden">
+                <figure class="h-40 sm:h-48">
+                    <img src="{{ asset('storage/menu/' . $menu->gambar) }}" class="w-full h-full object-cover" alt="{{ $menu->nama }}">
+                </figure>
+                <div class="card-body p-4 sm:p-6">
+                    <h3 class="card-title text-base sm:text-lg">{{ $menu->nama }}</h3>
+                    <p class="text-sm sm:text-base">{{ $menu->deskripsi }}</p>
+                    <div class="card-actions justify-end mt-2">
+                        <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp{{ number_format($menu->harga, 0, ',', '.') }}</span>
                     </div>
                 </div>
+            </div>
             @empty
-                <p class="col-span-3 text-center text-gray-500">Menu belum tersedia.</p>
+            <p class="col-span-3 text-center text-gray-500">Menu belum tersedia.</p>
             @endforelse
         </div>
 
@@ -146,59 +146,59 @@
                 </div>
             </div>
             @if(auth()->guard('pelanggan')->check())
-                <label for="modal-ulasan" class="btn btn-warning mt-4 sm:mt-0">Tambah Ulasan</label>
+            <label for="modal-ulasan" class="btn btn-warning mt-4 sm:mt-0">Tambah Ulasan</label>
             @else
-                <a href="{{ route('login') }}" class="btn btn-warning mt-4 sm:mt-0">Login untuk Menambah Ulasan</a>
+            <a href="{{ route('login') }}" class="btn btn-warning mt-4 sm:mt-0">Login untuk Menambah Ulasan</a>
             @endif
         </div>
 
         <!-- Daftar Ulasan -->
         <div id="ulasanSection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             @forelse($ulasans as $review)
-                <div class="card bg-base-100 shadow-xl">
-                    <div class="card-body p-4 sm:p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="avatar mb-2 sm:mb-3">
-                                    <div class="w-10 sm:w-12 rounded-full">
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($review->pelanggan->username ?? 'User') }}&background=random" />
-                                    </div>
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body p-4 sm:p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="avatar mb-2 sm:mb-3">
+                                <div class="w-10 sm:w-12 rounded-full">
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($review->pelanggan->username ?? 'User') }}&background=random" />
                                 </div>
-                                <h3 class="font-bold text-base sm:text-lg">{{ $review->pelanggan->username ?? 'Anonim' }}</h3>
                             </div>
+                            <h3 class="font-bold text-base sm:text-lg">{{ $review->pelanggan->username ?? 'Anonim' }}</h3>
                         </div>
-                        <div class="flex mb-2 sm:mb-3 text-yellow-400 text-xl">
-                            @for ($i = 1; $i <= 5; $i++)
-                                @if ($review->star_rating >= $i)
-                                    <i class='bx bxs-star'></i>
-                                @elseif ($review->star_rating >= $i - 0.5)
-                                    <i class='bx bxs-star-half'></i>
-                                @else
-                                    <i class='bx bx-star text-gray-400'></i>
-                                @endif
-                            @endfor
-                        </div>
-                        <p class="text-sm sm:text-base mb-4">"{{ $review->comments }}"</p>
-
-                        @if(auth()->guard('pelanggan')->check() && $review->id_pelanggan == auth()->guard('pelanggan')->user()->id_pelanggan)
-                            <div class="flex gap-2">
-                                <!-- Tombol Edit -->
-                                <button class="btn btn-sm btn-success" onclick="editUlasan({{ $review->id }}, `{{ $review->comments }}`, {{ $review->star_rating }})">
-                                    Edit
-                                </button>
-
-                                <!-- Tombol Hapus -->
-                                <form action="{{ route('ulasan.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus ulasan ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-error" type="submit">Hapus</button>
-                                </form>
-                            </div>
-                        @endif
                     </div>
+                    <div class="flex mb-2 sm:mb-3 text-yellow-400 text-xl">
+                        @for ($i = 1; $i <= 5; $i++)
+                            @if ($review->star_rating >= $i)
+                            <i class='bx bxs-star'></i>
+                            @elseif ($review->star_rating >= $i - 0.5)
+                            <i class='bx bxs-star-half'></i>
+                            @else
+                            <i class='bx bx-star text-gray-400'></i>
+                            @endif
+                            @endfor
+                    </div>
+                    <p class="text-sm sm:text-base mb-4">"{{ $review->comments }}"</p>
+
+                    @if(auth()->guard('pelanggan')->check() && $review->id_pelanggan == auth()->guard('pelanggan')->user()->id_pelanggan)
+                    <div class="flex gap-2">
+                        <!-- Tombol Edit -->
+                        <button class="btn btn-sm btn-success" onclick="editUlasan({{ $review->id }}, `{{ $review->comments }}`, {{ $review->star_rating }})">
+                            Edit
+                        </button>
+
+                        <!-- Tombol Hapus -->
+                        <form action="{{ route('ulasan.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus ulasan ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-sm btn-error" type="submit">Hapus</button>
+                        </form>
+                    </div>
+                    @endif
                 </div>
+            </div>
             @empty
-                <p class="text-center col-span-3 text-gray-500">Belum ada ulasan.</p>
+            <p class="text-center col-span-3 text-gray-500">Belum ada ulasan.</p>
             @endforelse
         </div>
     </div>
@@ -218,132 +218,142 @@
 <!-- Modal Tambah Ulasan -->
 <input type="checkbox" id="modal-ulasan" class="modal-toggle" />
 <div class="modal">
-  <div class="modal-box max-w-md">
-    <h3 id="modalTitle" class="font-bold text-lg mb-3">Tambah Ulasan Baru</h3>
-    <form method="POST" id="reviewFormElement">
-        @csrf
-        @if(auth()->guard('pelanggan')->check())
+    <div class="modal-box max-w-md">
+        <h3 id="modalTitle" class="font-bold text-lg mb-3">Tambah Ulasan Baru</h3>
+        @if($lastOrder)
+        <form method="POST" id="reviewFormElement">
+            @csrf
             <input type="hidden" name="id_pelanggan" value="{{ auth()->guard('pelanggan')->user()->id_pelanggan }}">
-        @else
-            <input type="hidden" name="id_pelanggan" value="">
-        @endif
-        <input type="hidden" name="id_pemesanan" value="10"> {{-- sementara pakai 1 untuk testing --}}
+            <input type="hidden" name="id_pemesanan" value="{{ $lastOrder->id_pemesanan }}">
 
-        <div class="form-control mb-3">
-            <label class="label"><span class="label-text">Nama</span></label>
-            <input type="text" value="{{ Auth::guard('pelanggan')->user()->username ?? '' }}" class="input input-bordered w-full" readonly>
-        </div>
-
-        <div class="form-control mb-4" x-data="{ rating: 0 }">
-            <label class="label">
-                <span class="label-text">Rating</span>
-            </label>
-            <div class="flex items-center gap-1 text-2xl text-gray-400">
-                <template x-for="star in 5" :key="star">
-                    <svg @click="rating = star"
-                         @mouseover="rating = star"
-                         @mouseleave="rating = rating"
-                         :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'"
-                         class="w-7 h-7 cursor-pointer transition-all duration-150"
-                         fill="currentColor"
-                         viewBox="0 0 20 20">
-                         <path d="M10 15l-5.878 3.09 1.122-6.545L0.487 6.91l6.572-.955L10 0l2.941 5.955 6.572.955-4.757 4.635 1.122 6.545z"/>
-                    </svg>
-                </template>
+            <div class="form-control mb-3">
+                <label class="label"><span class="label-text">Nama</span></label>
+                <input type="text" value="{{ Auth::guard('pelanggan')->user()->username ?? '' }}" class="input input-bordered w-full" readonly>
             </div>
-            <input type="hidden" name="star_rating" x-model="rating">
-            <span class="text-sm text-gray-600 mt-1 block">Rating: <span x-text="rating"></span> bintang</span>
-        </div>
 
-        <div class="form-control mb-4">
-            <label class="label"><span class="label-text">Ulasan</span></label>
-            <textarea name="comments" id="reviewText" class="textarea textarea-bordered h-24" required></textarea>
-        </div>
+            <div class="form-control mb-4" x-data="{ rating: 0 }">
+                <label class="label">
+                    <span class="label-text">Rating</span>
+                </label>
+                <div class="flex items-center gap-1 text-2xl text-gray-400">
+                    <template x-for="star in 5" :key="star">
+                        <svg @click="rating = star"
+                            @mouseover="rating = star"
+                            @mouseleave="rating = rating"
+                            :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'"
+                            class="w-7 h-7 cursor-pointer transition-all duration-150"
+                            fill="currentColor"
+                            viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.122-6.545L0.487 6.91l6.572-.955L10 0l2.941 5.955 6.572.955-4.757 4.635 1.122 6.545z" />
+                        </svg>
+                    </template>
+                </div>
+                <input type="hidden" name="star_rating" x-model="rating">
+                <span class="text-sm text-gray-600 mt-1 block">Rating: <span x-text="rating"></span> bintang</span>
+            </div>
 
-        <div class="modal-action">
-            <label for="modal-ulasan" class="btn">Batal</label>
-            <button type="button" id="submitReview" class="btn btn-primary">Simpan</button>
+            <div class="form-control mb-4">
+                <label class="label"><span class="label-text">Ulasan</span></label>
+                <textarea name="comments" id="reviewText" class="textarea textarea-bordered h-24" required></textarea>
+            </div>
+
+            <div class="modal-action">
+                <label for="modal-ulasan" class="btn">Batal</label>
+                <button type="button" id="submitReview" class="btn btn-primary">Simpan</button>
+            </div>
+        </form>
+        @else
+        <div class="text-center py-4">
+            <p class="text-error mb-2">Anda belum memiliki riwayat pemesanan.</p>
+            <p class="text-sm text-base-content/70">Silakan lakukan reservasi terlebih dahulu untuk memberikan ulasan.</p>
+            <div class="mt-4">
+                <a href="{{ route('reservation') }}" class="btn btn-primary">Reservasi Sekarang</a>
+            </div>
         </div>
-    </form>
-  </div>
+        @endif
+    </div>
 </div>
 
 <!-- Modal Edit Ulasan -->
 <input type="checkbox" id="modal-edit-ulasan" class="modal-toggle" />
 <div class="modal" role="dialog">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg mb-4">Edit Ulasan</h3>
-    <form id="editReviewForm" method="POST" action="{{ route('ulasan.update') }}">
-        @csrf
-        @method('PUT')
-        <input type="hidden" name="id" id="edit_id">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Edit Ulasan</h3>
+        <form id="editReviewForm" method="POST" action="{{ route('ulasan.update') }}">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="id" id="edit_id">
 
-        <div class="mb-3">
-            <label for="edit_comments" class="label">Komentar</label>
-            <textarea id="edit_comments" name="comments" class="textarea textarea-bordered w-full" required></textarea>
-        </div>
+            <div class="mb-3">
+                <label for="edit_comments" class="label">Komentar</label>
+                <textarea id="edit_comments" name="comments" class="textarea textarea-bordered w-full" required></textarea>
+            </div>
 
-        <div class="mb-3">
-            <label for="edit_rating" class="label">Rating</label>
-            <select id="edit_rating" name="star_rating" class="select select-bordered w-full" required>
-                @for ($i = 1; $i <= 5; $i++)
-                    <option value="{{ $i }}">{{ $i }} Bintang</option>
-                @endfor
-            </select>
-        </div>
+            <div class="mb-3">
+                <label for="edit_rating" class="label">Rating</label>
+                <select id="edit_rating" name="star_rating" class="select select-bordered w-full" required>
+                    @for ($i = 1; $i <= 5; $i++)
+                        <option value="{{ $i }}">{{ $i }} Bintang</option>
+                        @endfor
+                </select>
+            </div>
 
-        <div class="modal-action">
-            <label for="modal-edit-ulasan" class="btn">Batal</label>
-            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-        </div>
-    </form>
-  </div>
+            <div class="modal-action">
+                <label for="modal-edit-ulasan" class="btn">Batal</label>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 @endsection
 
 @section('scripts')
 <script>
-    setTimeout(() => {
-        document.querySelector('.alert')?.remove();
-    }, 3000); // 3 detik
+    // Remove alert after 3 seconds
+    setTimeout(function() {
+        var alert = document.querySelector('.alert');
+        if (alert) alert.remove();
+    }, 3000);
 
-    document.getElementById('submitReview').addEventListener('click', function () {
-        let form = document.getElementById('reviewFormElement');
-        let formData = new FormData(form);
+    // Handle review submission
+    document.getElementById('submitReview').addEventListener('click', function() {
+        var form = document.getElementById('reviewFormElement');
+        var formData = new FormData(form);
+        var token = document.querySelector('input[name="_token"]').value;
 
         fetch("{{ route('ulasan.store') }}", {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-            },
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Gagal menambahkan ulasan.');
-            }
-            return response.json(); // Pastikan response dari controller berupa JSON
-        })
-        .then(data => {
-            alert("Ulasan berhasil ditambahkan!");
-            window.location.href = window.location.origin + window.location.pathname + "#ulasan";
-            window.location.reload();
-        })
-        .catch(error => {
-            alert("Terjadi kesalahan: " + error.message);
-        });
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if (data.success) {
+                    alert(data.message);
+                    document.getElementById('modal-ulasan').checked = false;
+                    window.location.reload();
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(function(error) {
+                alert("Terjadi kesalahan: " + error.message);
+            });
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Smooth scroll ke anchor di navbar
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+    // Smooth scroll
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-
+                var targetId = this.getAttribute('href');
+                var targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     window.scrollTo({
                         top: targetElement.offsetTop - 80,
@@ -354,12 +364,11 @@
         });
     });
 
+    // Edit review
     function editUlasan(id, comments, rating) {
         document.getElementById('edit_id').value = id;
         document.getElementById('edit_comments').value = comments;
         document.getElementById('edit_rating').value = rating;
-
-        // Buka modal
         document.getElementById('modal-edit-ulasan').checked = true;
     }
 </script>

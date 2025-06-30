@@ -64,13 +64,13 @@
             position: absolute;
             right: 0;
         }
-        
+
         /* CSS untuk layar kecil (iPhone 5) */
         @media (max-width: 320px) {
             .input {
                 padding-right: 30px;
             }
-            
+
             button.absolute.right-3 {
                 right: 0.5rem;
             }

@@ -69,7 +69,7 @@ class ProfileController extends Controller
     {
         // Menggunakan id_pelanggan yang benar untuk relasi
         $pelanggan = Auth::guard('pelanggan')->user();
-        
+
         $reservasi = Pesanan::where('id_pelanggan', $pelanggan->id_pelanggan)
             ->orderByDesc('jadwal')
             ->get();
