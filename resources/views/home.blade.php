@@ -161,7 +161,11 @@
                         <div>
                             <div class="avatar mb-2 sm:mb-3">
                                 <div class="w-10 sm:w-12 rounded-full">
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($review->pelanggan->username ?? 'User') }}&background=random" />
+                                    @if($review->pelanggan && $review->pelanggan->foto_profil)
+                                    <img src="{{ asset('storage/profile/' . $review->pelanggan->foto_profil) }}" alt="{{ $review->pelanggan->username }}" />
+                                    @else
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($review->pelanggan->username ?? 'User') }}&background=random" alt="Default Avatar" />
+                                    @endif
                                 </div>
                             </div>
                             <h3 class="font-bold text-base sm:text-lg">{{ $review->pelanggan->username ?? 'Anonim' }}</h3>

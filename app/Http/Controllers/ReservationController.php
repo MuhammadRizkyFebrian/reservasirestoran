@@ -15,34 +15,56 @@ class ReservationController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_pemesan' => 'required',
-            'no_handphone' => 'required',
-            'tanggal' => 'required|date',
-            'jam' => 'required',
-            'jumlah_tamu' => 'required|integer|min:1',
-            'no_meja' => 'required|array',
-            'no_meja.*' => 'integer|distinct|min:1',
-        ]);
-
-        $kodeTransaksi = 'TRX' . now()->format('YmdHis') . strtoupper(Str::random(3));
-
-        foreach ($request->no_meja as $mejaId) {
-            Pesanan::create([
-                'id_pelanggan' => auth('pelanggan')->id(),
-                'no_meja' => $mejaId,
-                'nama_pemesan' => $request->nama_pemesan,
-                'jumlah_tamu' => $request->jumlah_tamu,
-                'no_handphone' => $request->no_handphone,
-                'catatan' => $request->catatan,
-                'jadwal' => $request->tanggal . ' ' . $request->jam,
-                'kode_transaksi' => $kodeTransaksi,
-                'status' => 'menunggu',
+        try {
+            $request->validate([
+                'nama_pemesan' => 'required',
+                'no_handphone' => 'required',
+                'tanggal' => 'required|date',
+                'jam' => 'required',
+                'jumlah_tamu' => 'required|integer|min:1',
+                'no_meja' => 'required|array',
+                'no_meja.*' => 'integer|distinct|min:1',
             ]);
-        }
 
-        return redirect()->route('payment', ['kode' => $kodeTransaksi])
-            ->with('success', 'Reservasi berhasil!');
+            // Validasi waktu pemesanan minimal 10 menit sebelum jadwal
+            $jadwalPemesanan = Carbon::parse($request->tanggal . ' ' . $request->jam);
+            $waktuSekarang = Carbon::now();
+            $selisihMenit = $waktuSekarang->diffInMinutes($jadwalPemesanan, false);
+
+            if ($selisihMenit < 10) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pemesanan harus dilakukan minimal 10 menit sebelum jadwal yang dipilih.'
+                ], 422);
+            }
+
+            $kodeTransaksi = 'TRX' . now()->format('YmdHis') . strtoupper(Str::random(3));
+
+            foreach ($request->no_meja as $mejaId) {
+                Pesanan::create([
+                    'id_pelanggan' => auth('pelanggan')->id(),
+                    'no_meja' => $mejaId,
+                    'nama_pemesan' => $request->nama_pemesan,
+                    'jumlah_tamu' => $request->jumlah_tamu,
+                    'no_handphone' => $request->no_handphone,
+                    'catatan' => $request->catatan,
+                    'jadwal' => $jadwalPemesanan,
+                    'kode_transaksi' => $kodeTransaksi,
+                    'status' => 'menunggu',
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Reservasi berhasil!',
+                'redirect' => route('payment', ['kode' => $kodeTransaksi])
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function payment($kode)

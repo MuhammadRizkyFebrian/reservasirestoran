@@ -310,15 +310,57 @@
         // Event listener untuk form reservasi
         if (reservationForm) {
             reservationForm.addEventListener('submit', function(e) {
-                const guestCount = document.getElementById('guestCount');
-                const totalCapacity = Array.from(selectedTables.values())
-                    .reduce((sum, table) => sum + table.capacity, 0);
+                e.preventDefault();
 
-                if (parseInt(guestCount.value) > totalCapacity) {
-                    e.preventDefault();
-                    showAlert('Peringatan', `Jumlah tamu melebihi kapasitas meja (maksimal ${totalCapacity} orang)`);
+                // Validasi waktu pemesanan minimal 10 menit sebelum jadwal
+                const selectedDate = dateInput.value;
+                const selectedTime = timeInput.value;
+                const jadwalPemesanan = new Date(selectedDate + 'T' + selectedTime);
+                const waktuSekarang = new Date();
+                const selisihMenit = (jadwalPemesanan - waktuSekarang) / 1000 / 60;
+
+                if (selisihMenit < 10) {
+                    showAlert('Peringatan', 'Pemesanan harus dilakukan minimal 10 menit sebelum jadwal yang dipilih.');
                     return;
                 }
+
+                // Validasi meja yang dipilih
+                if (selectedTables.size === 0) {
+                    showAlert('Peringatan', 'Silakan pilih minimal satu meja.');
+                    return;
+                }
+
+                // Lanjutkan dengan pengiriman form
+                const formData = new FormData();
+                formData.append('nama_pemesan', document.getElementById('customerName').value);
+                formData.append('no_handphone', document.getElementById('phoneNumber').value);
+                formData.append('tanggal', selectedDate);
+                formData.append('jam', selectedTime);
+                formData.append('jumlah_tamu', document.getElementById('guestCount').value);
+                formData.append('_token', '{{ csrf_token() }}');
+
+                // Tambahkan meja yang dipilih
+                selectedTables.forEach((data, tableNo) => {
+                    formData.append('no_meja[]', tableNo);
+                });
+
+                // Kirim form
+                fetch('{{ route("reservation.store") }}', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = data.redirect;
+                        } else {
+                            showAlert('Error', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        showAlert('Error', 'Terjadi kesalahan saat memproses reservasi.');
+                        console.error('Error:', error);
+                    });
             });
         }
 

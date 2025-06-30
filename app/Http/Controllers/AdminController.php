@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Pembayaran;
 use App\Models\Pesanan;
 use App\Models\Resi;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -530,10 +531,19 @@ class AdminController extends Controller
     public function getTableSchedule($no_meja)
     {
         try {
+            $now = Carbon::now();
+
             // Cek apakah ada jadwal untuk meja ini
             $jadwal = Pesanan::where('no_meja', $no_meja)
                 ->whereIn('status', ['menunggu', 'dikonfirmasi'])
-                ->where('jadwal', '>=', now())
+                ->where(function ($query) use ($now) {
+                    $query->where('jadwal', '>=', $now)
+                        ->orWhere(function ($q) use ($now) {
+                            // Tampilkan jadwal yang belum lewat 1 jam
+                            $q->where('jadwal', '<', $now)
+                                ->where('jadwal', '>=', $now->copy()->subHour());
+                        });
+                })
                 ->select('kode_transaksi', 'nama_pemesan', 'jadwal', 'status')
                 ->orderBy('jadwal', 'asc')
                 ->get()
@@ -541,13 +551,13 @@ class AdminController extends Controller
                     return [
                         'kode_transaksi' => $pesanan->kode_transaksi,
                         'nama_pemesan' => $pesanan->nama_pemesan,
-                        'tanggal' => \Carbon\Carbon::parse($pesanan->jadwal)->translatedFormat('d M Y'),
-                        'waktu' => \Carbon\Carbon::parse($pesanan->jadwal)->format('H:i'),
+                        'tanggal' => Carbon::parse($pesanan->jadwal)->translatedFormat('d M Y'),
+                        'waktu' => Carbon::parse($pesanan->jadwal)->format('H:i'),
                         'status' => $pesanan->status
                     ];
                 });
 
-            // Update status meja menjadi tersedia jika tidak ada jadwal
+            // Update status meja menjadi tersedia jika tidak ada jadwal aktif
             if ($jadwal->isEmpty()) {
                 $meja = Meja::find($no_meja);
                 if ($meja) {

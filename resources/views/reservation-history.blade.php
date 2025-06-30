@@ -134,10 +134,10 @@
                         </label>
                         <select class="select select-bordered w-full" id="statusFilter">
                             <option value="all">Semua Status</option>
-                            <option value="completed">Selesai</option>
-                            <option value="scheduled">Terjadwal</option>
-                            <option value="pending">Menunggu Konfirmasi</option>
-                            <option value="cancelled">Dibatalkan</option>
+                            <option value="selesai">Selesai</option>
+                            <option value="dikonfirmasi">Dikonfirmasi</option>
+                            <option value="menunggu">Menunggu</option>
+                            <option value="dibatalkan">Dibatalkan</option>
                         </select>
                     </div>
 
@@ -501,6 +501,7 @@
         const dateFilter = document.getElementById('dateFilter');
         const filterButton = document.getElementById('filterButton');
         const receiptModal = document.getElementById('receipt-modal');
+        const reservationsList = document.getElementById('reservationsList');
 
         // Handle cancel buttons
         document.querySelectorAll('[data-reservation]').forEach(button => {
@@ -512,11 +513,18 @@
 
         // Apply filters
         filterButton.addEventListener('click', function() {
-            const statusValue = statusFilter.value;
+            const statusValue = statusFilter.value.toLowerCase();
             const dateValue = dateFilter.value;
+            let hasVisibleCards = false;
+
+            // Hapus pesan "tidak ada hasil" jika ada
+            const existingMessage = document.getElementById('no-results-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
 
             reservationCards.forEach(card => {
-                const cardStatus = card.getAttribute('data-status');
+                const cardStatus = card.getAttribute('data-status').toLowerCase();
                 const cardDate = card.getAttribute('data-date');
 
                 let showByStatus = statusValue === 'all' || cardStatus === statusValue;
@@ -542,13 +550,24 @@
                     }
                 }
 
-                // Show or hide the card based on filters
-                if (showByStatus && showByDate) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
+                const shouldShow = showByStatus && showByDate;
+                card.style.display = shouldShow ? 'block' : 'none';
+                if (shouldShow) {
+                    hasVisibleCards = true;
                 }
             });
+
+            // Tampilkan pesan jika tidak ada hasil yang sesuai filter
+            if (!hasVisibleCards && reservationCards.length > 0) {
+                const message = document.createElement('div');
+                message.id = 'no-results-message';
+                message.className = 'text-center text-gray-500 py-8';
+                message.innerHTML = `
+                    <i class='bx bx-search-alt text-4xl mb-4'></i>
+                    <p class="text-lg">Tidak ada reservasi yang sesuai dengan filter.</p>
+                `;
+                reservationsList.appendChild(message);
+            }
         });
     });
 

@@ -571,7 +571,7 @@
                             <td>{{ $table->kapasitas }} orang</td>
                             <td>Rp{{ number_format($table->harga, 0, ',', '.') }}</td>
                             <td>
-                                <button onclick="showSchedule({{ $table->no_meja }})"
+                                <button onclick="showSchedule('{{ $table->no_meja }}')"
                                     class="btn btn-sm {{ $table->status === 'tersedia' ? 'btn-success' : 'btn-error' }}">
                                     {{ ucfirst($table->status) }}
                                     <i class='bx bx-calendar-event ml-1'></i>
