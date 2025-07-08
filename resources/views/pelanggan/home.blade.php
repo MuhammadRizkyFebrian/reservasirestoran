@@ -30,7 +30,7 @@
             <div class="text-center text-white max-w-md">
                 <h1 class="mb-3 sm:mb-5 text-3xl sm:text-5xl font-bold">Selamat Datang</h1>
                 <p class="mb-4 sm:mb-5 text-sm sm:text-base">Rasakan pengalaman makan malam yang tak terlupakan dengan suasana misterius dan hidangan istimewa dari dapur kami.</p>
-                <a href="{{ route('reservation') }}" class="btn btn-soft btn-warning">Pesan Meja</a>
+                <a href="{{ route('reservation') }}" class="btn btn-soft btn-primary text-white">Pesan Meja</a>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
         </div>
 
         <div class="text-center mt-6 sm:mt-8">
-            <a href="{{ route('menu') }}" class="btn btn-warning btn-sm sm:btn-md">Lihat lainnya...</a>
+            <a href="{{ route('menu') }}" class="btn btn-primary btn-sm sm:btn-md text-white">Lihat lainnya...</a>
         </div>
     </div>
 </section>
@@ -102,7 +102,7 @@
                 <div class="promo-content text-white">
                     <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Happy Hour</h3>
                     <p class="mb-3 sm:mb-4 text-sm sm:text-base">Diskon 20% untuk semua minuman dari jam 4-6 sore, setiap hari Senin-Jumat.</p>
-                    <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
+                    <button class="btn btn-xs sm:btn-sm btn-primary text-white">Lihat Detail</button>
                 </div>
             </div>
 
@@ -111,7 +111,7 @@
                 <div class="promo-content text-white">
                     <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Weekend Special</h3>
                     <p class="mb-3 sm:mb-4 text-sm sm:text-base">Paket makan untuk 4 orang hanya Rp500.000, setiap Sabtu dan Minggu.</p>
-                    <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
+                    <button class="btn btn-xs sm:btn-sm btn-primary text-white">Lihat Detail</button>
                 </div>
             </div>
 
@@ -120,7 +120,7 @@
                 <div class="promo-content text-white">
                     <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Birthday Package</h3>
                     <p class="mb-3 sm:mb-4 text-sm sm:text-base">Gratis kue dan minuman spesial untuk yang berulang tahun (min. 4 orang).</p>
-                    <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
+                    <button class="btn btn-xs sm:btn-sm btn-primary text-white">Lihat Detail</button>
                 </div>
             </div>
         </div>
@@ -148,7 +148,7 @@
             @if(auth()->guard('pelanggan')->check())
             <label for="modal-ulasan" class="btn btn-warning mt-4 sm:mt-0">Tambah Ulasan</label>
             @else
-            <a href="{{ route('login') }}" class="btn btn-warning mt-4 sm:mt-0">Login untuk Menambah Ulasan</a>
+            <a href="{{ route('login') }}" class="btn btn-primary  mt-4 sm:mt-0 text-white">Login untuk Menambah Ulasan</a>
             @endif
         </div>
 
@@ -217,7 +217,7 @@
         <div class="text-center">
             <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Reservasi Sekarang</h2>
             <p class="mb-6 sm:mb-8 max-w-2xl mx-auto text-sm sm:text-base">Jangan lewatkan pengalaman bersantap yang luar biasa. Reservasi meja Anda sekarang dan nikmati hidangan spesial dari chef kami!</p>
-            <a href="{{ route('reservation') }}" class="btn btn-warning">Pesan Meja</a>
+            <a href="{{ route('reservation') }}" class="btn btn-primary text-white">Pesan Meja</a>
         </div>
     </div>
 </section>
