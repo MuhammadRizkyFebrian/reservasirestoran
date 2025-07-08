@@ -38,17 +38,17 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'pelanggan',
         ],
 
         'pelanggan' => [
             'driver' => 'session',
-            'provider' => 'pelanggans',
+            'provider' => 'pelanggan',
         ],
 
         'staf' => [
             'driver' => 'session',
-            'provider' => 'stafs',
+            'provider' => 'staf',
         ],
     ],
 
@@ -72,17 +72,17 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\Pelanggan\Pelanggan::class,
         ],
 
-        'pelanggans' => [
+        'pelanggan' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Pelanggan::class,
+            'model' => App\Models\Pelanggan\Pelanggan::class,
         ],
-        
-        'stafs' => [
+
+        'staf' => [
             'driver' => 'eloquent',
-            'model' => App\Models\StafRestoran::class,
+            'model' => App\Models\Staf_Restoran\StafRestoran::class,
         ],
     ],
 
@@ -107,7 +107,7 @@ return [
 
     'passwords' => [
         'users' => [
-            'provider' => 'users',
+            'provider' => 'pelanggan',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,

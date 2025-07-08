@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\UlasanController;
+use App\Http\Controllers\Pelanggan\HomeController;
+use App\Http\Controllers\Staf_Restoran\MenuController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Staf_Restoran\AdminController;
+use App\Http\Controllers\Pelanggan\ProfileController;
+use App\Http\Controllers\Pelanggan\ReservationController;
+use App\Http\Controllers\Pelanggan\UlasanController;
+use App\Models\Staf_Restoran\Meja;
 
 // ==========================
 // LANDING DAN MENU UMUM
@@ -25,6 +26,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/register', 'showRegisterForm')->name('register');
     Route::post('/register', 'register');
     Route::get('/forgot-password', 'showForgotPasswordForm')->name('password.request');
+    Route::post('/forgot-password', 'sendResetOtp')->name('password.email');
     Route::post('/reset-password', 'resetPassword')->name('password.update');
 });
 
@@ -43,8 +45,8 @@ Route::prefix('admin')->controller(AuthController::class)->group(function () {
 Route::middleware('auth:pelanggan')->group(function () {
     // Reservation routes
     Route::get('/reservation', function () {
-        $meja = \App\Models\Meja::all();
-        return view('reservation', compact('meja'));
+        $meja = Meja::all();
+        return view('pelanggan.reservation', compact('meja'));
     })->name('reservation');
     Route::post('/reservation', [ReservationController::class, 'store'])->name('reservation.store');
 
@@ -108,4 +110,9 @@ Route::prefix('admin')->middleware('auth:staf')->group(function () {
 
     // CRUD menu admin
     Route::resource('menus', MenuController::class)->except(['show']);
+});
+
+Route::get('/meja', function () {
+    $meja = Meja::all();
+    return response()->json($meja);
 });

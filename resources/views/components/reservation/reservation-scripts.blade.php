@@ -67,16 +67,41 @@
 
         // Enable/disable check availability button
         function updateCheckAvailabilityButton() {
-            checkAvailabilityBtn.disabled = !dateInput.value || !timeInput.value;
+            const date = dateInput.value;
+            const time = timeInput.value;
+
+            if (!date || !time) {
+                checkAvailabilityBtn.disabled = true;
+                return;
+            }
+
+            // Validasi waktu minimal 20 menit
+            const jadwalPemesanan = new Date(date + 'T' + time);
+            const waktuSekarang = new Date();
+            const selisihMenit = (jadwalPemesanan - waktuSekarang) / 1000 / 60;
+
+            checkAvailabilityBtn.disabled = selisihMenit < 20;
         }
 
         // Event listener untuk perubahan waktu
         timeInput.addEventListener('change', updateCheckAvailabilityButton);
+        // Event listener untuk perubahan tanggal
+        dateInput.addEventListener('change', updateCheckAvailabilityButton);
+
+        // Update status tombol setiap 1 menit
+        setInterval(updateCheckAvailabilityButton, 60000);
 
         // Check table availability
         checkAvailabilityBtn.addEventListener('click', async function() {
             const date = dateInput.value;
             const time = timeInput.value;
+
+            // Validasi waktu pemesanan minimal 20 menit sebelum jadwal
+            const jadwalPemesanan = new Date(date + 'T' + time);
+            const waktuSekarang = new Date();
+            const selisihMenit = (jadwalPemesanan - waktuSekarang) / 1000 / 60;
+
+            if (selisihMenit < 20) return;
 
             try {
                 const response = await fetch(`/api/check-table-availability?date=${date}&time=${time}`);
@@ -312,17 +337,14 @@
             reservationForm.addEventListener('submit', function(e) {
                 e.preventDefault();
 
-                // Validasi waktu pemesanan minimal 10 menit sebelum jadwal
+                // Validasi waktu pemesanan minimal 20 menit sebelum jadwal
                 const selectedDate = dateInput.value;
                 const selectedTime = timeInput.value;
                 const jadwalPemesanan = new Date(selectedDate + 'T' + selectedTime);
                 const waktuSekarang = new Date();
                 const selisihMenit = (jadwalPemesanan - waktuSekarang) / 1000 / 60;
 
-                if (selisihMenit < 10) {
-                    showAlert('Peringatan', 'Pemesanan harus dilakukan minimal 10 menit sebelum jadwal yang dipilih.');
-                    return;
-                }
+                if (selisihMenit < 20) return;
 
                 // Validasi meja yang dipilih
                 if (selectedTables.size === 0) {

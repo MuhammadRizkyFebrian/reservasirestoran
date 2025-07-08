@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Pesanan;
-use App\Models\Pembayaran;
+use App\Models\Pelanggan\Pemesanan;
+use App\Models\Pelanggan\Pembayaran;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -19,7 +19,7 @@ class UpdateReservationStatus extends Command
         $this->info('Menjalankan update status reservasi...');
 
         // Ambil semua pesanan dengan status 'dikonfirmasi' yang jadwalnya sudah lewat 1 jam
-        $pesananSelesai = Pesanan::where('status', 'dikonfirmasi')
+        $pesananSelesai = Pemesanan::where('status', 'dikonfirmasi')
             ->where('jadwal', '<', $now->copy()->subHour())
             ->get();
 
@@ -28,7 +28,7 @@ class UpdateReservationStatus extends Command
 
             // Tampilkan ringkasan data pesanan terbaru
             $this->info("\nRingkasan 5 Reservasi Terakhir:");
-            $samplePesanan = Pesanan::select('id_pemesanan', 'jadwal', 'status')
+            $samplePesanan = Pemesanan::select('id_pemesanan', 'jadwal', 'status')
                 ->orderBy('jadwal', 'desc')
                 ->limit(5)
                 ->get();

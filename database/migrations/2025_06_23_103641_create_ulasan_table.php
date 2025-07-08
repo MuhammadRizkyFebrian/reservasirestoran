@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_pelanggan');
             $table->longText('comments')->nullable();
             $table->integer('star_rating');
-            $table->enum('status', ['active','deactive'])->default('active');
+            $table->enum('status', ['active', 'deactive'])->default('active');
             $table->timestamps();
 
             // Foreign key ke tabel pemesanan

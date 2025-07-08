@@ -43,7 +43,7 @@
                     <ul class="space-y-1">
                         <li class="text-sm sm:text-base flex items-center">
                             <i class='bx bx-time-five mr-2 text-lg'></i>
-                            <span>Setiap Hari: 11:00 - 22:00</span>
+                            <span>Setiap Hari: 11:00 - 21:00</span>
                         </li>
                     </ul>
                 </div>
