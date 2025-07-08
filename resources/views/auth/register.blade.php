@@ -88,7 +88,7 @@
 
     <!-- Submit -->
     <div class="mt-4">
-        <button type="submit" class="btn btn-primary w-full">
+        <button type="submit" class="btn btn-primary w-full text-white">
             <i class='bx bx-user-plus mr-2'></i> Daftar
         </button>
     </div>

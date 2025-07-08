@@ -22,7 +22,7 @@
             Daftar Menu
         </h2>
         <!-- Trigger Modal -->
-        <label for="modalTambah" class="btn btn-primary">
+        <label for="modalTambah" class="btn btn-primary text-white">
             <i class='bx bx-plus mr-1'></i>
             Tambah Menu
         </label>
@@ -58,7 +58,7 @@
                 <option value="makanan">Makanan</option>
                 <option value="minuman">Minuman</option>
             </select>
-            <button type="button" class="btn btn-primary" onclick="filterTable()">
+            <button type="button" class="btn btn-primary text-white" onclick="filterTable()">
                 <i class='bx bx-search'></i>
                 Cari
             </button>
@@ -113,7 +113,7 @@
                     <td>Rp {{ number_format($menu->harga, 0, ',', '.') }}</td>
                     <td>
                         <div class="action-buttons">
-                            <button type="button" data-menu-id="{{ $menu->id_menu }}" class="btn btn-sm btn-primary action-edit-btn">
+                            <button type="button" data-menu-id="{{ $menu->id_menu }}" class="btn btn-sm btn-primary action-edit-btn text-white">
                                 <i class='bx bx-edit-alt'></i>
                                 <span class="hidden sm:inline ml-1">Edit</span>
                             </button>
@@ -171,7 +171,7 @@
 
                             <div class="modal-action mt-4 flex justify-between">
                                 <button type="button" class="btn" onclick="document.getElementById('modal-edit-{{ $menu->id_menu }}').close()">Batal</button>
-                                <button type="submit" class="btn btn-primary">Update</button>
+                                <button type="submit" class="btn btn-primary text-white">Update</button>
                             </div>
                         </form>
                     </div>
@@ -264,7 +264,7 @@
 
             <div class="modal-action">
                 <button type="button" class="btn" onclick="document.getElementById('modalTambah').close()">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary text-white">Simpan</button>
             </div>
         </form>
     </div>

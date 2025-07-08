@@ -125,7 +125,7 @@ font-size: 0.85rem;
                 <option value="selesai">Selesai</option>
                 <option value="dibatalkan">Dibatalkan</option>
             </select>
-            <button class="btn btn-primary" onclick="filterTable()">
+            <button class="btn btn-primary text-white" onclick="filterTable()">
                 <i class='bx bx-search mr-1'></i>
                 <span>Cari</span>
             </button>

@@ -92,7 +92,7 @@
                     </ul>
                 </div>
                 @else
-                <a href="{{ route('login') }}" class="btn btn-primary btn-sm h-9 flex items-center justify-center">
+                <a href="{{ route('login') }}" class="btn btn-primary btn-sm h-9 flex items-center justify-center text-white">
                     <i class='bx bx-log-in mr-1'></i>
                     Masuk
                 </a>

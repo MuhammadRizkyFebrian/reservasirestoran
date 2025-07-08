@@ -65,7 +65,7 @@
 
     <!-- Login Button -->
     <div class="mt-4">
-        <button type="submit" class="btn btn-primary w-full">
+        <button type="submit" class="btn btn-primary w-full text-white">
             <i class='bx bx-log-in mr-2 text-lg'></i> Masuk
         </button>
     </div>

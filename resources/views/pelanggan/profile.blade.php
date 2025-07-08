@@ -70,7 +70,7 @@ align-items: center;
 
 .nav-item:hover, .nav-item.active {
 background-color: var(--fallback-primary,oklch(var(--p)));
-color: var(--fallback-primary-content,oklch(var(--pc)));
+color: white;
 }
 
 .nav-item i {
@@ -224,7 +224,7 @@ margin-bottom: 2rem;
 
                     <div class="flex justify-end gap-2 pt-2">
                         <button type="button" id="cancelEditBtn" class="btn btn-ghost btn-sm">Batal</button>
-                        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                        <button type="submit" class="btn btn-primary btn-sm text-white">Simpan</button>
                     </div>
                 </form>
             </div>
