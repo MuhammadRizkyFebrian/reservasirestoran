@@ -108,7 +108,7 @@
             </div>
 
             <div class="mt-4">
-                <button id="checkAvailabilityBtn" class="btn btn-primary" disabled>
+                <button id="checkAvailabilityBtn" class="btn btn-primary text-white" disabled>
                     Cek Ketersediaan Meja
                 </button>
             </div>

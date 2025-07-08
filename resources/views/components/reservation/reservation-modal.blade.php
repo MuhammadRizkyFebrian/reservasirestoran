@@ -103,7 +103,7 @@
             </div>
 
             <div class="form-control">
-                <button type="submit" class="btn btn-secondary" id="modalLanjutkanReservasiBtn">Lanjutkan Reservasi</button>
+                <button type="submit" class="btn btn-primary text-white" id="modalLanjutkanReservasiBtn">Lanjutkan Reservasi</button>
             </div>
         </form>
     </div>

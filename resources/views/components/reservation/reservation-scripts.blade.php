@@ -163,7 +163,7 @@
                                 <span class="text-sm font-semibold">Total Pembayaran:</span>
                                 <span id="totalPrice" class="text-sm">Rp 0</span>
                             </div>
-                            <button id="openReservationModalBtn" class="btn btn-primary" disabled>
+                            <button id="openReservationModalBtn" class="btn btn-primary text-white " disabled>
                                 Lanjutkan Reservasi
                             </button>
                         </div>
