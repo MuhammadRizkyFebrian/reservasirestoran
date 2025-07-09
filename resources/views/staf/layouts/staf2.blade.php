@@ -74,7 +74,7 @@
 
         .menu-item.active {
             background-color: var(--fallback-primary, oklch(var(--p)));
-            color: white;
+            color: var(--fallback-primary-content, oklch(var(--pc)));
             font-weight: 500;
         }
 

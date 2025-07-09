@@ -30,7 +30,7 @@
             <div class="text-center text-white max-w-md">
                 <h1 class="mb-3 sm:mb-5 text-3xl sm:text-5xl font-bold">Selamat Datang</h1>
                 <p class="mb-4 sm:mb-5 text-sm sm:text-base">Rasakan pengalaman makan malam yang tak terlupakan dengan suasana misterius dan hidangan istimewa dari dapur kami.</p>
-                <a href="{{ route('reservation') }}" class="btn btn-soft btn-primary text-white">Pesan Meja</a>
+                <a href="{{ route('reservation') }}" class="btn btn-soft btn-warning">Pesan Meja</a>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
         </div>
 
         <div class="text-center mt-6 sm:mt-8">
-            <a href="{{ route('menu') }}" class="btn btn-primary btn-sm sm:btn-md text-white">Lihat lainnya...</a>
+            <a href="{{ route('menu') }}" class="btn btn-warning btn-sm sm:btn-md">Lihat lainnya...</a>
         </div>
     </div>
 </section>
@@ -102,7 +102,7 @@
                 <div class="promo-content text-white">
                     <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Happy Hour</h3>
                     <p class="mb-3 sm:mb-4 text-sm sm:text-base">Diskon 20% untuk semua minuman dari jam 4-6 sore, setiap hari Senin-Jumat.</p>
-                    <button class="btn btn-xs sm:btn-sm btn-primary text-white">Lihat Detail</button>
+                    <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
                 </div>
             </div>
 
@@ -111,7 +111,7 @@
                 <div class="promo-content text-white">
                     <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Weekend Special</h3>
                     <p class="mb-3 sm:mb-4 text-sm sm:text-base">Paket makan untuk 4 orang hanya Rp500.000, setiap Sabtu dan Minggu.</p>
-                    <button class="btn btn-xs sm:btn-sm btn-primary text-white">Lihat Detail</button>
+                    <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
                 </div>
             </div>
 
@@ -120,7 +120,7 @@
                 <div class="promo-content text-white">
                     <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Birthday Package</h3>
                     <p class="mb-3 sm:mb-4 text-sm sm:text-base">Gratis kue dan minuman spesial untuk yang berulang tahun (min. 4 orang).</p>
-                    <button class="btn btn-xs sm:btn-sm btn-primary text-white">Lihat Detail</button>
+                    <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
                 </div>
             </div>
         </div>
@@ -148,7 +148,7 @@
             @if(auth()->guard('pelanggan')->check())
             <label for="modal-ulasan" class="btn btn-warning mt-4 sm:mt-0">Tambah Ulasan</label>
             @else
-            <a href="{{ route('login') }}" class="btn btn-primary  mt-4 sm:mt-0 text-white">Login untuk Menambah Ulasan</a>
+            <a href="{{ route('login') }}" class="btn btn-warning mt-4 sm:mt-0">Login untuk Menambah Ulasan</a>
             @endif
         </div>
 
@@ -182,7 +182,7 @@
                             @endif
                             @endfor
                     </div>
-                    <p class="text-sm sm:text-base mb-4">"{{ $review->comments }}"</p>
+                    <p class="text-sm sm:text-base mb-4 break-words line-clamp-3">"{{ $review->comments }}"</p>
 
                     @if(auth()->guard('pelanggan')->check() && $review->id_pelanggan == auth()->guard('pelanggan')->user()->id_pelanggan)
                     <div class="flex gap-2">
@@ -217,7 +217,7 @@
         <div class="text-center">
             <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Reservasi Sekarang</h2>
             <p class="mb-6 sm:mb-8 max-w-2xl mx-auto text-sm sm:text-base">Jangan lewatkan pengalaman bersantap yang luar biasa. Reservasi meja Anda sekarang dan nikmati hidangan spesial dari chef kami!</p>
-            <a href="{{ route('reservation') }}" class="btn btn-primary text-white">Pesan Meja</a>
+            <a href="{{ route('reservation') }}" class="btn btn-warning">Pesan Meja</a>
         </div>
     </div>
 </section>
@@ -260,8 +260,14 @@
             </div>
 
             <div class="form-control mb-4">
-                <label class="label"><span class="label-text">Ulasan</span></label>
-                <textarea name="comments" id="reviewText" class="textarea textarea-bordered h-24" required></textarea>
+                <label class="label">
+                    <span class="label-text">Komentar</span>
+                </label>
+                <textarea name="comments" id="comments" class="textarea textarea-bordered h-24" placeholder="Tulis ulasan Anda di sini..." maxlength="100" required></textarea>
+                <label class="label">
+                    <span class="label-text-alt text-base-content/70">Maksimal 100 karakter</span>
+                    <span class="label-text-alt text-base-content/70"><span id="charCount">0</span>/100</span>
+                </label>
             </div>
 
             <div class="modal-action">
@@ -293,7 +299,11 @@
 
             <div class="mb-3">
                 <label for="edit_comments" class="label">Komentar</label>
-                <textarea id="edit_comments" name="comments" class="textarea textarea-bordered w-full" required></textarea>
+                <textarea id="edit_comments" name="comments" class="textarea textarea-bordered w-full" maxlength="100" required></textarea>
+                <label class="label">
+                    <span class="label-text-alt text-base-content/70">Maksimal 100 karakter</span>
+                    <span class="label-text-alt text-base-content/70"><span id="editCharCount">0</span>/100</span>
+                </label>
             </div>
 
             <div class="mb-3">
@@ -371,6 +381,30 @@
         });
     });
 
+    // Karakter counter untuk textarea
+    document.getElementById('comments').addEventListener('input', function() {
+        const maxLength = 100;
+        const currentLength = this.value.length;
+        document.getElementById('charCount').textContent = currentLength;
+
+        if (currentLength > maxLength) {
+            this.value = this.value.substring(0, maxLength);
+            document.getElementById('charCount').textContent = maxLength;
+        }
+    });
+
+    // Karakter counter untuk form edit
+    document.getElementById('edit_comments').addEventListener('input', function() {
+        const maxLength = 100;
+        const currentLength = this.value.length;
+        document.getElementById('editCharCount').textContent = currentLength;
+
+        if (currentLength > maxLength) {
+            this.value = this.value.substring(0, maxLength);
+            document.getElementById('editCharCount').textContent = maxLength;
+        }
+    });
+
     // Event listener untuk tombol edit
     document.querySelectorAll('.edit-ulasan-btn').forEach(function(button) {
         button.addEventListener('click', function() {
@@ -387,6 +421,8 @@
         document.getElementById('edit_comments').value = comments;
         document.getElementById('edit_rating').value = rating;
         document.getElementById('modal-edit-ulasan').checked = true;
+        // Update karakter counter saat modal edit dibuka
+        document.getElementById('editCharCount').textContent = comments.length;
     }
 </script>
 

@@ -125,7 +125,7 @@ font-size: 0.85rem;
                 <option value="selesai">Selesai</option>
                 <option value="dibatalkan">Dibatalkan</option>
             </select>
-            <button class="btn btn-primary text-white" onclick="filterTable()">
+            <button class="btn btn-primary" onclick="filterTable()">
                 <i class='bx bx-search mr-1'></i>
                 <span>Cari</span>
             </button>
@@ -171,16 +171,6 @@ font-size: 0.85rem;
                             <button onclick="showDetail('{{ $p->kode_transaksi }}')" class="btn btn-sm btn-info">
                                 <i class='bx bx-info-circle'></i>
                             </button>
-                            @if($p->status == 'menunggu' && $p->pembayaran && $p->pembayaran->bukti_pembayaran)
-                            <button onclick="showConfirmation('{{ $p->kode_transaksi }}')" class="btn btn-sm btn-success ml-2">
-                                <i class='bx bx-check'></i>
-                            </button>
-                            @endif
-                            @if($p->status == 'menunggu')
-                            <button onclick="showCancellation('{{ $p->kode_transaksi }}')" class="btn btn-sm btn-error ml-2">
-                                <i class='bx bx-x'></i>
-                            </button>
-                            @endif
                         </div>
                     </td>
                 </tr>
@@ -276,6 +266,7 @@ font-size: 0.85rem;
             </div>
         </div>
         <div class="modal-action">
+            <div id="detail-actions"></div>
             <button class="btn" onclick="document.getElementById('detail-modal').close()">Tutup</button>
         </div>
     </div>
@@ -382,6 +373,26 @@ document.getElementById('detail-bukti-text').textContent = 'Gambar tidak dapat d
 document.getElementById('detail-bukti-text').style.display = 'block';
 document.getElementById('detail-bukti').style.display = 'none';
 document.getElementById('detail-bukti-text').textContent = 'Belum ada bukti pembayaran';
+}
+
+// Update action buttons
+const actionsContainer = document.getElementById('detail-actions');
+actionsContainer.innerHTML = '';
+
+if (data.data.status_pemesanan.toLowerCase() === 'menunggu') {
+if (data.data.bukti_pembayaran) {
+const confirmBtn = document.createElement('button');
+confirmBtn.className = 'btn btn-success mr-2';
+confirmBtn.innerHTML = '<i class="bx bx-check mr-2"></i>Konfirmasi';
+confirmBtn.onclick = () => showConfirmation(kodeTransaksi);
+actionsContainer.appendChild(confirmBtn);
+}
+
+const cancelBtn = document.createElement('button');
+cancelBtn.className = 'btn btn-error mr-2';
+cancelBtn.innerHTML = '<i class="bx bx-x mr-2"></i>Batalkan';
+cancelBtn.onclick = () => showCancellation(kodeTransaksi);
+actionsContainer.appendChild(cancelBtn);
 }
 } else {
 alert('Gagal mengambil detail pemesanan');

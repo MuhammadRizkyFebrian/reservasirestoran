@@ -122,7 +122,7 @@ width: 100%;
                 <option value="dikonfirmasi">Dikonfirmasi</option>
                 <option value="selesai">Selesai</option>
             </select>
-            <button class="btn btn-primary text-white" onclick="filterTable()">
+            <button class="btn btn-primary" onclick="filterTable()">
                 <i class='bx bx-search mr-1'></i>
                 <span>Cari</span>
             </button>
