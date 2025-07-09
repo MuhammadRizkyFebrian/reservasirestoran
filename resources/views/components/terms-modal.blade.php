@@ -20,7 +20,7 @@
         </div>
         <div class="modal-action">
             <form method="dialog">
-                <button class="btn btn-secondary">Tutup</button>
+                <button class="btn btn-primary text-white">Tutup</button>
             </form>
         </div>
     </div>

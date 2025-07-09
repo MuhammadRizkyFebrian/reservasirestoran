@@ -210,7 +210,7 @@ $first = $pemesanan->first();
                         <span>Kembali</span>
                     </a>
 
-                    <button class="btn btn-secondary btn-sm" id="btnConfirmPayment">
+                    <button class="btn btn-primary text-white btn-sm" id="btnConfirmPayment">
                         <i class='bx bx-check'></i>
                         <span>Konfirmasi Pembayaran</span>
                     </button>
@@ -257,7 +257,7 @@ $first = $pemesanan->first();
 
             <div class="modal-action">
                 <button type="button" class="btn btn-ghost" onclick="confirmPaymentModal.close()">Batal</button>
-                <button type="submit" class="btn btn-secondary">Kirim Konfirmasi</button>
+                <button type="submit" class="btn btn-primary text-white">Kirim Konfirmasi</button>
             </div>
         </form>
     </div>
