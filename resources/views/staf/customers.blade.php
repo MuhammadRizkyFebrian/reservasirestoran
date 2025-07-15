@@ -83,7 +83,7 @@ font-size: 0.85rem;
     <!-- Search & Filter Form -->
     <div class="search-form">
         <input type="text" placeholder="Cari pelanggan..." class="input input-bordered" id="searchInput">
-        <button class="btn btn-primary">
+        <button class="btn btn-primary text-white">
             <i class='bx bx-search mr-1'></i>
             <span>Cari</span>
         </button>
@@ -110,7 +110,7 @@ font-size: 0.85rem;
                     <td>{{ $customer->nomor_handphone }}</td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn btn-sm btn-primary action-edit-btn"
+                            <button class="btn btn-sm btn-primary text-white action-edit-btn"
                                 onclick="openEditModal('{{ $customer->id_pelanggan }}', '{{ $customer->email }}', '{{ $customer->username }}', '{{ $customer->nomor_handphone }}')">
                                 <i class='bx bx-edit-alt'></i>
                                 <span class="hidden sm:inline ml-1">Edit</span>
@@ -200,7 +200,7 @@ font-size: 0.85rem;
 
             <div class="modal-action">
                 <button type="button" class="btn btn-outline" onclick="closeEditModal()">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                <button type="submit" class="btn btn-primary text-white">Simpan Perubahan</button>
             </div>
         </form>
     </div>

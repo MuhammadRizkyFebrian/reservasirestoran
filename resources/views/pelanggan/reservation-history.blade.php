@@ -55,6 +55,7 @@
     .nav-item.active {
         background-color: var(--fallback-primary, oklch(var(--p)));
         color: var(--fallback-primary-content, oklch(var(--pc)));
+        color: white;
     }
 
     .nav-item i {

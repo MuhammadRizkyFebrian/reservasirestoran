@@ -87,7 +87,7 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             <i class='bx bx-table mr-2 text-primary'></i>
             Daftar Meja
         </h2>
-        <button class="btn btn-primary add-table-btn" onclick="openAddModal()">
+        <button class="btn btn-primary add-table-btn text-white" onclick="openAddModal()">
             <i class='bx bx-plus mr-1'></i>
             <span>Tambah Meja</span>
         </button>
@@ -102,7 +102,7 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 <option value="tersedia">Tersedia</option>
                 <option value="dipesan">Dipesan</option>
             </select>
-            <button type="button" class="btn btn-primary" onclick="filterTable()">
+            <button type="button" class="btn btn-primary text-white" onclick="filterTable()">
                 <i class='bx bx-search'></i>
                 Cari
             </button>
@@ -138,7 +138,7 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('{{ $table->no_meja }}', '{{ $table->tipe_meja }}', '{{ $table->harga }}', '{{ $table->status }}', '{{ $table->kapasitas }}')">
+                            <button class="btn btn-sm btn-primary action-edit-btn text-white" onclick="openEditModal('{{ $table->no_meja }}', '{{ $table->tipe_meja }}', '{{ $table->harga }}', '{{ $table->status }}', '{{ $table->kapasitas }}')">
                                 <i class='bx bx-edit-alt'></i>
                                 <span class="hidden sm:inline ml-1">Edit</span>
                             </button>
@@ -248,7 +248,7 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
             <div class="modal-action">
                 <button type="button" class="btn btn-outline" onclick="closeEditModal()">Batal</button>
-                <button type="submit" class="btn btn-primary" id="saveButton">Simpan</button>
+                <button type="submit" class="btn btn-primary text-white" id="saveButton">Simpan</button>
             </div>
         </form>
     </div>
