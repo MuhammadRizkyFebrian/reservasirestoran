@@ -479,7 +479,7 @@
                         </label>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-sm w-full">
+                    <button type="submit" class="btn btn-primary text-white btn-sm w-full">
                         <i class='bx bx-upload'></i>
                         Upload Bukti Pembayaran
                     </button>
