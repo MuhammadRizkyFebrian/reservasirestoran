@@ -19,7 +19,7 @@ class AuthController extends Controller
     // Admin Authentication
     public function showAdminLoginForm()
     {
-        return view('admin.login');
+        return view('staf.login');
     }
 
     public function adminLogin(Request $request)
