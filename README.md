@@ -77,4 +77,5 @@ DB_PASSWORD=
 ## Jalankan Web
 ```bash
   php artisan serve
-<h4 align="center">Copyright © 2025 seatify</h4>
+
+<p align="center"><sub>Copyright © 2025 Seatify – All rights reserved.</sub></p>
