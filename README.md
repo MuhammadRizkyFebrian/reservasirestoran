@@ -154,7 +154,7 @@ php artisan key:generate
 2. Pilih "Security"
 3. Aktifkan "2-Step Verification"
 4. Kembali ke Security, pilih "App passwords"
-5. Generate App Password untuk aplikasi "Mail"
+5. Generate App Password untuk aplikasi baru misalnya "Laravel"
 6. Salin password yang digenerate ke MAIL_PASSWORD di .env
 
 ## Jalankan Web
