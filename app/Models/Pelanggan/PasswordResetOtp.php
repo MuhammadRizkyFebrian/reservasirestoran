@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class PasswordResetOtp extends Model
 {
-    protected $table = 'password_reset_otps';
+    protected $table = 'otp';
     protected $primaryKey = 'email';
     public $incrementing = false;
     protected $keyType = 'string';
+    public $timestamps = false;
 
     protected $fillable = [
         'email',
-        'otp',
+        'kode_otp',
         'expires_at'
     ];
 

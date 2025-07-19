@@ -1,6 +1,6 @@
 @extends('auth.layouts.auth')
 
-@section('title', 'Register')
+@section('title', 'Daftar')
 @section('page_title', 'Daftar Akun')
 @section('page_description', 'Silakan isi form untuk membuat akun baru')
 
@@ -24,14 +24,14 @@
         @enderror
     </div>
 
-    <!-- Username -->
+    <!-- Nama Pengguna -->
     <div class="form-control">
         <label for="username" class="label py-1">
-            <span class="label-text">Username</span>
+            <span class="label-text">Nama Pengguna</span>
         </label>
         <label class="input input-bordered flex items-center gap-2 @error('username') input-error @enderror">
             <i class='bx bx-user text-xl'></i>
-            <input type="text" id="username" name="username" value="{{ old('username') }}" class="grow" placeholder="Username" required>
+            <input type="text" id="username" name="username" value="{{ old('username') }}" class="grow" placeholder="Nama Pengguna" required>
         </label>
         @error('username')
         <label class="label py-0">
@@ -40,14 +40,14 @@
         @enderror
     </div>
 
-    <!-- Password -->
+    <!-- Kata Sandi -->
     <div class="form-control">
         <label for="password" class="label py-1">
-            <span class="label-text">Password</span>
+            <span class="label-text">Kata Sandi</span>
         </label>
         <label class="input input-bordered flex items-center gap-2 @error('password') input-error @enderror relative">
             <i class='bx bx-lock-alt text-xl'></i>
-            <input type="password" id="password" name="password" class="grow" placeholder="Password" required>
+            <input type="password" id="password" name="password" class="grow" placeholder="Kata Sandi" required>
             <button type="button" onclick="togglePassword()" class="absolute right-3">
                 <i id="eye-icon" class='bx bx-hide text-xl'></i>
             </button>
@@ -59,14 +59,14 @@
         @enderror
     </div>
 
-    <!-- Password Confirmation -->
+    <!-- Konfirmasi Kata Sandi -->
     <div class="form-control">
         <label for="password_confirmation" class="label py-1">
-            <span class="label-text">Konfirmasi Password</span>
+            <span class="label-text">Konfirmasi Kata Sandi</span>
         </label>
         <label class="input input-bordered flex items-center gap-2">
             <i class='bx bx-lock text-xl'></i>
-            <input type="password" id="password_confirmation" name="password_confirmation" class="grow" placeholder="Konfirmasi Password" required>
+            <input type="password" id="password_confirmation" name="password_confirmation" class="grow" placeholder="Konfirmasi Kata Sandi" required>
         </label>
     </div>
 

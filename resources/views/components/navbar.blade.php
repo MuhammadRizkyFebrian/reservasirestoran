@@ -39,7 +39,7 @@
             <!-- Controls -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <!-- Theme Switcher -->
-                <div class="dropdown dropdown-end">
+                <div class="dropdown dropdown-end hidden">
                     <div tabindex="0" class="w-9 h-9 flex items-center justify-center cursor-pointer rounded-full hover:bg-base-200">
                         <i class='bx bx-palette text-lg'></i>
                     </div>

@@ -11,13 +11,13 @@
     <!-- Username Input -->
     <div class="form-control">
         <label for="username" class="label py-1">
-            <span class="label-text">Username</span>
+            <span class="label-text">Nama Pengguna</span>
         </label>
         <label class="input input-bordered flex items-center gap-2 @error('username') input-error @enderror">
             <i class='bx bx-user text-xl text-base-content/70'></i>
             <input type="text" id="username" name="username" value="{{ old('username') }}"
                 class="grow"
-                placeholder="Username" required>
+                placeholder="Nama Pengguna" required>
         </label>
         @error('username')
         <label class="label py-0">
@@ -29,13 +29,13 @@
     <!-- Password Input -->
     <div class="form-control">
         <label for="password" class="label py-1">
-            <span class="label-text">Password</span>
+            <span class="label-text">Kata Sandi</span>
         </label>
         <label class="input input-bordered flex items-center gap-2 @error('password') input-error @enderror relative">
             <i class='bx bx-lock-alt text-xl text-base-content/70'></i>
             <input type="password" id="password" name="password"
                 class="grow"
-                placeholder="Password" required>
+                placeholder="Kata Sandi" required>
             <button type="button" onclick="togglePassword()" class="absolute right-3">
                 <i id="eye-icon" class='bx bx-hide text-xl text-base-content/70'></i>
             </button>
@@ -58,7 +58,7 @@
 
         <div class="text-sm">
             <a href="{{ route('password.request') }}" class="link link-hover link-primary">
-                Lupa password?
+                Lupa kata sandi?
             </a>
         </div>
     </div>

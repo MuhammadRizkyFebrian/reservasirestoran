@@ -87,7 +87,7 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             <i class='bx bx-table mr-2 text-primary'></i>
             Daftar Meja
         </h2>
-        <button class="btn btn-primary add-table-btn" onclick="openAddModal()">
+        <button class="btn btn-primary add-table-btn text-white" onclick="openAddModal()">
             <i class='bx bx-plus mr-1'></i>
             <span>Tambah Meja</span>
         </button>
@@ -102,7 +102,7 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 <option value="tersedia">Tersedia</option>
                 <option value="dipesan">Dipesan</option>
             </select>
-            <button type="button" class="btn btn-primary" onclick="filterTable()">
+            <button type="button" class="btn btn-primary text-white" onclick="filterTable()">
                 <i class='bx bx-search'></i>
                 Cari
             </button>
@@ -248,7 +248,7 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
             <div class="modal-action">
                 <button type="button" class="btn btn-outline" onclick="closeEditModal()">Batal</button>
-                <button type="submit" class="btn btn-primary" id="saveButton">Simpan</button>
+                <button type="submit" class="btn btn-primary text-white" id="saveButton">Simpan</button>
             </div>
         </form>
     </div>
@@ -383,7 +383,7 @@ function deleteTable() {
 const tableNumber = window.tableToDelete;
 console.log('Deleting table:', tableNumber);
 
-fetch('{{ route("admin.tables.delete") }}', {
+fetch('{{ route("staf.tables.delete") }}', {
 method: 'POST',
 headers: {
 'Content-Type': 'application/json',
@@ -443,7 +443,7 @@ newRow.innerHTML = `
 <td>${tableData.kapasitas} Orang</td>
 <td>Rp${new Intl.NumberFormat('id-ID').format(tableData.harga)}</td>
 <td>
-    <button onclick="showSchedule(${tableData.no_meja})"
+    <button onclick="showSchedule('${tableData.no_meja}')"
         class="btn btn-sm ${tableData.status === 'tersedia' ? 'btn-success' : 'btn-error'}">
         ${tableData.status.charAt(0).toUpperCase() + tableData.status.slice(1)}
         <i class='bx bx-calendar-event ml-1'></i>
@@ -474,7 +474,7 @@ cells[1].textContent = tableData.tipe_meja.charAt(0).toUpperCase() + tableData.t
 cells[2].textContent = `${tableData.kapasitas} Orang`;
 cells[3].textContent = `Rp${new Intl.NumberFormat('id-ID').format(tableData.harga)}`;
 cells[4].innerHTML = `
-<button onclick="showSchedule(${tableData.no_meja})"
+<button onclick="showSchedule('${tableData.no_meja}')"
     class="btn btn-sm ${tableData.status === 'tersedia' ? 'btn-success' : 'btn-error'}">
     ${tableData.status.charAt(0).toUpperCase() + tableData.status.slice(1)}
     <i class='bx bx-calendar-event ml-1'></i>
@@ -562,8 +562,8 @@ status: tableStatus
 };
 
 const endpoint = isEditMode ?
-'{{ route("admin.tables.update") }}' :
-'{{ route("admin.tables.create") }}';
+'{{ route("staf.tables.update") }}' :
+'{{ route("staf.tables.create") }}';
 
 fetch(endpoint, {
 method: 'POST',
@@ -632,7 +632,7 @@ statusFilter.addEventListener('change', filterTable);
 
 async function showSchedule(noMeja) {
 try {
-const response = await fetch(`/admin/tables/${noMeja}/schedule`);
+const response = await fetch(`/staf/meja/${noMeja}/schedule`);
 const data = await response.json();
 
 if (data.success) {

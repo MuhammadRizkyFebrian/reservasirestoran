@@ -83,7 +83,7 @@ font-size: 0.85rem;
     <!-- Search & Filter Form -->
     <div class="search-form">
         <input type="text" placeholder="Cari pelanggan..." class="input input-bordered" id="searchInput">
-        <button class="btn btn-primary">
+        <button class="btn btn-primary text-white">
             <i class='bx bx-search mr-1'></i>
             <span>Cari</span>
         </button>
@@ -200,7 +200,7 @@ font-size: 0.85rem;
 
             <div class="modal-action">
                 <button type="button" class="btn btn-outline" onclick="closeEditModal()">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                <button type="submit" class="btn btn-primary text-white">Simpan Perubahan</button>
             </div>
         </form>
     </div>
@@ -237,7 +237,7 @@ const username = document.getElementById('customerUsername').value;
 const phone = document.getElementById('customerPhone').value;
 
 // Kirim request ke server
-fetch('{{ route("admin.customers.update") }}', {
+fetch('{{ route("staf.customers.update") }}', {
 method: 'POST',
 headers: {
 'Content-Type': 'application/json',
@@ -294,7 +294,7 @@ modal.showModal();
 function deleteCustomer() {
 const customerId = window.customerToDelete;
 
-fetch('{{ route("admin.customers.delete") }}', {
+fetch('{{ route("staf.customers.delete") }}', {
 method: 'POST',
 headers: {
 'Content-Type': 'application/json',

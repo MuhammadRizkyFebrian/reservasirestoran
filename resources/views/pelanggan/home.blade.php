@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard - ' . config('app.name'))
+@section('title' . config('app.name'))
 
 @section('head')
 @include('components.home.home-styles')
@@ -29,8 +29,8 @@
         <div class="flex items-center justify-center min-h-[60vh] sm:min-h-[70vh]">
             <div class="text-center text-white max-w-md">
                 <h1 class="mb-3 sm:mb-5 text-3xl sm:text-5xl font-bold">Selamat Datang</h1>
-                <p class="mb-4 sm:mb-5 text-sm sm:text-base">Rasakan pengalaman makan malam yang tak terlupakan dengan suasana misterius dan hidangan istimewa dari dapur kami.</p>
-                <a href="{{ route('reservation') }}" class="btn btn-soft btn-warning">Pesan Meja</a>
+                <p class="mb-4 sm:mb-5 text-sm sm:text-base">Nikmati pengalaman bersantap yang berkesan dengan suasana unik dan sajian istimewa dari dapur kami.</p>
+                <a href="{{ route('reservation') }}" class="btn btn-soft btn-primary text-white">Pesan Meja</a>
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
                     <h3 class="card-title text-base sm:text-lg">{{ $menu->nama }}</h3>
                     <p class="text-sm sm:text-base">{{ $menu->deskripsi }}</p>
                     <div class="card-actions justify-end mt-2">
-                        <span class="badge badge-warning text-xs sm:text-sm px-4 py-4 text-base">Rp{{ number_format($menu->harga, 0, ',', '.') }}</span>
+                        <span class="badge badge-primary text-xs sm:text-sm px-4 py-4 text-base text-white">Rp{{ number_format($menu->harga, 0, ',', '.') }}</span>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
         </div>
 
         <div class="text-center mt-6 sm:mt-8">
-            <a href="{{ route('menu') }}" class="btn btn-warning btn-sm sm:btn-md">Lihat lainnya...</a>
+            <a href="{{ route('menu') }}" class="btn btn-primary btn-sm sm:btn-md text-white">Lihat lainnya...</a>
         </div>
     </div>
 </section>
@@ -102,7 +102,7 @@
                 <div class="promo-content text-white">
                     <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Happy Hour</h3>
                     <p class="mb-3 sm:mb-4 text-sm sm:text-base">Diskon 20% untuk semua minuman dari jam 4-6 sore, setiap hari Senin-Jumat.</p>
-                    <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
+                    <button class="btn btn-xs sm:btn-sm btn-primary text-white">Lihat Detail</button>
                 </div>
             </div>
 
@@ -111,7 +111,7 @@
                 <div class="promo-content text-white">
                     <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Weekend Special</h3>
                     <p class="mb-3 sm:mb-4 text-sm sm:text-base">Paket makan untuk 4 orang hanya Rp500.000, setiap Sabtu dan Minggu.</p>
-                    <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
+                    <button class="btn btn-xs sm:btn-sm btn-primary text-white">Lihat Detail</button>
                 </div>
             </div>
 
@@ -120,7 +120,7 @@
                 <div class="promo-content text-white">
                     <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Birthday Package</h3>
                     <p class="mb-3 sm:mb-4 text-sm sm:text-base">Gratis kue dan minuman spesial untuk yang berulang tahun (min. 4 orang).</p>
-                    <button class="btn btn-xs sm:btn-sm btn-warning">Lihat Detail</button>
+                    <button class="btn btn-xs sm:btn-sm btn-primary text-white">Lihat Detail</button>
                 </div>
             </div>
         </div>
@@ -146,9 +146,9 @@
                 </div>
             </div>
             @if(auth()->guard('pelanggan')->check())
-            <label for="modal-ulasan" class="btn btn-warning mt-4 sm:mt-0">Tambah Ulasan</label>
+            <label for="modal-ulasan" class="btn btn-primary mt-4 sm:mt-0 text-white">Tambah Ulasan</label>
             @else
-            <a href="{{ route('login') }}" class="btn btn-warning mt-4 sm:mt-0">Login untuk Menambah Ulasan</a>
+            <a href="{{ route('login') }}" class="btn btn-primary mt-4 sm:mt-0 text-white">Login untuk Menambah Ulasan</a>
             @endif
         </div>
 
@@ -195,10 +195,14 @@
                         </button>
 
                         <!-- Tombol Hapus -->
-                        <form action="{{ route('ulasan.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus ulasan ini?');">
+                        <button class="btn btn-sm btn-error delete-ulasan-btn"
+                            data-id="{{ $review->id }}"
+                            onclick="showDeleteConfirmation('{{ $review->id }}')">
+                            Hapus
+                        </button>
+                        <form id="deleteForm{{ $review->id }}" action="{{ route('ulasan.destroy', $review->id) }}" method="POST" class="hidden">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-sm btn-error" type="submit">Hapus</button>
                         </form>
                     </div>
                     @endif
@@ -217,7 +221,7 @@
         <div class="text-center">
             <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Reservasi Sekarang</h2>
             <p class="mb-6 sm:mb-8 max-w-2xl mx-auto text-sm sm:text-base">Jangan lewatkan pengalaman bersantap yang luar biasa. Reservasi meja Anda sekarang dan nikmati hidangan spesial dari chef kami!</p>
-            <a href="{{ route('reservation') }}" class="btn btn-warning">Pesan Meja</a>
+            <a href="{{ route('reservation') }}" class="btn btn-primary text-white">Pesan Meja</a>
         </div>
     </div>
 </section>
@@ -272,7 +276,7 @@
 
             <div class="modal-action">
                 <label for="modal-ulasan" class="btn">Batal</label>
-                <button type="button" id="submitReview" class="btn btn-primary">Simpan</button>
+                <button type="button" id="submitReview" class="btn btn-primary text-white">Simpan</button>
             </div>
         </form>
         @else
@@ -317,9 +321,23 @@
 
             <div class="modal-action">
                 <label for="modal-edit-ulasan" class="btn">Batal</label>
-                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                <button type="submit" class="btn btn-primary text-white">Simpan Perubahan</button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Modal Konfirmasi Hapus -->
+<input type="checkbox" id="modal-delete-ulasan" class="modal-toggle" />
+<div class="modal" role="dialog">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Konfirmasi Hapus</h3>
+        <p>Apakah Anda yakin ingin menghapus ulasan ini?</p>
+        <p class="text-sm text-base-content/70 mt-2">Tindakan ini tidak dapat dibatalkan.</p>
+        <div class="modal-action">
+            <label for="modal-delete-ulasan" class="btn">Batal</label>
+            <button type="button" id="confirmDelete" class="btn btn-error">Hapus</button>
+        </div>
     </div>
 </div>
 
@@ -352,16 +370,76 @@
             })
             .then(function(data) {
                 if (data.success) {
-                    alert(data.message);
+                    // Tutup modal
                     document.getElementById('modal-ulasan').checked = false;
+
+                    // Tambahkan notifikasi ke session storage untuk ditampilkan setelah refresh
+                    sessionStorage.setItem('notification', data.message);
+                    sessionStorage.setItem('scrollToUlasan', 'true');
+
+                    // Refresh halaman
                     window.location.reload();
                 } else {
                     throw new Error(data.message);
                 }
             })
             .catch(function(error) {
-                alert("Terjadi kesalahan: " + error.message);
+                // Tampilkan error dengan notifikasi yang sama
+                const notification = document.createElement('div');
+                notification.className = 'alert alert-error fixed top-0 left-1/2 transform -translate-x-1/2 mt-4 z-50 w-fit shadow-lg';
+                notification.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>${error.message}</span>
+                `;
+                document.body.appendChild(notification);
+
+                // Hapus notifikasi error setelah 3 detik
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
             });
+    });
+
+    // Check for notification and scroll after page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const notification = sessionStorage.getItem('notification');
+        const shouldScrollToUlasan = sessionStorage.getItem('scrollToUlasan');
+
+        if (notification) {
+            // Tampilkan notifikasi
+            const notificationElement = document.createElement('div');
+            notificationElement.className = 'alert alert-success fixed top-0 left-1/2 transform -translate-x-1/2 mt-4 z-50 w-fit shadow-lg';
+            notificationElement.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>${notification}</span>
+            `;
+            document.body.appendChild(notificationElement);
+
+            // Hapus notifikasi setelah 3 detik
+            setTimeout(() => {
+                notificationElement.remove();
+            }, 3000);
+
+            // Hapus notifikasi dari session storage
+            sessionStorage.removeItem('notification');
+        }
+
+        // Scroll ke section ulasan dengan animasi
+        if (shouldScrollToUlasan) {
+            const ulasanSection = document.getElementById('ulasan');
+            if (ulasanSection) {
+                setTimeout(() => {
+                    ulasanSection.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }, 100);
+            }
+            sessionStorage.removeItem('scrollToUlasan');
+        }
     });
 
     // Smooth scroll
@@ -424,6 +502,21 @@
         // Update karakter counter saat modal edit dibuka
         document.getElementById('editCharCount').textContent = comments.length;
     }
+
+    let currentDeleteId = null;
+
+    function showDeleteConfirmation(id) {
+        currentDeleteId = id;
+        document.getElementById('modal-delete-ulasan').checked = true;
+    }
+
+    document.getElementById('confirmDelete').addEventListener('click', function() {
+        if (currentDeleteId) {
+            // Simpan flag untuk scroll setelah refresh
+            sessionStorage.setItem('scrollToUlasan', 'true');
+            document.getElementById('deleteForm' + currentDeleteId).submit();
+        }
+    });
 </script>
 
 @endsection

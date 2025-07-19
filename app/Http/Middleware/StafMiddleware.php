@@ -11,10 +11,10 @@ class StafMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::guard('staf')->check()) {
-            return $next($request);
+        if (!Auth::guard('staf')->check()) {
+            return redirect()->route('staf.login')->with('error', 'Silakan login sebagai staf restoran terlebih dahulu.');
         }
 
-        return redirect()->route('admin.login')->with('error', 'Silakan login sebagai staf restoran terlebih dahulu.');
+        return $next($request);
     }
 }

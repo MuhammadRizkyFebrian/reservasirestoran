@@ -12,7 +12,7 @@
                         <input type="text" id="searchInput" placeholder="Cari menu..." class="input input-bordered w-full pl-10 h-12" autocomplete="off" />
                     </div>
                 </div>
-                
+
                 <!-- Filter Controls -->
                 <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
                     <!-- Category Filter -->
@@ -33,7 +33,7 @@
                             <i class="bx bx-chevron-down text-gray-500"></i>
                         </div>
                     </div>
-                    
+
                     <!-- Type Filter -->
                     <div class="relative">
                         <select id="typeFilter" class="select select-bordered w-full sm:w-[160px] h-12 pr-8">
@@ -45,24 +45,19 @@
                             <i class="bx bx-chevron-down text-gray-500"></i>
                         </div>
                     </div>
-                    
-                    <!-- Filter Buttons -->
-                    <div class="flex gap-2">
-                        <button type="button" id="filterButton" class="btn btn-primary text-white flex-1 sm:flex-none h-12 min-h-0">
-                            <i class='bx bx-filter-alt mr-1'></i>Filter
-                        </button>
-                        <button type="reset" id="resetButton" class="btn btn-outline h-12 min-h-0 px-3 sm:px-4">
-                            <i class='bx bx-reset'></i>
-                            <span class="hidden sm:inline ml-1">Reset</span>
-                        </button>
-                    </div>
+
+                    <!-- Reset Button -->
+                    <button type="reset" id="resetButton" class="btn btn-outline h-12 min-h-0 px-3 sm:px-4">
+                        <i class='bx bx-reset'></i>
+                        <span class="hidden sm:inline ml-1">Reset</span>
+                    </button>
                 </div>
             </div>
-            
+
             <!-- Filter Results Counter -->
             <div id="filterResults" class="mt-3 pl-1 text-sm hidden">
                 <span id="resultCount">0</span> menu ditemukan
             </div>
         </form>
     </div>
-</div> 
+</div>

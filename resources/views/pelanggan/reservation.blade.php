@@ -143,7 +143,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Gambar PNG Denah Restoran -->
                 <div class="flex justify-center items-center">
-                    <img src="{{ asset('images/restaurant_floor_plan (1).png') }}" alt="Denah Restoran" class="w-10/12 h-auto rounded-lg shadow-md">
+                    <img src="{{ asset('images/denah.png') }}" alt="Denah Restoran" class="w-10/12 h-auto rounded-lg shadow-md">
                 </div>
 
                 <!-- Daftar Meja -->

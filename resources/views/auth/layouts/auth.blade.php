@@ -85,7 +85,7 @@
             </div>
 
             <!-- Switcher Tema -->
-            <div class="flex justify-center gap-2 mb-4">
+            <div class="flex justify-center gap-2 mb-4 hidden">
                 <button onclick="document.documentElement.setAttribute('data-theme', 'lemonade')"
                     class="btn btn-circle btn-xs bg-success border-2 border-base-100" title="Tema Lemonade"></button>
                 <button onclick="document.documentElement.setAttribute('data-theme', 'light')"

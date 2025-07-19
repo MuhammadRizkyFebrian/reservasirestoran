@@ -277,46 +277,55 @@
         }
 
         function updateSelectedTablesInfo() {
-            if (!selectedTablesInfo) return;
+            let tableInfo = '';
+            let totalCapacity = 0;
 
-            if (selectedTables.size === 0) {
-                selectedTablesInfo.innerHTML = '<div class="text-center text-gray-500">Belum ada meja yang dipilih</div>';
-                return;
+            if (selectedTables.size > 0) {
+                tableInfo = 'Meja yang dipilih: ';
+                selectedTables.forEach((details, tableNo) => {
+                    tableInfo += `No. ${tableNo} (${details.capacity} orang), `;
+                    totalCapacity += details.capacity;
+                });
+                tableInfo = tableInfo.slice(0, -2); // Hapus koma terakhir
+            } else {
+                tableInfo = 'Belum ada meja yang dipilih';
             }
 
-            let totalCapacity = 0;
-            const tableInfoHTML = Array.from(selectedTables).map(([no, data]) => {
-                totalCapacity += data.capacity;
-                return `
-                    <div class="flex justify-between items-center mb-2">
-                        <span>Meja ${no} (Kapasitas: ${data.capacity} orang)</span>
-                        <span>Rp ${data.price.toLocaleString('id-ID')}</span>
-                    </div>
-                `;
-            }).join('');
+            selectedTablesInfo.textContent = tableInfo;
 
-            selectedTablesInfo.innerHTML = `
-                <div class="bg-base-200 p-4 rounded-lg">
-                    <div class="font-semibold mb-2">Detail Meja yang Dipilih:</div>
-                    ${tableInfoHTML}
-                    <div class="border-t border-base-300 mt-2 pt-2">
-                        <div class="flex justify-between items-center">
-                            <span>Total Kapasitas:</span>
-                            <span>${totalCapacity} orang</span>
-                        </div>
-                        <div class="flex justify-between items-center mt-1">
-                            <span>Tanggal & Waktu:</span>
-                            <span>${dateInput.value} ${timeInput.value}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
+            // Update max capacity info
+            const maxCapacityInfo = document.getElementById('maxCapacityInfo');
+            if (maxCapacityInfo) {
+                maxCapacityInfo.textContent = `Maks. ${totalCapacity} orang`;
+            }
 
-            // Update input jumlah tamu dengan kapasitas maksimal
-            const guestCountInput = document.getElementById('guestCount');
-            if (guestCountInput) {
-                guestCountInput.max = totalCapacity;
-                guestCountInput.placeholder = `Maksimal ${totalCapacity} orang`;
+            // Update max capacity untuk input jumlah tamu
+            window.maxGuestCapacity = totalCapacity;
+            const guestCount = document.getElementById('guestCount');
+            if (guestCount && guestCount.value) {
+                limitGuestCount(guestCount);
+            }
+        }
+
+        // Fungsi untuk membatasi input jumlah tamu
+        window.limitGuestCount = function(input) {
+            // Hapus karakter non-angka
+            input.value = input.value.replace(/[^0-9]/g, '');
+
+            // Hapus angka 0 di awal
+            input.value = input.value.replace(/^0+/, '');
+
+            // Konversi ke angka
+            let value = parseInt(input.value) || 0;
+
+            // Batasi nilai maksimal
+            if (value > window.maxGuestCapacity) {
+                input.value = window.maxGuestCapacity;
+            }
+
+            // Batasi nilai minimal
+            if (value < 1 && input.value !== '') {
+                input.value = 1;
             }
         }
 
@@ -349,6 +358,19 @@
                 // Validasi meja yang dipilih
                 if (selectedTables.size === 0) {
                     showAlert('Peringatan', 'Silakan pilih minimal satu meja.');
+                    return;
+                }
+
+                // Validasi jumlah tamu
+                const guestCount = document.getElementById('guestCount');
+                const jumlahTamu = parseInt(guestCount.value) || 0;
+                let totalCapacity = 0;
+                selectedTables.forEach((details) => {
+                    totalCapacity += details.capacity;
+                });
+
+                if (jumlahTamu < 1 || jumlahTamu > totalCapacity) {
+                    showAlert('Peringatan', `Jumlah tamu harus antara 1 dan ${totalCapacity} orang`);
                     return;
                 }
 

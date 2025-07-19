@@ -73,7 +73,7 @@
 
         .menu-item.active {
             background-color: var(--fallback-primary, oklch(var(--p)));
-            color: white;
+            color: primary;
             font-weight: 500;
         }
 
@@ -462,7 +462,7 @@
     <div class="content-wrapper" id="contentWrapper">
         <div class="header flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold">@yield('title')</h1>
-            <form action="{{ route('admin.logout') }}" method="POST">
+            <form action="{{ route('staf.logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-outline">
                     <i class='bx bx-log-out mr-2'></i>Keluar
@@ -474,7 +474,7 @@
     </div>
 
     <!-- Theme Switcher -->
-    <div class="theme-switcher dropdown dropdown-right dropdown-end">
+    <div class="theme-switcher dropdown dropdown-right dropdown-end hidden">
         <div tabindex="0" class="w-full h-full flex items-center justify-center cursor-pointer">
             <i class='bx bx-palette text-lg'></i>
         </div>

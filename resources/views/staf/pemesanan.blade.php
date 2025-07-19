@@ -125,7 +125,7 @@ font-size: 0.85rem;
                 <option value="selesai">Selesai</option>
                 <option value="dibatalkan">Dibatalkan</option>
             </select>
-            <button class="btn btn-primary" onclick="filterTable()">
+            <button class="btn btn-primary text-white" onclick="filterTable()">
                 <i class='bx bx-search mr-1'></i>
                 <span>Cari</span>
             </button>
@@ -260,6 +260,10 @@ font-size: 0.85rem;
                 </div>
             </div>
             <div>
+                <p class="text-sm text-gray-500">Catatan</p>
+                <p class="font-medium" id="detail-catatan">-</p>
+            </div>
+            <div>
                 <p class="text-sm text-gray-500">Bukti Pembayaran</p>
                 <p class="font-medium" id="detail-bukti-text">-</p>
                 <img id="detail-bukti" src="" alt="Bukti Pembayaran" class="mt-2 max-w-full h-auto hidden">
@@ -323,7 +327,7 @@ const modal = document.getElementById('detail-modal');
 modal.showModal();
 
 // Ambil data detail pemesanan
-fetch(`/admin/pemesanan/${kodeTransaksi}`, {
+fetch(`/staf/pemesanan/${kodeTransaksi}`, {
 headers: {
 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 }
@@ -374,6 +378,9 @@ document.getElementById('detail-bukti-text').style.display = 'block';
 document.getElementById('detail-bukti').style.display = 'none';
 document.getElementById('detail-bukti-text').textContent = 'Belum ada bukti pembayaran';
 }
+
+// Tampilkan catatan
+document.getElementById('detail-catatan').textContent = data.data.catatan || '-';
 
 // Update action buttons
 const actionsContainer = document.getElementById('detail-actions');
@@ -480,7 +487,7 @@ function confirmReservation() {
 const kodeTransaksi = window.reservationToConfirm;
 
 // Kirim request ke endpoint konfirmasi
-fetch(`/admin/pemesanan/${kodeTransaksi}/konfirmasi`, {
+fetch(`/staf/pemesanan/${kodeTransaksi}/konfirmasi`, {
 method: 'POST',
 headers: {
 'Content-Type': 'application/json',
@@ -495,6 +502,10 @@ updateReservationStatus(kodeTransaksi, 'dikonfirmasi');
 
 // Tampilkan notifikasi sukses
 showNotification('Pemesanan berhasil dikonfirmasi', 'alert-success');
+
+// Tutup modal detail dan konfirmasi
+document.getElementById('detail-modal').close();
+closeConfirmModal();
 } else {
 showNotification(data.message || 'Gagal mengkonfirmasi pemesanan', 'alert-error');
 }
@@ -503,9 +514,6 @@ showNotification(data.message || 'Gagal mengkonfirmasi pemesanan', 'alert-error'
 console.error('Error:', error);
 showNotification('Terjadi kesalahan saat mengkonfirmasi pemesanan', 'alert-error');
 });
-
-// Tutup modal
-closeConfirmModal();
 }
 
 // Function to cancel reservation
@@ -513,7 +521,7 @@ function cancelReservation() {
 const kodeTransaksi = window.reservationToCancel;
 
 // Kirim request ke endpoint pembatalan
-fetch(`/admin/pemesanan/${kodeTransaksi}/batalkan`, {
+fetch(`/staf/pemesanan/${kodeTransaksi}/batalkan`, {
 method: 'POST',
 headers: {
 'Content-Type': 'application/json',
@@ -528,6 +536,10 @@ updateReservationStatus(kodeTransaksi, 'dibatalkan');
 
 // Tampilkan notifikasi sukses
 showNotification('Pemesanan berhasil dibatalkan', 'alert-success');
+
+// Tutup modal detail dan pembatalan
+document.getElementById('detail-modal').close();
+closeCancelModal();
 } else {
 showNotification(data.message || 'Gagal membatalkan pemesanan', 'alert-error');
 }
@@ -536,9 +548,6 @@ showNotification(data.message || 'Gagal membatalkan pemesanan', 'alert-error');
 console.error('Error:', error);
 showNotification('Terjadi kesalahan saat membatalkan pemesanan', 'alert-error');
 });
-
-// Tutup modal
-closeCancelModal();
 }
 
 // Search and filter functionality

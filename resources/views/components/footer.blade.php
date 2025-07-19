@@ -52,7 +52,7 @@
                 <div>
                     <span class="footer-title mb-3">Lokasi</span>
                     <div class="w-full h-32 sm:h-40 rounded-lg overflow-hidden mb-2">
-                        <img src="images/lokasi.png" alt="Map" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/lokasi.png') }}" alt="Map" class="w-full h-full object-cover">
                     </div>
                     <a href="https://maps.app.goo.gl/Qdq6PGTHE1nD5hNy7" target="_blank" class="btn btn-xs btn-accent">
                         <i class='bx bx-map mr-1'></i> Buka di Maps

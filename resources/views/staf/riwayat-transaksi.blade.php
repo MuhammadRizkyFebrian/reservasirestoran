@@ -122,7 +122,7 @@ width: 100%;
                 <option value="dikonfirmasi">Dikonfirmasi</option>
                 <option value="selesai">Selesai</option>
             </select>
-            <button class="btn btn-primary" onclick="filterTable()">
+            <button class="btn btn-primary text-white" onclick="filterTable()">
                 <i class='bx bx-search mr-1'></i>
                 <span>Cari</span>
             </button>
@@ -315,7 +315,7 @@ currentTransactionId = id;
 const modal = document.getElementById('transactionDetailModal');
 
 // Fetch transaction details
-fetch(`/admin/transactions/${id}`)
+fetch(`/staf/transaksi/${id}`)
 .then(response => response.json())
 .then(response => {
 if (!response.success) {
@@ -358,7 +358,7 @@ if (!currentTransactionId) return;
 
 if (!confirm('Apakah Anda yakin ingin mengkonfirmasi pembayaran ini?')) return;
 
-fetch(`/admin/transactions/${currentTransactionId}/confirm`, {
+fetch(`/staf/transaksi/${currentTransactionId}/confirm`, {
 method: 'POST',
 headers: {
 'Content-Type': 'application/json',
@@ -440,7 +440,7 @@ currentTransactionId = id;
 const modal = document.getElementById('editTransactionModal');
 
 // Fetch transaction data
-fetch(`/admin/transactions/${id}`)
+fetch(`/staf/transaksi/${id}`)
 .then(response => response.json())
 .then(response => {
 if (!response.success) {
@@ -468,7 +468,7 @@ e.preventDefault();
 if (!currentTransactionId) return;
 
 const formData = new FormData(this);
-fetch(`/admin/transactions/${currentTransactionId}/update`, {
+fetch(`/staf/transaksi/${currentTransactionId}/update`, {
 method: 'POST',
 headers: {
 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,

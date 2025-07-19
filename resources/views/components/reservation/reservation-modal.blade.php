@@ -45,7 +45,13 @@
                 <label class="label py-1">
                     <span class="label-text text-sm">Nomor Handphone</span>
                 </label>
-                <input type="tel" name="no_handphone" id="phoneNumber" class="input input-bordered" placeholder="Masukkan nomor handphone" required>
+                <input type="tel" name="no_handphone" id="phoneNumber" class="input input-bordered"
+                    pattern="[0-9]*"
+                    inputmode="numeric"
+                    minlength="10"
+                    maxlength="13"
+                    onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                    placeholder="Masukkan nomor handphone" required>
             </div>
 
             <!-- Input tersembunyi untuk tanggal dan waktu -->
@@ -55,18 +61,25 @@
             <div class="form-control">
                 <label class="label py-1">
                     <span class="label-text text-sm">Jumlah Tamu</span>
+                    <span class="label-text-alt text-sm" id="maxCapacityInfo"></span>
                 </label>
-                <input type="number" name="jumlah_tamu" id="guestCount" class="input input-bordered" min="1" max="20" placeholder="Jumlah orang" required>
+                <input type="tel" name="jumlah_tamu" id="guestCount" class="input input-bordered"
+                    pattern="[0-9]*"
+                    inputmode="numeric"
+                    onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                    oninput="limitGuestCount(this)"
+                    placeholder="Jumlah orang"
+                    required>
             </div>
 
             <div class="form-control">
                 <label class="label py-1">
                     <span class="label-text text-sm">Catatan <span class="text-xs opacity-70">(opsional)</span></span>
                 </label>
-                <textarea name="catatan" id="notes" class="textarea textarea-bordered" placeholder="Masukkan permintaan khusus" rows="2" maxlength="200"></textarea>
+                <textarea name="catatan" id="notes" class="textarea textarea-bordered" placeholder="Masukkan permintaan khusus" rows="2" maxlength="100"></textarea>
                 <div class="flex justify-between items-center mt-1">
                     <p class="text-xs opacity-70">*Durasi 1 jam</p>
-                    <span class="text-xs opacity-70"><span id="charCount">0</span>/200</span>
+                    <span class="text-xs opacity-70"><span id="charCount">0</span>/100</span>
                 </div>
             </div>
 

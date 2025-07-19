@@ -23,7 +23,7 @@ class AdminController extends Controller
     public function customers()
     {
         $pelanggan = Pelanggan::paginate(10);
-        return view('staf.customers', compact('pelanggan'));
+        return view('staf.pelanggan', compact('pelanggan'));
     }
 
     public function tables()
@@ -431,7 +431,8 @@ class AdminController extends Controller
                 'status_pemesanan' => ucfirst($firstPemesanan->status),
                 'status_pembayaran' => 'Menunggu',
                 'total_pembayaran' => $totalPembayaran,
-                'bukti_pembayaran' => null
+                'bukti_pembayaran' => null,
+                'catatan' => $firstPemesanan->catatan
             ];
 
             if ($firstPemesanan->pembayaran) {

@@ -28,7 +28,7 @@ class AuthController extends Controller
 
         if (Auth::guard('web')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('staf.dashboard');
         }
 
         return back()->withErrors([
@@ -41,7 +41,7 @@ class AuthController extends Controller
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('admin.login');
+        return redirect()->route('staf.login');
     }
 
     // Customer Authentication
@@ -62,7 +62,7 @@ class AuthController extends Controller
         if ($staf && Hash::check($request->password, $staf->password)) {
             Auth::guard('staf')->login($staf);
             $request->session()->regenerate();
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('staf.dashboard');
         }
 
         // Cek pelanggan
@@ -127,7 +127,7 @@ class AuthController extends Controller
     // Password Reset
     public function showForgotPasswordForm()
     {
-        return view('auth.forgot-password');
+        return view('auth.lupa-sandi');
     }
 
     public function sendResetOtp(Request $request)
@@ -147,7 +147,7 @@ class AuthController extends Controller
         PasswordResetOtp::updateOrCreate(
             ['email' => $request->email],
             [
-                'otp' => Hash::make($otp),
+                'kode_otp' => Hash::make($otp),
                 'expires_at' => Carbon::now()->addMinutes(15)
             ]
         );
@@ -182,7 +182,7 @@ class AuthController extends Controller
             ->where('expires_at', '>', Carbon::now())
             ->first();
 
-        if (!$passwordReset || !Hash::check($request->otp, $passwordReset->otp)) {
+        if (!$passwordReset || !Hash::check($request->otp, $passwordReset->kode_otp)) {
             return back()
                 ->withErrors(['otp' => 'Kode OTP tidak valid atau sudah kadaluarsa.'])
                 ->with('show_otp_form', true);

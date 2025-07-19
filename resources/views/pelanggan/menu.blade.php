@@ -21,7 +21,7 @@
     <h2 class="text-3xl font-bold mb-8 text-base-content">Makanan</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 lg:gap-2">
-        @foreach($makanan as $item)
+        @forelse($makanan as $item)
         @component('components.menu.menu-card')
         @slot('image', $item->gambar ? asset('storage/menu/' . $item->gambar) : asset('images/placeholder.jpg'))
         @slot('title', $item->nama)
@@ -30,7 +30,9 @@
         @slot('description', $item->deskripsi)
         @slot('price', $item->harga)
         @endcomponent
-        @endforeach
+        @empty
+        <p class="col-span-3 text-center text-gray-500">Menu makanan belum tersedia.</p>
+        @endforelse
     </div>
 </div>
 
@@ -39,7 +41,7 @@
     <h2 class="text-3xl font-bold mb-8 text-base-content">Minuman</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 lg:gap-2">
-        @foreach($minuman as $item)
+        @forelse($minuman as $item)
         @component('components.menu.menu-card')
         @slot('image', asset('storage/menu/' . $item->gambar))
         @slot('title', $item->nama)
@@ -48,7 +50,9 @@
         @slot('description', $item->deskripsi)
         @slot('price', $item->harga)
         @endcomponent
-        @endforeach
+        @empty
+        <p class="col-span-3 text-center text-gray-500">Menu minuman belum tersedia.</p>
+        @endforelse
     </div>
 </div>
 

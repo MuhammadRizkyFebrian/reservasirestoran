@@ -16,17 +16,16 @@ class HomeController extends Controller
         $isLoggedIn = Auth::guard('pelanggan')->check();
         $user = Auth::guard('pelanggan')->user();
 
-        $ulasans = Ulasan::where('status', 'active')
-            ->latest()
-            ->with('pelanggan')
+        $ulasans = Ulasan::with('pelanggan')
+            ->orderBy('id', 'desc')
             ->get();
 
         $avgRating = number_format(
-            Ulasan::where('status', 'active')->avg('star_rating'),
+            Ulasan::avg('star_rating'),
             1
         );
 
-        $totalReviews = Ulasan::where('status', 'active')->count();
+        $totalReviews = Ulasan::count();
 
         $lastOrder = $isLoggedIn
             ? Pemesanan::where('id_pelanggan', $user->id_pelanggan)

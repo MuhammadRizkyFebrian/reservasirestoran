@@ -1,7 +1,7 @@
 @extends('auth.layouts.auth')
 
-@section('title', 'Reset Password')
-@section('page_title', 'Reset Password')
+@section('title', 'Reset Sandi')
+@section('page_title', 'Reset Sandi')
 @section('page_description', 'Masukkan email Anda untuk menerima kode OTP')
 
 @section('content')
@@ -12,17 +12,12 @@
         <label for="email" class="label py-1">
             <span class="label-text">Email Terdaftar</span>
         </label>
-        <label class="input input-bordered flex items-center gap-2 @error('email') input-error @enderror">
+        <label class="input input-bordered flex items-center gap-2">
             <i class='bx bx-envelope text-xl text-base-content/70'></i>
             <input type="email" id="email" name="email" value="{{ old('email') }}"
                 class="grow"
                 placeholder="Email terdaftar" required>
         </label>
-        @error('email')
-        <label class="label py-0">
-            <span class="label-text-alt text-error">{{ $message }}</span>
-        </label>
-        @enderror
     </div>
 
     <button type="submit" class="btn btn-primary w-full text-white">
@@ -45,16 +40,11 @@
                 class="grow"
                 placeholder="Masukkan kode OTP" required>
         </label>
-        @error('otp')
-        <label class="label py-0">
-            <span class="label-text-alt text-error">{{ $message }}</span>
-        </label>
-        @enderror
     </div>
 
     <div class="form-control">
         <label for="password" class="label py-1">
-            <span class="label-text">Password Baru</span>
+            <span class="label-text">Sandi Baru</span>
         </label>
         <label class="input input-bordered flex items-center gap-2 @error('password') input-error @enderror relative">
             <i class='bx bx-lock-alt text-xl text-base-content/70'></i>
@@ -74,7 +64,7 @@
 
     <div class="form-control">
         <label for="password_confirmation" class="label py-1">
-            <span class="label-text">Konfirmasi Password Baru</span>
+            <span class="label-text">Konfirmasi Sandi Baru</span>
         </label>
         <label class="input input-bordered flex items-center gap-2 relative">
             <i class='bx bx-lock text-xl text-base-content/70'></i>
@@ -88,15 +78,16 @@
     </div>
 
     <button type="submit" class="btn btn-primary w-full text-white">
-        Reset Password
+        Reset Sandi
     </button>
 </form>
 @endsection
 
 @section('footer')
+
 <div class="text-center mt-4">
     <a href="{{ route('login') }}" class="link link-hover link-primary">
-        Kembali ke Login
+        Kembali
     </a>
 </div>
 @endsection

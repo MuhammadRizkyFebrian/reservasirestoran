@@ -38,8 +38,7 @@ class UlasanController extends Controller
                 'id_pemesanan' => $request->id_pemesanan,
                 'id_pelanggan' => $request->id_pelanggan,
                 'comments' => $request->comments,
-                'star_rating' => $request->star_rating,
-                'status' => 'active',
+                'star_rating' => $request->star_rating
             ]);
 
             return response()->json([

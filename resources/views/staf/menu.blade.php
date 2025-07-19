@@ -1,6 +1,6 @@
 @extends('staf.layouts.staf')
 
-@section('title', 'Daftar Menu - ' . config('app.name'))
+@section('title', 'Data Menu')
 
 @push('head')
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -113,7 +113,7 @@
                     <td>Rp {{ number_format($menu->harga, 0, ',', '.') }}</td>
                     <td>
                         <div class="action-buttons">
-                            <button type="button" data-menu-id="{{ $menu->id_menu }}" class="btn btn-sm btn-primary action-edit-btn text-white">
+                            <button type="button" data-menu-id="{{ $menu->id_menu }}" class="btn btn-sm btn-primary action-edit-btn">
                                 <i class='bx bx-edit-alt'></i>
                                 <span class="hidden sm:inline ml-1">Edit</span>
                             </button>
@@ -171,7 +171,7 @@
 
                             <div class="modal-action mt-4 flex justify-between">
                                 <button type="button" class="btn" onclick="document.getElementById('modal-edit-{{ $menu->id_menu }}').close()">Batal</button>
-                                <button type="submit" class="btn btn-primary text-white">Update</button>
+                                <button type="submit" class="btn btn-primary text-white">Simpan</button>
                             </div>
                         </form>
                     </div>
@@ -287,7 +287,7 @@
 </dialog>
 
 <!-- Theme Switcher -->
-<div class="theme-switcher dropdown dropdown-right dropdown-end">
+<div class="theme-switcher dropdown dropdown-right dropdown-end hidden">
     <div tabindex="0" class="w-full h-full flex items-center justify-center cursor-pointer">
         <i class='bx bx-palette text-lg'></i>
     </div>
@@ -407,7 +407,7 @@
             button.addEventListener('click', function() {
                 const menuId = this.dataset.menuId;
                 const deleteForm = document.getElementById('deleteForm');
-                deleteForm.action = '{{ url("/admin/menus") }}/' + menuId;
+                deleteForm.action = '{{ url("/staf/menus") }}/' + menuId;
                 document.getElementById('modalDelete').showModal();
             });
         });

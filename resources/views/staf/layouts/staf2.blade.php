@@ -376,32 +376,32 @@
         </div>
 
         <div class="sidebar-menu">
-            <a href="{{ route('admin.dashboard') }}" class="menu-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+            <a href="{{ route('staf.dashboard') }}" class="menu-item {{ request()->routeIs('staf.dashboard') ? 'active' : '' }}">
                 <i class='bx bxs-dashboard'></i>
                 <span>Dashboard</span>
             </a>
 
-            <a href="{{ route('admin.customers') }}" class="menu-item {{ request()->routeIs('admin.customers') ? 'active' : '' }}">
-                <i class='bx bxs-user-detail'></i>
-                <span>Data Pelanggan</span>
+            <a href="{{ route('staf.customers') }}" class="menu-item {{ request()->routeIs('staf.customers') ? 'active' : '' }}">
+                <i class='bx bx-user'></i>
+                <span>Pelanggan</span>
             </a>
 
-            <a href="{{ route('admin.tables') }}" class="menu-item {{ request()->routeIs('admin.tables') ? 'active' : '' }}">
+            <a href="{{ route('staf.tables') }}" class="menu-item {{ request()->routeIs('staf.tables') ? 'active' : '' }}">
                 <i class='bx bx-table'></i>
                 <span>Daftar Meja</span>
             </a>
 
-            <a href="{{ route('admin.menu') }}" class="menu-item {{ request()->routeIs('admin.menu') ? 'active' : '' }}">
-                <i class='bx  bx-food-menu'></i>
+            <a href="{{ route('staf.menu') }}" class="menu-item {{ request()->routeIs('staf.menu') ? 'active' : '' }}">
+                <i class='bx bx-food-menu'></i>
                 <span>Daftar Menu</span>
             </a>
 
-            <a href="{{ route('admin.pemesanan') }}" class="menu-item {{ request()->routeIs('admin.pemesanan') ? 'active' : '' }}">
+            <a href="{{ route('staf.pemesanan') }}" class="menu-item {{ request()->routeIs('staf.pemesanan') ? 'active' : '' }}">
                 <i class='bx bx-calendar-edit'></i>
                 <span>Pemesanan</span>
             </a>
 
-            <a href="{{ route('admin.transactions') }}" class="menu-item {{ request()->routeIs('admin.transactions') ? 'active' : '' }}">
+            <a href="{{ route('staf.transactions') }}" class="menu-item {{ request()->routeIs('staf.transactions') ? 'active' : '' }}">
                 <i class='bx bx-history'></i>
                 <span>Transaksi Selesai</span>
             </a>
@@ -425,7 +425,7 @@
     </div>
 
     <!-- Theme Switcher -->
-    <div class="theme-switcher dropdown dropdown-right dropdown-end">
+    <div class="theme-switcher dropdown dropdown-right dropdown-end hidden">
         <div tabindex="0" class="w-full h-full flex items-center justify-center cursor-pointer">
             <i class='bx bx-palette text-lg'></i>
         </div>
