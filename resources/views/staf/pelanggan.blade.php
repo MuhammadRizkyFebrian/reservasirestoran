@@ -110,7 +110,7 @@ font-size: 0.85rem;
                     <td>{{ $customer->nomor_handphone }}</td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn btn-sm btn-primary action-edit-btn"
+                            <button class="btn btn-sm btn-primary text-white action-edit-btn"
                                 onclick="openEditModal('{{ $customer->id_pelanggan }}', '{{ $customer->email }}', '{{ $customer->username }}', '{{ $customer->nomor_handphone }}')">
                                 <i class='bx bx-edit-alt'></i>
                                 <span class="hidden sm:inline ml-1">Edit</span>

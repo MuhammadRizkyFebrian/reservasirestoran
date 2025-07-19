@@ -74,7 +74,7 @@
 
         .menu-item.active {
             background-color: var(--fallback-primary, oklch(var(--p)));
-            color: var(--fallback-primary-content, oklch(var(--pc)));
+            color: white;
             font-weight: 500;
         }
 
@@ -364,6 +364,7 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Sidebar -->
+<<<<<<< HEAD
     <div class="sidebar" id="sidebar">
         <div class="py-4 px-6 border-b border-base-200 flex justify-between items-center">
             <h1 class="text-2xl font-bold flex items-center">
@@ -407,6 +408,9 @@
             </a>
         </div>
     </div>
+=======
+    @include('staf.layouts.sidebar')
+>>>>>>> 206d4f57ad216016f24abe02c47611028a26c806
 
     <!-- Main Content -->
     <div class="content-wrapper" id="contentWrapper">

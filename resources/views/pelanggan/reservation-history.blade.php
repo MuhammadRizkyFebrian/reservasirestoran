@@ -55,6 +55,7 @@
     .nav-item.active {
         background-color: var(--fallback-primary, oklch(var(--p)));
         color: var(--fallback-primary-content, oklch(var(--pc)));
+        color: white;
     }
 
     .nav-item i {
@@ -478,7 +479,7 @@
                         </label>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-sm w-full">
+                    <button type="submit" class="btn btn-primary text-white btn-sm w-full">
                         <i class='bx bx-upload'></i>
                         Upload Bukti Pembayaran
                     </button>

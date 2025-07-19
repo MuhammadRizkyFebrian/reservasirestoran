@@ -138,7 +138,7 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn btn-sm btn-primary action-edit-btn" onclick="openEditModal('{{ $table->no_meja }}', '{{ $table->tipe_meja }}', '{{ $table->harga }}', '{{ $table->status }}', '{{ $table->kapasitas }}')">
+                            <button class="btn btn-sm btn-primary action-edit-btn text-white" onclick="openEditModal('{{ $table->no_meja }}', '{{ $table->tipe_meja }}', '{{ $table->harga }}', '{{ $table->status }}', '{{ $table->kapasitas }}')">
                                 <i class='bx bx-edit-alt'></i>
                                 <span class="hidden sm:inline ml-1">Edit</span>
                             </button>
