@@ -64,15 +64,18 @@
 **Copy dan Atur Env**
 
 ```bash
-copy .env.example
-ubah file menjadi .env
-```
+# Buat file .env baru dengan konten berikut:
+cat > .env << 'EOL'
+APP_NAME="Seatify"
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
 
-## Ubah Konfigurasi database
+LOG_CHANNEL=stack
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=debug
 
-#### sesuaikan database nya menjadi seperti ini
-
-```bash
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
