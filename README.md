@@ -18,11 +18,11 @@
 ## 📌 Fitur Aplikasi
 
 -   Login untuk staf & pelanggan
--   CRUD Menu dan Reservasi
+-   CRUD menu dan meja
 -   Pemesanan meja oleh pelanggan
 -   Persetujuan reservasi oleh admin
--   Riwayat Transaksi dan Pembayaran
--   Dashboard Statistik Admin
+-   Riwayat transaksi dan pembayaran
+-   Dashboard statistik admin
 
 ## 🧑‍💻 Akun default
 
