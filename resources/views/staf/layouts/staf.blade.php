@@ -73,7 +73,7 @@
 
         .menu-item.active {
             background-color: var(--fallback-primary, oklch(var(--p)));
-            color: primary;
+            color: white;
             font-weight: 500;
         }
 
