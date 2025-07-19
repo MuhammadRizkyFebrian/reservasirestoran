@@ -34,8 +34,6 @@ Route::controller(AuthController::class)->group(function () {
 // AUTENTIKASI ADMIN
 // ==========================
 Route::prefix('staf')->controller(AuthController::class)->group(function () {
-    Route::get('/login', 'showAdminLoginForm')->name('staf.login');
-    Route::post('/login', 'adminLogin');
     Route::post('/logout', 'adminLogout')->name('staf.logout');
 });
 

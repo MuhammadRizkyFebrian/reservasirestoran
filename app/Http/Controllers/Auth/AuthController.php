@@ -17,31 +17,12 @@ use Carbon\Carbon;
 class AuthController extends Controller
 {
     // Admin Authentication
-    public function showAdminLoginForm()
-    {
-        return view('staf.login');
-    }
-
-    public function adminLogin(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::guard('web')->attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->route('staf.dashboard');
-        }
-
-        return back()->withErrors([
-            'loginError' => 'Email atau password salah.',
-        ]);
-    }
-
     public function adminLogout(Request $request)
     {
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('staf.login');
+        return redirect()->route('login');
     }
 
     // Customer Authentication

@@ -462,11 +462,7 @@
     <div class="content-wrapper" id="contentWrapper">
         <div class="header flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold">@yield('title')</h1>
-<<<<<<< HEAD
             <form action="{{ route('staf.logout') }}" method="POST">
-=======
-            <form action="{{ route('logout') }}" method="POST">
->>>>>>> 206d4f57ad216016f24abe02c47611028a26c806
                 @csrf
                 <button type="submit" class="btn btn-outline">
                     <i class='bx bx-log-out mr-2'></i>Keluar
