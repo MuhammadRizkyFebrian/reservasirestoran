@@ -63,9 +63,9 @@
 
 **Atur Env**
 
-```bash
-# Buat file .env baru dengan konten berikut:
-cat > .env << 'EOL'
+Buat file `.env` baru di root proyek dan isi dengan konfigurasi berikut:
+
+```env
 APP_NAME="Seatify"
 APP_ENV=local
 APP_KEY=
@@ -127,20 +127,24 @@ VITE_PUSHER_SCHEME="${PUSHER_SCHEME}"
 VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
 SESSION_EXPIRE_ON_CLOSE=true
-EOL
+```
 
-# Setelah file .env terbuat, ubah informasi sensitif berikut:
-# 1. Konfigurasi email untuk OTP:
-#    - MAIL_USERNAME=email@gmail.com     -> Ganti dengan email Gmail Anda
-#    - MAIL_PASSWORD=app_password        -> Ganti dengan App Password dari Gmail
-#    - MAIL_FROM_ADDRESS=email@gmail.com -> Ganti dengan email Gmail Anda
+Setelah file `.env` terbuat, ubah informasi sensitif berikut:
 
-# 2. Konfigurasi database (opsional):
-#    - DB_DATABASE=dbreservasirestoran   -> Nama database bisa disesuaikan
-#    - DB_USERNAME=root                  -> Username database bisa disesuaikan
-#    - DB_PASSWORD=                      -> Password database jika ada
+1. Konfigurasi email untuk OTP:
 
-# Generate app key baru
+    - `MAIL_USERNAME=email@gmail.com` -> Ganti dengan email Gmail Anda
+    - `MAIL_PASSWORD=app_password` -> Ganti dengan App Password dari Gmail
+    - `MAIL_FROM_ADDRESS=email@gmail.com` -> Ganti dengan email Gmail Anda
+
+2. Konfigurasi database (opsional):
+    - `DB_DATABASE=dbreservasirestoran` -> Nama database bisa disesuaikan
+    - `DB_USERNAME=root` -> Username database bisa disesuaikan
+    - `DB_PASSWORD=` -> Password database jika ada
+
+Terakhir, generate app key baru:
+
+```bash
 php artisan key:generate
 ```
 
